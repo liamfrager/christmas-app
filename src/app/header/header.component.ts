@@ -10,11 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   daysToChristmas = 0;
+  things = [ 'stuff', 'to', 'show']
 
   ngOnInit() {
     this.daysToChristmas = this.findDaysToChristmas();
   }
-    
 
   findDaysToChristmas() {
     const dayOfYear = (date: Date) => Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24)

@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
+    .footer {
+        background-color: white;
+        display: flex;
+        position: fixed;
+        justify-content: space-around;
+        align-items: end;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+    }
+    .menu_item {
+        color: #26251d;
+        background-color: white;
+        position: relative;
+        font-size: 30px;
+        padding-block: 15px;
+        text-align: center;
+    }
+    .link {
+        text-decoration: none;
+    }
+    .selected {
+        text-shadow: 0px 0px 15px #4daf7c;
+    }

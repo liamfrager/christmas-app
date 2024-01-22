@@ -1,0 +1,14 @@
+.header {
+    font-size: 20px;
+    text-align: center;
+    background-color: #d64541;
+    color: white;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    /* border-bottom: 30px solid white; */
+    box-shadow:
+        0 0 0 30px white,
+        0 0 0 31px #26251d;
+    border-radius: 0px 0px 50% 50%;
+}
