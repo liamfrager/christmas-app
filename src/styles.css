@@ -1,1 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+/* Great Vibes, Tangerine, Parisienne, Style Script */
+
+/* Mountains of Christmas */
+@import url("https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&display=swap");
+/* Tangerine */
+@import url("https://fonts.googleapis.com/css2?family=Tangerine&display=swap");
+/* Google Icons */
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
+/* Global */
+
+* {
+  box-sizing: border-box;
+}
+/* Subheading on each page and functional icons */
+.heading {
+  display: flex;
+  justify-content: space-between;
+}
+.heading span {
+  font-size: 30px;
+  color: #26251d;
+  padding: 0px 10px;
+}
+.material-symbols-outlined {
+  font-size: 30px;
+}
+
+/* Family page */
+#family-members {
+  padding: 10px 0;
+}
+
+/* Forms */
+fieldset {
+  border: none;
+}
+input[type="text"],
+input[type="url"],
+input[type="file"],
+fieldset {
+  height: 20px;
+  width: 100%;
+  margin: 0 0 10px 0;
+  padding: 2px;
+}
+
+/* ... */
+h1,
+h2 {
+  font-family: "Tangerine";
+}
+h1 {
+  margin: 20px 0px 30px 0px;
+}
+h2 {
+  font-size: 40px;
+  margin: 0 0 10px 0;
+}
+p {
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+body {
+  background-color: cornsilk;
+  margin: 0;
+}
+main {
+  padding: 10px;
+  margin-top: 120px;
+}

@@ -1,0 +1,7 @@
+<header>
+  <h1 *ngIf="daysToChristmas !== 0">
+    ~ {{ daysToChristmas }} {{ daysToChristmas === 1 ? "day" : "days" }} until
+    Christmas! ~
+  </h1>
+  <h1 *ngIf="daysToChristmas === 0">Merry Christmas!</h1>
+</header>
