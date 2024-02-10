@@ -11,6 +11,9 @@ import { account } from "./account.js";
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  constructor() {
+    
+  }
   loginWithGoogle() {
     console.log(browserSessionPersistence);
     setPersistence(auth, browserSessionPersistence)
