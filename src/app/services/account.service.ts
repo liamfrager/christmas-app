@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { Router } from '@angular/router';
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged, getAuth, signOut, User } from "firebase/auth";
 import { FirebaseService } from './firebase.service';
@@ -11,7 +11,7 @@ type UserFunction = (user: User) => any;
 })
 export class AccountService {
 
-  constructor(private firebase: FirebaseService) { }
+  constructor(private firebase: FirebaseService, private router: Router) { }
 
   currentUser?: User
 
@@ -59,14 +59,12 @@ export class AccountService {
     });
   }
 
-  // logoutUser() {
-  //   const auth = getAuth();
-  //   signOut(auth).then(() => {
-  //     goto('/', { replaceState: true })
-  //     this.currentUser = {};
-  //   }).catch((error) => {
-  //     console.error('Could not logout')
-  //     // An error happened.
-  //   });
-  // }
+  logoutUser() {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      this.router.navigate(['/login']);
+    }).catch((error) => {
+      console.error('Could not logout')
+    });
+  }
 }
