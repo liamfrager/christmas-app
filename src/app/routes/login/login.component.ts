@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
-import { auth } from "./firebase.js";
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, setPersistence, browserSessionPersistence } from "firebase/auth";
-import { account } from "./account.js";
+import { AccountService } from "../../services/account.service.js";
+import { FirebaseService } from "../../services/firebase.service.js";
 
 @Component({
   selector: 'app-login',
@@ -11,12 +11,11 @@ import { account } from "./account.js";
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  constructor() {
-    
+  constructor(private accountService: AccountService, private firebaseService: FirebaseService) {
   }
   loginWithGoogle() {
     console.log(browserSessionPersistence);
-    setPersistence(auth, browserSessionPersistence)
+    setPersistence(this.firebaseService.auth, browserSessionPersistence)
       .then(() => {
         // Existing and future Auth states are now persisted in the current
         // session only. Closing the window would clear any existing state even
@@ -24,8 +23,8 @@ export class LoginComponent {
         // ...
         // New sign-in will be persisted with session persistence.
         const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-          .then((result) => {
+        signInWithPopup(this.firebaseService.auth, provider)
+          .then(async (result) => {
               // This gives you a Google Access Token. You can use it to access the Google API.
               const credential = GoogleAuthProvider.credentialFromResult(result);
               // @ts-ignore: Object is possibly 'null'.
@@ -34,12 +33,11 @@ export class LoginComponent {
               const user = result.user;
               // IdP data available using getAdditionalUserInfo(result)
               // ...
-              if (account.isNewUser(user)) {
-                  account.createNewUser(user);
+              if (await this.accountService.isNewUser(user)) {
+                  this.accountService.createNewUser(user);
               } else {
-                  account.getUserInfo(user);
+                  this.accountService.getUserInfo(user);
               }
-              this.router.navigate(['role']);
           }).catch((error) => {
               // Handle Errors here.
               const errorCode = error.code;
@@ -56,7 +54,7 @@ export class LoginComponent {
         const errorCode = error.code;
         const errorMessage = error.message;
     });
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(this.firebaseService.auth, user => {
       // Check for user status
     });
   }

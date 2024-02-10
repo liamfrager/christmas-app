@@ -4,6 +4,8 @@ import { doc, setDoc, getDoc } from "firebase/firestore";
 import { onAuthStateChanged, getAuth, signOut, User } from "firebase/auth";
 import { FirebaseService } from './firebase.service';
 
+type UserFunction = (user: User) => any;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,20 +13,31 @@ export class AccountService {
 
   constructor(private firebase: FirebaseService) { }
 
-  updateUserInfo() {
-    const docRef = doc(this.firebase.db, 'users', this.currentUser.uid)
+  currentUser?: User
+
+  ifUser(user: User | undefined, func: UserFunction) {
+    if (user) {
+      return func(user)
+    } else {
+      return undefined;
+    }
+  }
+
+  updateUserInfo(user: User) {
+    const docRef = doc(this.firebase.db, 'users', user.uid)
     getDoc(docRef).then(snap => {
-      this.currentUser = snap.data();
+      // this.currentUser = snap.data();
     })
   }
 
-  isNewUser(user: User) {
+  async isNewUser(user: User): Promise<boolean> {
     const docRef = doc(this.firebase.db, 'users', user.uid)
-    getDoc(docRef).then(() => {
+    try {
+      await getDoc(docRef);
       return true;
-    }).catch(() => {
+    } catch (_) {
       return false;
-    })
+    }
   }
 
   createNewUser(user: User) {
@@ -42,18 +55,18 @@ export class AccountService {
   getUserInfo(user: User) {
     const docRef = doc(this.firebase.db, 'users', user.uid)
     getDoc(docRef).then(snap => {
-      this.currentUser = snap.data();
+      // this.currentUser = snap.data();
     });
   }
 
-  logoutUser() {
-    const auth = getAuth();
-    signOut(auth).then(() => {
-      goto('/', { replaceState: true })
-      this.currentUser = {};
-    }).catch((error) => {
-      console.error('Could not logout')
-      // An error happened.
-    });
-  }
+  // logoutUser() {
+  //   const auth = getAuth();
+  //   signOut(auth).then(() => {
+  //     goto('/', { replaceState: true })
+  //     this.currentUser = {};
+  //   }).catch((error) => {
+  //     console.error('Could not logout')
+  //     // An error happened.
+  //   });
+  // }
 }
