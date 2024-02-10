@@ -1,0 +1,27 @@
+.member {
+        background-color: #4daf7c;
+        color: white;
+        font-size: 25px;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 10px;
+        display: flex;
+        /* align-items: center; */
+        justify-content: space-between;
+    }
+    p {
+        margin-left: 10px;
+    }
+    img {
+        border-radius: 50%;
+        border: 1px solid #26251d;
+    }
+    button {
+        background: none;
+        border: none;
+        color: white;
+        height: 10px;
+        font-size: 30px;
+        position: relative;
+        top: 0px;
+    }
