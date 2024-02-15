@@ -1,5 +1,5 @@
-<!-- <div *ngIf="name.length > 0" class="member">
+<div *ngIf="name" class="member">
     <img src={{pfp}} alt="">
     <p>{{name}}</p>
-    <button on:click="{{clickIcon}}" class="material-symbols-outlined">{{icon}}</button>
-</div> -->
+    <button (click)="onClick()" class="material-symbols-outlined">{{icon}}</button>
+</div>

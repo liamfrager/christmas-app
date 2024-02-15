@@ -1,13 +1,18 @@
 <div>
     <h2>Add family member</h2>
-    <!-- <form on:submit|preventDefault="{{displayUser}}">
-    <form>
+    <form (ngSubmit)="onSubmit(searchUserForm)" #searchUserForm="ngForm">
         <span class="material-symbols-outlined">search</span>
-        <input id="search" type="text" placeholder="email">
+        <input id="searchedUser" type="text" placeholder="email" name="searchedEmail" ngModel>
         <button type="submit">Search</button>
     </form>
     
-    <app-user-bubble pfp={{user.pfp}} name={{user.displayName}} icon={{icon}} clickIcon={{addFriend}}></app-user-bubble> -->
+    <app-user-bubble *ngIf="searchedUser !== undefined"
+        pfp="{{searchedUser['pfp']}}"
+        name="{{searchedUser['displayName']}}"
+        icon="{{icon}}"
+        args="{{searchedUser['uid']}}"
+        [func]="addFriend">
+    </app-user-bubble>
 </div>
 <div>
     <h2>Family requests</h2>
