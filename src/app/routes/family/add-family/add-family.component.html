@@ -7,8 +7,7 @@
     </form>
     
     <app-user-bubble *ngIf="searchedUser !== undefined"
-        [pfp]="searchedUser['pfp']"
-        [name]="searchedUser['displayName']"
+        [uid]="searchedUser['uid']"
         [icon]="icon"
         (buttonClicked)="addFriend(searchedUser['uid'])"
         >
