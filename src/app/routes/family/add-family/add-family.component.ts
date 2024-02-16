@@ -22,7 +22,7 @@ export class AddFamilyComponent {
 
   async onSubmit(form: NgForm) {
     const searchedEmail = form.form.value.searchedEmail
-    const currentUser = await this.currentUser; // here this.currentUser returns a Promise that resolves with "async", but later on...
+    const currentUser = await this.currentUser;
     this.currentUser = currentUser;
       if (searchedEmail !== currentUser?.['email']) {
           const q = query(collection(this.db, "users"), where('email', '==', searchedEmail));
@@ -42,7 +42,7 @@ export class AddFamilyComponent {
   }
   
   async addFriend(uid: string) {
-    const currentUser = await this.currentUser; // ...here this.currentUser returns undefined.
+    const currentUser = await this.currentUser;
     if (this.icon === "person_add") {
       this.icon = "check";
       let newFamilyMembers;

@@ -3,6 +3,7 @@ import { UserBubbleComponent } from '../user-bubble/user-bubble.component';
 import { AccountService } from '../../services/account.service';
 import { DocumentData } from 'firebase/firestore';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-family-display',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './family-display.component.css'
 })
 export class FamilyDisplayComponent {
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AccountService, private router: Router) {
     this.accountService.currentUser?.then((value: DocumentData) => {
       this.familyMembers = value['family'];
     })
@@ -21,5 +22,6 @@ export class FamilyDisplayComponent {
 
   goToList(uid: string) {
     console.log("clicked", uid);
+    this.router.navigate(['/family/list'], {queryParams: {uid: uid}});
   }
 }

@@ -1,12 +1,35 @@
 import { Component } from '@angular/core';
+import { GiftListService } from '../../../services/gift-list.service';
+import { FormsModule, NgForm } from '@angular/forms';
+import { AccountService } from '../../../services/account.service';
+
+type Gift = {
+  name: string,
+  url: string,
+  details: string,
+};
 
 @Component({
   selector: 'app-add-gift',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './add-gift.component.html',
   styleUrl: './add-gift.component.css'
 })
 export class AddGiftComponent {
+  constructor(private giftListService: GiftListService, private accountService: AccountService) {};
 
+  
+
+  async onSubmit(form: NgForm) {
+    const uid = await this.accountService.getCurrentUserUID();
+    const gift: Gift = {
+      name: form.form.value.name,
+      url: form.form.value.url,
+      details: form.form.value.details,
+    }
+    if (uid) {
+      this.giftListService.addGiftToList(uid, gift)
+    }
+  }
 }
