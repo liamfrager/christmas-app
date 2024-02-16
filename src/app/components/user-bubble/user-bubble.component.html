@@ -1,5 +1,5 @@
 <div *ngIf="name" class="member">
     <img src={{pfp}} alt="">
     <p>{{name}}</p>
-    <button (click)="onClick()" class="material-symbols-outlined">{{icon}}</button>
+    <button (click)="buttonClicked.emit(true)" class="material-symbols-outlined">{{icon}}</button>
 </div>

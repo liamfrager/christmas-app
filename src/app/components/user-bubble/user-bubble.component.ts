@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-user-bubble',
@@ -9,16 +9,10 @@ import { Component, Input } from '@angular/core';
   styleUrl: './user-bubble.component.css'
 })
 export class UserBubbleComponent {
-  @Input() pfp: string | undefined;
-  @Input() name: string | undefined;
-  @Input() icon: string | undefined = "edit";
-  @Input() args: any;
-  @Input() func!: (args: any) => void;;
-
-  onClick = () => {
-    this.func(this.args);
-    // this.runIcon();
-  };
+  @Input() pfp?: string;
+  @Input() name?: string;
+  @Input() icon: string = "edit";
+  @Output() buttonClicked = new EventEmitter();
 
   runIcon() {
       switch (this.icon) {

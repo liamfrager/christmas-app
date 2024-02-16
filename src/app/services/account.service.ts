@@ -23,7 +23,7 @@ export class AccountService {
     });
   }
   
-  currentUser?: DocumentData | undefined  = this.getUserInfo(this.getCurrentUserUID());
+  currentUser?: DocumentData | Promise<DocumentData> = this.getUserInfo(this.getCurrentUserUID());
 
   async getUserInfo(uid: string | undefined | Promise<string | undefined>) {
     uid = await uid;

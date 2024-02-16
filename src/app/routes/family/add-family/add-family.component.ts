@@ -25,6 +25,8 @@ export class AddFamilyComponent {
     console.log("promise", this.currentUser)
     const currentUser = await this.currentUser; // here this.currentUser returns a Promise that resolves with "async", but later on...
     console.log("resolved promise", currentUser);
+    console.log("current user now", this.currentUser);
+    this.currentUser = currentUser;
       if (searchedEmail !== currentUser?.['email']) {
           const q = query(collection(this.db, "users"), where('email', '==', searchedEmail));
           const docRef = await getDocs(q);

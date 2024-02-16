@@ -7,11 +7,11 @@
     </form>
     
     <app-user-bubble *ngIf="searchedUser !== undefined"
-        pfp="{{searchedUser['pfp']}}"
-        name="{{searchedUser['displayName']}}"
-        icon="{{icon}}"
-        args="{{searchedUser['uid']}}"
-        [func]="addFriend">
+        [pfp]="searchedUser['pfp']"
+        [name]="searchedUser['displayName']"
+        [icon]="icon"
+        (buttonClicked)="addFriend(searchedUser['uid'])"
+        >
     </app-user-bubble>
 </div>
 <div>
