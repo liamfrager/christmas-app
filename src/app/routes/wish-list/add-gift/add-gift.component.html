@@ -1,18 +1,8 @@
 <h2>Add A New Gift</h2>
 
-<form action="/">
-    <input type="text" name="name" id="name" placeholder="Name of Gift*" required><br>
-    <input type="url" name="link" id="link" placeholder="URL"><br>
-    <fieldset>
-        <input type="radio" name="price" id="cheap" checked>
-        <label for="cheap">$</label>
-        <input type="radio" name="price" id="nice" >
-        <label for="nice">$$</label>
-        <input type="radio" name="price" id="pricy" >
-        <label for="pricy">$$$</label>
-        <input type="radio" name="price" id="expensive" >
-        <label for="expensive">$$$$</label>
-    </fieldset><br>
-    <input type="file" name="image" id="image"><br>
+<form (ngSubmit)="onSubmit(addGiftForm)" #addGiftForm="ngForm">
+    <input type="text" name="name" id="name" placeholder="Name of Gift *" required ngModel><br>
+    <input type="url" name="url" id="url" placeholder="URL" ngModel><br>
+    <textarea name="details" id="details" placeholder="Details" style="width: 100%; resize: none" ngModel></textarea>
     <input type="submit" name="submit" id="submit" value="Add Gift to List">
 </form>

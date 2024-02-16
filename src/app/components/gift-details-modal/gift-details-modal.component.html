@@ -1,0 +1,9 @@
+<div class="backdrop">
+  <div class="modal">
+    <span (click)="closeModal.emit(true)" class="material-symbols-outlined close">close</span>
+    <h3>{{gift.name}}</h3>
+    <a [href]="gift.url">{{gift.url}}</a>
+    <p>{{gift.details}}</p>
+    <button (click)="claimGift.emit(true)">Claim gift</button>
+  </div>
+</div>

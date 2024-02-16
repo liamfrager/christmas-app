@@ -7,6 +7,7 @@ import { AddGiftComponent } from './routes/wish-list/add-gift/add-gift.component
 // Family
 import { FamilyComponent } from './routes/family/family.component';
 import { AddFamilyComponent } from './routes/family/add-family/add-family.component';
+import { FamilyListComponent } from './routes/family/list/list.component';
 // Shopping List
 import { ShoppingListComponent } from './routes/shopping-list/shopping-list.component';
 // Secret Santa
@@ -39,6 +40,10 @@ export const routes: Routes = [
   {
     path: 'family/add-family',
     component: AddFamilyComponent,
+  },
+  {
+    path: 'family/list',
+    component: FamilyListComponent,
   },
   {
     path: 'shopping-list',

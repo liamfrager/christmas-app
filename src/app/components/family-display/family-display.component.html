@@ -1,8 +1,12 @@
-<div>
-  <app-user-bubble *ngFor="let member of familyMembers"
-    [uid]="member"
-    icon="featured_seasonal_and_gifts"
-    (buttonClicked)="goToList(member)"
-    >
-  </app-user-bubble>
+<div *ngIf="familyMembers; else loadingFamily">
+  <div *ngIf="familyMembers.length > 0; else noFamily">
+    <app-user-bubble *ngFor="let member of familyMembers"
+      [uid]="member"
+      icon="featured_seasonal_and_gifts"
+      (buttonClicked)="goToList(member)"
+      >
+    </app-user-bubble>
+  </div>
+  <ng-template #noFamily>You have no family members.</ng-template>
 </div>
+<ng-template #loadingFamily>Loading family members...</ng-template>

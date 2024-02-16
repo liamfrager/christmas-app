@@ -1,0 +1,5 @@
+.gift-wrap {
+  display: flex;
+  align-items: center;
+  padding: .2em;
+}
