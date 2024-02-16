@@ -1,0 +1,8 @@
+<div>
+  <app-user-bubble *ngFor="let member of familyMembers"
+    [uid]="member"
+    icon="featured_seasonal_and_gifts"
+    (buttonClicked)="goToList(member)"
+    >
+  </app-user-bubble>
+</div>
