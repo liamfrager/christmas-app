@@ -1,12 +1,7 @@
-<div class="heading">
-    <h2>Your Wish List</h2>
-    <div>
-        <a href="/">
-            <span class="material-symbols-outlined menu_item">filter_list</span>
-        </a>
-        <a href="/wish-list/add-gift">
-            <span class="material-symbols-outlined menu_item">forms_add_on</span>
-        </a>
-    </div>
-</div>
-<app-list-display [uid]="uid"></app-list-display>
+<app-page-heading
+    headingText="Your Wish List"
+    [buttons]="headingButtons"
+    (onIconClick)="onHeadingIconClick($event)"
+    >
+</app-page-heading>
+<app-list-display listType="wish" [uid]="uid"></app-list-display>

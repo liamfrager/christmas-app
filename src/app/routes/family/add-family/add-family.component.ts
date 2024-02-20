@@ -56,9 +56,7 @@ export class AddFamilyComponent {
         const docRef = doc(this.db, "users", this.currentUser?.['uid']);
         updateDoc(docRef, {
           family: newFamilyMembers
-        }).then( (x) => {
-          console.log(x);
-        })
+        });
         console.log("Document updated with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);

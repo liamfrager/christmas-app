@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ListDisplayComponent } from '../../../components/list-display/list-display.component';
+import { ListDisplayComponent } from '../../../components/list-components/list-display/list-display.component';
 
 @Component({
   selector: 'app-family-list',

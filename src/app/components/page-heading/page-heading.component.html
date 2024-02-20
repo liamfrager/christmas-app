@@ -1,0 +1,10 @@
+<div class="heading">
+    <h2>{{headingText}}</h2>
+    <div>
+      <app-icon *ngFor="let icon of buttons"
+        [icon]="icon"
+        (iconClicked)="onIconClick.emit(icon)"
+        >
+      </app-icon>
+    </div>
+</div>

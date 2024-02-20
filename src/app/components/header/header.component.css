@@ -4,6 +4,7 @@
   background-color: #d64541;
   color: white;
   position: fixed;
+  z-index: 1;
   top: 0;
   width: 100vw;
   box-shadow: 0 0 0 30px white, 0 0 0 31px #26251d;

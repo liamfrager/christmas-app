@@ -1,0 +1,47 @@
+<div *ngIf="gifts; else loadingGifts">
+  <!-- Display list owner -->
+  <div *ngIf="listType !== 'shopping' && !isOwnedByCurrentUser" class="list-owner-display">
+    <img [src]="listOwner?.['pfp']" alt="">
+    <span>{{listOwner?.['displayName']}}</span>
+  </div>
+  <!-- Display gifts -->
+  <div *ngIf="gifts.length > 0; else noGifts">
+    <!-- If is shopping-list -->
+    <div *ngIf="listType === 'shopping'; else wishDisplay">
+      <div *ngFor="let user of gifts">
+        <div class="list-owner-display">
+          <img [src]="user.user.pfp" alt="">
+          <span>{{user.user.displayName}}</span>
+        </div>
+        <app-gift-display
+          *ngFor="let gift of user.gifts"
+          class="gift"
+          [gift]="gift"
+          (giftClicked)="highlightGift(gift)"
+          >
+        </app-gift-display>
+      </div>
+    </div>
+    <!-- If is wish-list -->
+    <ng-template #wishDisplay>
+      <app-gift-display
+        *ngFor="let gift of gifts"
+        class="gift"
+        [gift]="gift"
+        (giftClicked)="highlightGift(gift)"
+        >
+      </app-gift-display>
+    </ng-template>
+  </div>
+  <!-- If no gifts -->
+  <ng-template #noGifts>{{isOwnedByCurrentUser ? "You have " : listOwner?.['displayName'] + " has"}} no gifts on {{isOwnedByCurrentUser ? "your " : "their"}} {{listType}} list.</ng-template>
+</div>
+<!-- Loading gifts -->
+<ng-template #loadingGifts>Loading gifts...</ng-template>
+
+<!-- Gift details slide-over -->
+  <app-gift-details-modal
+    [gift]="highlightedGift"
+    (claimGift)="claimGift(highlightedGift)"
+    >
+  </app-gift-details-modal>
