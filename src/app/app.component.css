@@ -1,3 +1,7 @@
 .filler {
-    height: 120px;
+    height: 8em;
+}
+
+.body {
+    margin: auto .8em;
 }

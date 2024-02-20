@@ -1,0 +1,51 @@
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+
+  to {
+    margin-left: -3px;
+    width: 100%;
+  }
+}
+@keyframes slideout {
+  from {
+    margin-left: -3px;
+    width: 100%;
+  }
+
+  to {
+    margin-left: 100%;
+    width: 300%;
+  }
+}
+.show {
+  animation-name: slidein;
+  animation-duration: .5s;
+  margin-left: -3px;
+  width: 100%;
+}
+.hide {
+  animation-name: slideout;
+  animation-duration: .5s;
+  margin-left: 100%;
+  width: 300%;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  background: cornsilk;
+  border-left: 3px solid black;
+}
+.modal {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8em;
+  padding: 1em;
+}
+.close {
+  position: relative;
+}

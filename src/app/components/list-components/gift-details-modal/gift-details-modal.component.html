@@ -1,0 +1,13 @@
+<div *ngIf="gift" [className]="isShown">
+  <div class="modal">
+    <app-page-heading
+      [headingText]="gift.name"
+      [buttons]="headingButtons"
+      (onIconClick)="closeModal()"
+      >
+    </app-page-heading>
+    <a [href]="gift.url">{{gift.url}}</a>
+    <p>{{gift.details}}</p>
+    <button (click)="buttonClicked.emit(true)">Claim gift</button>
+  </div>
+</div>

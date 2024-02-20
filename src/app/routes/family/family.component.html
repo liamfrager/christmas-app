@@ -1,12 +1,7 @@
-<div class="heading">
-    <h2>Your Family</h2>
-    <div>
-        <a href="/">
-            <span class="material-symbols-outlined menu_item">filter_list</span>
-        </a>
-        <a href="/family/add-family">
-            <span class="material-symbols-outlined menu_item">person_add</span>
-        </a>
-    </div>
-</div>
+<app-page-heading
+    headingText="Your Family"
+    [buttons]="headingButtons"
+    (onIconClick)="onHeadingIconClick($event)"
+    >
+</app-page-heading>
 <app-family-display></app-family-display>

@@ -1,0 +1,13 @@
+.gift-wrap {
+  display: flex;
+  align-items: center;
+  padding: .2em;
+}
+
+.checkbox {
+  margin-right: .3em;
+}
+
+.gift-name:hover {
+  color: darkred;
+}

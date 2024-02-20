@@ -21,7 +21,6 @@ export class FamilyDisplayComponent {
   familyMembers?: string[];
 
   goToList(uid: string) {
-    console.log("clicked", uid);
     this.router.navigate(['/family/list'], {queryParams: {uid: uid}});
   }
 }

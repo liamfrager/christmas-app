@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AccountService } from '../../services/account.service';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-user-bubble',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   templateUrl: './user-bubble.component.html',
   styleUrl: './user-bubble.component.css'
 })
@@ -19,10 +20,7 @@ export class UserBubbleComponent implements OnChanges {
   name?: string;
 
   ngOnChanges() {
-    console.log("bubble changes run");
     this.accountService.getUserInfo(this.uid).then(value => {
-      console.log(this.uid);
-      console.log("value", value);
       this.pfp = value?.['pfp'];
       this.name = value?.['displayName'];
     })

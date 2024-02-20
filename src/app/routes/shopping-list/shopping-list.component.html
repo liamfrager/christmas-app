@@ -1,1 +1,7 @@
-<h2>Shopping List</h2>
+<app-page-heading
+    headingText="Your Shopping List"
+    [buttons]="headingButtons"
+    (onIconClick)="onHeadingIconClick($event)"
+    >
+</app-page-heading>
+<app-list-display listType="shopping"></app-list-display>

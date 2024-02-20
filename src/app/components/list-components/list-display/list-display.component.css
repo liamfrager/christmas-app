@@ -1,0 +1,14 @@
+.gift {
+  margin: 0;
+  background: green;
+}
+.list-owner-display {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.list-owner-display img {
+  border-radius: 50%;
+  border: 2px solid black;
+  scale: .8;
+}
