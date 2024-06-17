@@ -5,9 +5,6 @@ import { getAuth, signOut, User } from "firebase/auth";
 import { FirebaseService } from './firebase.service';
 
 
-type UserFunction = (user: User) => any;
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -36,28 +33,13 @@ export class AccountService {
     }
   };
 
-  ifUser(user: User | undefined, func: UserFunction) {
-    if (user) {
-      return func(user)
-    } else {
-      return undefined;
-    }
-  }
-
-  updateUserInfo(user: User) {
-    const docRef = doc(this.firebaseService.db, 'users', user.uid)
-    getDoc(docRef).then(snap => {
-      this.currentUser = snap.data();
-    })
-  }
-
   async isNewUser(user: User): Promise<boolean> {
     const docRef = doc(this.firebaseService.db, 'users', user.uid)
-    try {
-      await getDoc(docRef);
-      return true;
-    } catch (_) {
+    const res = await getDoc(docRef);
+    if (res.data()) {
       return false;
+    } else {
+      return true;
     }
   }
 
@@ -73,8 +55,7 @@ export class AccountService {
   }
 
   logoutUser() {
-    const auth = getAuth();
-    signOut(auth).then(() => {
+    signOut(this.firebaseService.auth).then(() => {
       this.router.navigate(['/login']);
     }).catch((error) => {
       console.error('Could not logout')

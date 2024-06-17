@@ -49,3 +49,45 @@
 .close {
   position: relative;
 }
+
+.status-display {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: .5em;
+  height: .5em;
+  width: 90%;
+  background: white;
+  margin-top: 1em;
+}
+
+.node {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.node:hover {
+  scale: 1.1;
+}
+.node app-icon {
+  height: 30px;
+}
+
+.status-fill {
+  color: green;
+}
