@@ -17,9 +17,11 @@
           *ngFor="let gift of user.gifts"
           class="gift"
           [gift]="gift"
+          [isChecked]="getIsChecked(gift)"
           (giftClicked)="highlightGift(gift)"
           >
         </app-gift-display>
+        <hr>
       </div>
     </div>
     <!-- If is wish-list -->
@@ -28,13 +30,14 @@
         *ngFor="let gift of gifts"
         class="gift"
         [gift]="gift"
+        [isChecked]="getIsChecked(gift)"
         (giftClicked)="highlightGift(gift)"
         >
       </app-gift-display>
     </ng-template>
   </div>
   <!-- If no gifts -->
-  <ng-template #noGifts>{{isOwnedByCurrentUser ? "You have " : listOwner?.['displayName'] + " has"}} no gifts on {{isOwnedByCurrentUser ? "your " : "their"}} {{listType}} list.</ng-template>
+  <ng-template #noGifts>{{noGiftsMessage}}</ng-template>
 </div>
 <!-- Loading gifts -->
 <ng-template #loadingGifts>Loading gifts...</ng-template>
@@ -42,6 +45,8 @@
 <!-- Gift details slide-over -->
   <app-gift-details-modal
     [gift]="highlightedGift"
-    (claimGift)="claimGift(highlightedGift)"
+    [type]="listType"
+    (buttonClicked)="claimGift()"
+    (statusUpdated)="setStatus($event)"
     >
   </app-gift-details-modal>

@@ -1,3 +1,7 @@
 .icon:hover {
   scale: 1.1;
+  cursor: pointer;
+}
+span {
+  user-select: none;
 }

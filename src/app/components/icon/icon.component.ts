@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-icon',
@@ -7,7 +7,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './icon.component.html',
   styleUrl: './icon.component.css'
 })
-export class IconComponent {
+export class IconComponent implements OnChanges {
   @Input({required: true}) icon!: string;
+  @Input() hover: boolean = true;
   @Output() iconClicked = new EventEmitter();
+
+  style = "material-symbols-outlined icon"
+  ngOnChanges() {
+    this.style = this.hover ? "material-symbols-outlined icon" : "material-symbols-outlined";
+  }
 }

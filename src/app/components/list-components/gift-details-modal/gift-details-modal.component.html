@@ -8,6 +8,21 @@
     </app-page-heading>
     <a [href]="gift.url">{{gift.url}}</a>
     <p>{{gift.details}}</p>
-    <button (click)="buttonClicked.emit(true)">Claim gift</button>
+    <div *ngIf="type === 'shopping'; else wishButton" class="status-display">
+      <div class="line">
+        <div *ngFor="let status of statuses" class="node" [style]="status.name === currentStatus ? 'color: green' : ''">
+          <app-icon
+            [icon]="status.icon"
+            [hover]="false"
+            (iconClicked)="currentStatus = status.name"
+            [title]="status.name"
+            >
+          </app-icon>
+        </div>
+      </div>
+    </div>
+    <ng-template #wishButton>
+      <button *ngIf="" (click)="buttonClicked.emit(true)">Claim gift</button>
+    </ng-template>
   </div>
 </div>

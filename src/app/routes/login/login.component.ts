@@ -38,8 +38,6 @@ export class LoginComponent implements OnInit {
           // ...
           if (await this.accountService.isNewUser(user)) {
               this.accountService.createNewUser(user);
-          } else {
-              this.accountService.getUserInfo(user.uid);
           }
           this.router.navigate(['/wish-list'])
       }).catch((error) => {
