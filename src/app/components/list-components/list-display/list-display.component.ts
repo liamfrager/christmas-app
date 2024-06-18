@@ -41,6 +41,7 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   async updateGifts() {
+    console.log('updating gifts...')
     const shoppingListInfo = await this.giftListService.getShoppingListInfo();
     var result: any[] = [];
     var user = "";
@@ -65,6 +66,7 @@ export class ListDisplayComponent implements OnChanges {
       gifts: gifts
     });
     this.gifts = result;
+    console.log('updated gifts.')
   }
 
   highlightedGift?: any;

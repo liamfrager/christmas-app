@@ -20,20 +20,22 @@ export class GiftDetailsModalComponent implements OnChanges, OnDestroy{
   @Output() buttonClicked = new EventEmitter();
   @Output() statusUpdated = new EventEmitter();
 
-  headingButtons = ['close']
-  currentStatus = this.gift?.status
-  isShown!: string;
+  headingButtons = ['close'];
+  currentStatus = this.gift?.status;
+  isShown: boolean = false;
   ngOnChanges() {
-    this.isShown = "show backdrop";
-    this.currentStatus = this.gift?.status
+    this.isShown = true;
+    this.currentStatus = this.gift?.status;
   }
   closeModal() {
-    this.isShown = "hide backdrop";
-    this.statusUpdated.emit(this.currentStatus)
+    this.isShown = false;
+    console.log('Modal closed, isShown:', this.isShown);  // Debug log
+    // TODO: visuals are not updating before statusUpdated is emiting. directly update classlist rather than updating "isShown"?
+    this.statusUpdated.emit(this.currentStatus);
   }
 
   ngOnDestroy(): void {
-    this.statusUpdated.emit(this.currentStatus)
+    this.statusUpdated.emit(this.currentStatus);
   }
 
 
