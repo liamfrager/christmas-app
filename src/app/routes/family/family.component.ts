@@ -17,6 +17,7 @@ export class FamilyComponent {
   onHeadingIconClick(e: any) {
     switch (e) {
       case 'filter_list':
+        // TODO: add sorting capabilities
         console.log('filter')
         break;
       case 'person_add':

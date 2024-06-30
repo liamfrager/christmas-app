@@ -9,9 +9,9 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, FooterComponent],
-  imports: [BrowserModule, FormsModule, CommonModule],
+  declarations: [],
+  imports: [AppComponent, HeaderComponent, FooterComponent, BrowserModule, FormsModule, CommonModule],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [],
 })
 export class AppModule {}

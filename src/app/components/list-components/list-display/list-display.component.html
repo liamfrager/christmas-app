@@ -1,24 +1,24 @@
-<div *ngIf="gifts; else loadingGifts">
+<div *ngIf="listInfo; else loadingGifts">
   <!-- Display list owner -->
   <div *ngIf="listType !== 'shopping' && !isOwnedByCurrentUser" class="list-owner-display">
     <img [src]="listOwner?.['pfp']" alt="">
     <span>{{listOwner?.['displayName']}}</span>
   </div>
   <!-- Display gifts -->
-  <div *ngIf="gifts.length > 0; else noGifts">
+  <div *ngIf="listInfo !== {}; else noGifts">
     <!-- If is shopping-list -->
     <div *ngIf="listType === 'shopping'; else wishDisplay">
-      <div *ngFor="let user of gifts">
+      <div *ngFor="let list of listInfo | keyvalue">
         <div class="list-owner-display">
-          <img [src]="user.user.pfp" alt="">
-          <span>{{user.user.displayName}}</span>
+          <img [src]="list.value.user.pfp" [alt]="list.value.user.displayName + ' profile picture'">
+          <span>{{list.value.user.displayName}}</span>
         </div>
         <app-gift-display
-          *ngFor="let gift of user.gifts"
+          *ngFor="let gift of list.value.gifts | keyvalue"
           class="gift"
-          [gift]="gift"
-          [isChecked]="getIsChecked(gift)"
-          (giftClicked)="highlightGift(gift)"
+          [gift]="gift.value"
+          [isChecked]="getIsChecked(gift.value)"
+          (giftClicked)="showInModal(gift.value)"
           >
         </app-gift-display>
         <hr>
@@ -26,14 +26,16 @@
     </div>
     <!-- If is wish-list -->
     <ng-template #wishDisplay>
-      <app-gift-display
-        *ngFor="let gift of gifts"
-        class="gift"
-        [gift]="gift"
-        [isChecked]="getIsChecked(gift)"
-        (giftClicked)="highlightGift(gift)"
-        >
-      </app-gift-display>
+      <div *ngFor="let list of listInfo | keyvalue">
+        <app-gift-display
+          *ngFor="let gift of list.value.gifts | keyvalue"
+          class="gift"
+          [gift]="gift.value"
+          [isChecked]="getIsChecked(gift.value)"
+          (giftClicked)="showInModal(gift.value)"
+          >
+        </app-gift-display>
+      </div>
     </ng-template>
   </div>
   <!-- If no gifts -->
@@ -43,10 +45,10 @@
 <ng-template #loadingGifts>Loading gifts...</ng-template>
 
 <!-- Gift details slide-over -->
-  <app-gift-details-modal
-    [gift]="highlightedGift"
-    [type]="listType"
-    (buttonClicked)="claimGift()"
-    (statusUpdated)="setStatus($event)"
-    >
-  </app-gift-details-modal>
+<app-gift-details-modal
+  [gift]="giftInModal"
+  [type]="listType"
+  (onGiftClaim)="claimGift()"
+  (onStatusUpdated)="setStatus($event)"
+  >
+</app-gift-details-modal>

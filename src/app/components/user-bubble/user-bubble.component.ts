@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AccountService } from '../../services/account.service';
 import { IconComponent } from '../icon/icon.component';
+import { User } from '../../types';
 
 @Component({
   selector: 'app-user-bubble',
@@ -12,18 +13,14 @@ import { IconComponent } from '../icon/icon.component';
 })
 export class UserBubbleComponent implements OnChanges {
   constructor(private accountService: AccountService) {};
-  @Input({required: true}) uid?: string;
+  @Input({required: true}) uid!: string;
   @Input() icon: string = "edit";
   @Output() buttonClicked = new EventEmitter();
 
-  pfp?: string;
-  name?: string;
+  user?: User;
 
-  ngOnChanges() {
-    this.accountService.getUserInfo(this.uid).then(value => {
-      this.pfp = value?.['pfp'];
-      this.name = value?.['displayName'];
-    })
+  async ngOnChanges() {
+    this.user = await this.accountService.getUserInfo(this.uid)
   }
 
   runIcon() {

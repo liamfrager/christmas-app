@@ -11,3 +11,11 @@
 .gift-name:hover {
   color: darkred;
 }
+
+.cursor-click {
+  cursor: pointer;
+}
+
+.cursor-arrow {
+  cursor: default;
+}
