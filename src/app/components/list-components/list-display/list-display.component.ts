@@ -6,93 +6,90 @@ import { AccountService } from '../../../services/account.service';
 import { DocumentData, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { GiftDetailsModalComponent } from '../gift-details-modal/gift-details-modal.component';
 import { FirebaseService } from '../../../services/firebase.service';
+import { Gift, Gifts, List, User } from '../../../types';
 
 @Component({
-  selector: 'app-list-display',
-  standalone: true,
-  imports: [GiftDisplayComponent, GiftDetailsModalComponent, CommonModule],
-  templateUrl: './list-display.component.html',
-  styleUrl: './list-display.component.css'
+    selector: 'app-list-display',
+    standalone: true,
+    templateUrl: './list-display.component.html',
+    styleUrl: './list-display.component.css',
+    imports: [GiftDisplayComponent, GiftDetailsModalComponent, CommonModule]
 })
 export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};
-  @Input({required: true}) listType!: string;
+  @Input({ required: true }) listType!: string;
   @Input() uid!: string;
   
-  listOwner?: DocumentData;
+  listOwner?: User;
   isOwnedByCurrentUser = true;
   noGiftsMessage: string = 
     this.isOwnedByCurrentUser ?
     `You have no gifts in your ${this.listType} list` :
     `${this.listOwner?.['displayName']} has no gifts in their ${this.listType} list`
-  gifts: any;
+  listInfo: List | undefined;
   
   async ngOnChanges() {
     if (this.listType === "wish") {
-      this.gifts = await this.giftListService.getListInfo(this.uid);
+      this.listInfo = await this.giftListService.getWishListInfo(this.uid) as List;
       this.listOwner = await this.accountService.getUserInfo(this.uid);
       const currentUserUID = await this.accountService.getCurrentUserUID();
       this.isOwnedByCurrentUser = this.listOwner?.['uid'] === currentUserUID;
     } else if (this.listType === "shopping") {
-      this.updateGifts();
+      this.listInfo = await this.getShoppingListGifts();
     } else {
       console.log(`${this.listType} is not a valid list type.`)
     }
   }
 
-  async updateGifts() {
-    console.log('updating gifts...')
+  async getShoppingListGifts() {
     const shoppingListInfo = await this.giftListService.getShoppingListInfo();
-    var result: any[] = [];
-    var user = "";
-    var gifts: any[] = [];
-    for (let i = 0; i < shoppingListInfo.length; i++) {
-      const giftRef = shoppingListInfo[i];
-      if (user !== giftRef.user && user !== "") {
-        const userInfo = await this.accountService.getUserInfo(user);
-        result.push({
-          user: userInfo,
-          gifts: gifts
-        });
-        gifts = [];
+    if (shoppingListInfo) {
+      var result: List = {};
+      for (let i = 0; i < shoppingListInfo.length; i++) {
+        const gift = shoppingListInfo[i];
+        const userID = gift.isWishedBy;
+        if (!result[userID]) {
+          result[userID].user = await this.accountService.getUserInfo(userID)
+        }
+        result[userID].gifts[gift.id] = gift;
       }
-      user = giftRef.user
-      const giftInfo = await getDoc(doc(this.firebaseService.db, 'lists', user, 'wish-list', giftRef.id));
-      gifts.push({...giftInfo.data(), status: giftRef.status});
+      return result;
+    } else {
+      return {};
     }
-    const userInfo = await this.accountService.getUserInfo(user);
-    result.push({
-      user: userInfo,
-      gifts: gifts
-    });
-    this.gifts = result;
-    console.log('updated gifts.')
   }
 
-  highlightedGift?: any;
-  highlightGift(gift?: any) {
-    this.highlightedGift = {...gift};
+  giftInModal!: Gift;
+  showModal: boolean = false;
+  showInModal(gift: Gift) {
+    this.giftInModal = gift;
+    this.showModal = true;
   }
 
   claimGift() {
-    this.giftListService.addGiftToShoppingList(this.uid, this.highlightedGift!.id);
+    this.giftListService.addGiftToShoppingList(this.uid, this.giftInModal!);
   }
 
   async setStatus(status: string) {
     console.log('status: ', status)
-    const currentUserUID = await this.accountService.getCurrentUserUID();
-    const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserUID!, 'shopping-list', this.highlightedGift.id), {
-      status: status
-    })
-    this.highlightedGift = {...this.highlightedGift, status: status}
-    this.updateGifts();
-    // TODO: gifts status isn't updating...
+    try {
+      const currentUserUID = await this.accountService.getCurrentUserUID();
+      const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserUID!, 'shopping-list', this.giftInModal.id), {
+        status: status
+      })
+      this.giftInModal = {...this.giftInModal, status: status}
+      // TODO: update this.gifts to have the correct status.
+      // - refactor this.gifts to be an object with uids as keys.
+      // - refactor this.gifts.['user'].gifts to be an object with giftIDs as keys.
+      // - refactor gift in database to hold 'userRequestingGift' info.
+      // - this.gifts[this.giftInModal.userRequestingGift].gifts[this.giftInModal.id].status = status
+    } catch(e) { console.log(e) }
   }
 
   getIsChecked(gift: any): boolean {
     var result: boolean = false;
     if (this.listType === 'wish') {
-      if (!this.isOwnedByCurrentUser && gift.isClaimed) {
+      if (!this.isOwnedByCurrentUser && gift.isClaimedBy) {
         result = true;
       }
     } else if (this.listType === 'shopping') {

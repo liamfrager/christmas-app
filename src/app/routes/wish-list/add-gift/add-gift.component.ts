@@ -2,12 +2,8 @@ import { Component } from '@angular/core';
 import { GiftListService } from '../../../services/gift-list.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AccountService } from '../../../services/account.service';
+import { NewGift } from '../../../types';
 
-type Gift = {
-  name: string,
-  url: string,
-  details: string,
-};
 
 @Component({
   selector: 'app-add-gift',
@@ -23,13 +19,14 @@ export class AddGiftComponent {
 
   async onSubmit(form: NgForm) {
     const uid = await this.accountService.getCurrentUserUID();
-    const gift: Gift = {
-      name: form.form.value.name,
-      url: form.form.value.url,
-      details: form.form.value.details,
-    }
     if (uid) {
-      this.giftListService.addGiftToList(uid, gift)
+      const gift: NewGift = {
+        name: form.form.value.name,
+        url: form.form.value.url,
+        details: form.form.value.details,
+        isWishedBy: uid,
+      }
+      this.giftListService.addGiftToWishList(uid, gift)
     }
   }
 }

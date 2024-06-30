@@ -2,12 +2,8 @@ import { Injectable } from '@angular/core';
 import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
+import { Gift, Gifts, List, NewGift, User } from '../types';
 
-type Gift = {
-  name: string,
-  url: string,
-  details: string,
-};
 
 @Injectable({
   providedIn: 'root'
@@ -16,28 +12,41 @@ export class GiftListService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {};
   db = this.firebaseService.db;
 
-  async getListInfo(uid: string) {
-    let gifts: any[] = [];
+  async getWishListInfo(uid: string) : Promise<List | undefined> {
+    let gifts: Gifts = {};
     const querySnapshot = await getDocs(collection(this.db, 'lists', uid, 'wish-list'));
     querySnapshot.forEach((doc) => {
-      gifts.push(doc.data());
+      gifts[doc.data()['id']] = doc.data() as Gift;
     });
-    return gifts;
+    let user: User = await this.accountService.getUserInfo(uid);
+    if (user) {
+      let list: List = {
+        [user.uid]: {
+          gifts: gifts,
+          user: user,
+        }
+      }
+      return list;
+    } else {
+      return undefined
+    }
   }
 
-  async getShoppingListInfo() {
-    let shoppingListInfo: any[] = [];
+  async getShoppingListInfo() : Promise<Gift[]> {
+    let shoppingListInfo: Gift[] = [];
 
     const currentUserUID = await this.accountService.getCurrentUserUID();
-    const querySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserUID!, 'shopping-list'), orderBy('user')));
-    for (let i = 0; i < querySnapshot.docs.length; i++) {
-      const refData = querySnapshot.docs[i].data();
-      shoppingListInfo.push(refData);
+    const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserUID!, 'shopping-list'), orderBy('user')));
+    for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
+      const shoppingRefData = shoppingQuerySnapshot.docs[i].data();
+      const wishQuerySnapshot = await getDoc(doc(this.db, 'lists', shoppingRefData['giftWishedBy']!, 'wish-list', shoppingRefData['id']));
+      const wishRefData = wishQuerySnapshot.data()
+      shoppingListInfo.push({...shoppingRefData, ...wishRefData} as Gift);
     }
     return shoppingListInfo;
   }
 
-  async addGiftToList(uid: string, gift: Gift) {
+  async addGiftToWishList(uid: string, gift: NewGift) {
     const docRef = await addDoc(collection(this.firebaseService.db, 'lists', uid, 'wish-list'), {
       name: gift.name,
       url: gift.url,
@@ -48,23 +57,22 @@ export class GiftListService {
     })
   }
 
-  async addGiftToShoppingList(uid: string, giftID: string) {
+  async addGiftToShoppingList(uid: string, gift: Gift) {
     // Add gift to shopping list (reference to gift?);
     const currentUserUID = await this.accountService.getCurrentUserUID();
-    const shoppingDocRef = doc(this.firebaseService.db, 'lists', currentUserUID!, 'shopping-list', giftID);
-    const wishDocRef = doc(this.firebaseService.db, 'lists', uid, 'wish-list', giftID);
+    const shoppingDocRef = doc(this.firebaseService.db, 'lists', currentUserUID!, 'shopping-list', gift.id);
+    const wishDocRef = doc(this.firebaseService.db, 'lists', uid, 'wish-list', gift.id);
 
     const wishGift = (await getDoc(wishDocRef)).data();
-    const isAlreadyClaimed = wishGift?.['isClaimed'] ? true : false;
+    const isAlreadyClaimed = wishGift?.['isClaimedBy'] ? true : false;
     if (!isAlreadyClaimed) {
       setDoc(shoppingDocRef, {
-        id: giftID,
-        user: uid,
+        ...gift,
         status: 'claimed'
       });
       // Update gift to indicate that it has been claimed.
       updateDoc(wishDocRef, {
-        isClaimed: true
+        isClaimedBy: uid
       })
     } else {
       console.log('Gift already claimed!');

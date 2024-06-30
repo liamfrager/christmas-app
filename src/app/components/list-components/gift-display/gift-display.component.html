@@ -1,4 +1,4 @@
-<div class="gift-wrap" (click)="giftClicked.emit(true)">
-  <span class="material-symbols-outlined checkbox">{{isChecked ? "check_box" : "check_box_outline_blank"}}</span>
-  <span class="gift-name">{{gift.name}}</span>
+<div class="gift-wrap">
+  <span class="material-symbols-outlined checkbox cursor-arrow">{{isChecked ? "check_box" : "check_box_outline_blank"}}</span>
+  <span class="gift-name cursor-click" (click)="giftClicked.emit(true)">{{gift.name}}</span>
 </div>

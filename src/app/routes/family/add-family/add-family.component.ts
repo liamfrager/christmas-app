@@ -5,6 +5,7 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
 import { DocumentData, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'; 
 import { CommonModule } from '@angular/common';
+import { User } from '../../../types';
 
 @Component({
   selector: 'app-add-family',
@@ -16,44 +17,43 @@ import { CommonModule } from '@angular/common';
 export class AddFamilyComponent {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {};
   db = this.firebaseService.db;
-  currentUser: DocumentData | undefined = this.accountService.currentUser;
   searchedUser: DocumentData | undefined = undefined;
   icon = "person_add";
 
   async onSubmit(form: NgForm) {
     const searchedEmail = form.form.value.searchedEmail
-    const currentUser = await this.currentUser;
-    this.currentUser = currentUser;
+    const currentUser = await this.accountService.currentUser;;
       if (searchedEmail !== currentUser?.['email']) {
           const q = query(collection(this.db, "users"), where('email', '==', searchedEmail));
           const docRef = await getDocs(q);
-          docRef.forEach(snap => {
+          docRef.forEach(async snap => {
             this.searchedUser = snap.data();
-            this.icon = this.isFamilyMember(this.searchedUser?.['uid']) ? "check" : "person_add";
+            this.icon = await this.isFamilyMember(this.searchedUser?.['uid']) ? "check" : "person_add";
           })
       }
   }
 
-  isFamilyMember(searchedUserUID: string) {
-    if(this.currentUser?.['family']) {
-        return searchedUserUID !== undefined ? this.currentUser['family'].indexOf(searchedUserUID) >= 0 : false;
+  async isFamilyMember(searchedUserUID: string) {
+    const currentUser = await this.accountService.currentUser;;
+    if(currentUser['family']) {
+        return searchedUserUID !== undefined ? currentUser['family'].indexOf(searchedUserUID) >= 0 : false;
     }
     return false;
   }
   
   async addFriend(uid: string) {
-    const currentUser = await this.currentUser;
+    const currentUser = await this.accountService.currentUser;;
     if (this.icon === "person_add") {
       this.icon = "check";
       let newFamilyMembers;
-      if (this.currentUser?.['family'].length > 0 && this.currentUser?.['family'].indexOf(uid) < 0) {
-        newFamilyMembers = [...this.currentUser?.['family'], uid];
+      if (currentUser['family'].length > 0 && currentUser['family'].indexOf(uid) < 0) {
+        newFamilyMembers = [...currentUser['family'], uid];
       } else {
         newFamilyMembers = [uid]
       }
       
       try {
-        const docRef = doc(this.db, "users", this.currentUser?.['uid']);
+        const docRef = doc(this.db, "users", currentUser['uid']);
         updateDoc(docRef, {
           family: newFamilyMembers
         });

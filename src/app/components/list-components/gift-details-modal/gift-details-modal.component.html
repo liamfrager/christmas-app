@@ -1,6 +1,5 @@
-<div *ngIf="gift && isShown" class="backdrop">
+<div *ngIf="gift" [class]="isShown ? 'show backdrop' : 'hide backdrop'">
   <div class="modal">
-    <span>{{isShown}}</span>
     <app-page-heading
       [headingText]="gift.name"
       [buttons]="headingButtons"
@@ -9,21 +8,33 @@
     </app-page-heading>
     <a [href]="gift.url">{{gift.url}}</a>
     <p>{{gift.details}}</p>
-    <div *ngIf="type === 'shopping'; else wishButton" class="status-display">
+    <div *ngIf="type === 'shopping'; else wishList" class="status-display">
       <div class="line">
         <div *ngFor="let status of statuses" class="node" [style]="status.name === currentStatus ? 'color: green' : ''">
           <app-icon
             [icon]="status.icon"
             [hover]="false"
-            (iconClicked)="currentStatus = status.name"
+            (iconClicked)="onStatusUpdated.emit(status.name)"
             [title]="status.name"
             >
           </app-icon>
         </div>
       </div>
     </div>
-    <ng-template #wishButton>
-      <button *ngIf="" (click)="buttonClicked.emit(true)">Claim gift</button>
+    <ng-template #wishList>
+      <ng-container *ngIf="gift.wishedByUser !== currentUser.uid">
+        <ng-container *ngIf="gift.isClaimedBy; else claimGiftButton">
+          <ng-container *ngIf="gift.isClaimedBy === currentUser.uid; else claimedByDifferentUser">
+            <span>You have claimed this gift!</span>
+          </ng-container>
+          <ng-template #claimedByDifferentUser>
+            <span>This gift has already been claimed!</span>
+          </ng-template>
+        </ng-container>
+        <ng-template #claimGiftButton>
+          <button (click)="onGiftClaim.emit(true)">Claim gift</button>
+        </ng-template>
+      </ng-container>
     </ng-template>
   </div>
 </div>

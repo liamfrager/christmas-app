@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, OnDestroy, OnInit } from '@angular/core';
 import { PageHeadingComponent } from '../../page-heading/page-heading.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../icon/icon.component';
 import { AccountService } from '../../../services/account.service';
 import { FirebaseService } from '../../../services/firebase.service';
 import { doc, updateDoc } from 'firebase/firestore';
+import { User } from '../../../types';
 
 @Component({
   selector: 'app-gift-details-modal',
@@ -13,29 +14,31 @@ import { doc, updateDoc } from 'firebase/firestore';
   templateUrl: './gift-details-modal.component.html',
   styleUrl: './gift-details-modal.component.css'
 })
-export class GiftDetailsModalComponent implements OnChanges, OnDestroy{
-  constructor(private accountService: AccountService, private firebaseService: FirebaseService) {};
+export class GiftDetailsModalComponent implements OnChanges, OnInit{
+await: any;
+  constructor(private accountService: AccountService, private firebaseService: FirebaseService) {}
   @Input() gift?: any;
   @Input() type?: string;
-  @Output() buttonClicked = new EventEmitter();
-  @Output() statusUpdated = new EventEmitter();
+  @Output() onGiftClaim = new EventEmitter();
+  @Output() onGiftEdit = new EventEmitter();
+  @Output() onStatusUpdated = new EventEmitter();
 
   headingButtons = ['close'];
+  isShown = false;
   currentStatus = this.gift?.status;
-  isShown: boolean = false;
+  currentUser!: User;
+  async ngOnInit() {
+    this.currentUser = await this.accountService.currentUser;
+  }
   ngOnChanges() {
+    console.log(this.currentUser.uid)
+    console.log(this.gift)
     this.isShown = true;
     this.currentStatus = this.gift?.status;
   }
   closeModal() {
     this.isShown = false;
-    console.log('Modal closed, isShown:', this.isShown);  // Debug log
     // TODO: visuals are not updating before statusUpdated is emiting. directly update classlist rather than updating "isShown"?
-    this.statusUpdated.emit(this.currentStatus);
-  }
-
-  ngOnDestroy(): void {
-    this.statusUpdated.emit(this.currentStatus);
   }
 
 
