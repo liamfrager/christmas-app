@@ -24,6 +24,8 @@ export interface User extends DocumentData {
 }
 
 export type List = {
+    _type: string,
+} & {
     [userID: string]: {
         gifts: Gifts,
         user: User,
