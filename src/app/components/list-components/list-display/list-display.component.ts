@@ -17,47 +17,23 @@ import { Gift, Gifts, List, User } from '../../../types';
 })
 export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};
-  @Input({ required: true }) listType!: string;
-  @Input() uid!: string;
+  @Input({ required: true }) list!: List;
   
-  listOwner?: User;
   isOwnedByCurrentUser = true;
   noGiftsMessage: string = 
     this.isOwnedByCurrentUser ?
-    `You have no gifts in your ${this.listType} list` :
-    `${this.listOwner?.['displayName']} has no gifts in their ${this.listType} list`
-  listInfo: List | undefined;
+    `You have no gifts in your ${this.list.type} list` :
+    `${this.list.owner.displayName} has no gifts in their ${this.list.type} list`
   
   async ngOnChanges() {
-    if (this.listType === "wish") {
-      this.listInfo = await this.giftListService.getWishListInfo(this.uid) as List;
-      this.listOwner = await this.accountService.getUserInfo(this.uid);
+    if (this.list) {
       const currentUserUID = await this.accountService.getCurrentUserUID();
-      this.isOwnedByCurrentUser = this.listOwner?.['uid'] === currentUserUID;
-    } else if (this.listType === "shopping") {
-      this.listInfo = await this.getShoppingListGifts();
+      this.isOwnedByCurrentUser = this.list.owner.uid === currentUserUID;
     } else {
-      console.log(`${this.listType} is not a valid list type.`)
+      console.log(`List empty.`)
     }
   }
 
-  async getShoppingListGifts() {
-    const shoppingListInfo = await this.giftListService.getShoppingListInfo();
-    if (shoppingListInfo) {
-      var result: List = {};
-      for (let i = 0; i < shoppingListInfo.length; i++) {
-        const gift = shoppingListInfo[i];
-        const userID = gift.isWishedBy;
-        if (!result[userID]) {
-          result[userID].user = await this.accountService.getUserInfo(userID)
-        }
-        result[userID].gifts[gift.id] = gift;
-      }
-      return result;
-    } else {
-      return {};
-    }
-  }
 
   giftInModal!: Gift;
   showModal: boolean = false;
@@ -67,7 +43,7 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   claimGift() {
-    this.giftListService.addGiftToShoppingList(this.uid, this.giftInModal!);
+    this.giftListService.addGiftToShoppingList(this.list.owner.uid, this.giftInModal!);
   }
 
   async setStatus(status: string) {
@@ -88,11 +64,11 @@ export class ListDisplayComponent implements OnChanges {
 
   getIsChecked(gift: any): boolean {
     var result: boolean = false;
-    if (this.listType === 'wish') {
+    if (this.list.type === 'wish') {
       if (!this.isOwnedByCurrentUser && gift.isClaimedBy) {
         result = true;
       }
-    } else if (this.listType === 'shopping') {
+    } else if (this.list.type === 'shopping') {
         this.giftListService.getShoppingListInfo
       if (true) {
       }
