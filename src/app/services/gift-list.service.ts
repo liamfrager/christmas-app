@@ -21,9 +21,13 @@ export class GiftListService {
     let user: User = await this.accountService.getUserInfo(uid);
     if (user) {
       let list: List = {
-        [user.uid]: {
-          gifts: gifts,
-          user: user,
+        type: 'wish',
+        owner: user,
+        gifts: {
+          [user.uid]: {
+            gifts: gifts,
+            user: user,
+          }
         }
       }
       return list;
@@ -32,8 +36,8 @@ export class GiftListService {
     }
   }
 
-  async getShoppingListInfo() : Promise<Gift[]> {
-    let shoppingListInfo: Gift[] = [];
+  async getShoppingListInfo() : Promise<List | undefined> {
+    let listOfGifts: Gift[] = [];
 
     const currentUserUID = await this.accountService.getCurrentUserUID();
     const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserUID!, 'shopping-list'), orderBy('user')));
@@ -41,9 +45,26 @@ export class GiftListService {
       const shoppingRefData = shoppingQuerySnapshot.docs[i].data();
       const wishQuerySnapshot = await getDoc(doc(this.db, 'lists', shoppingRefData['giftWishedBy']!, 'wish-list', shoppingRefData['id']));
       const wishRefData = wishQuerySnapshot.data()
-      shoppingListInfo.push({...shoppingRefData, ...wishRefData} as Gift);
+      listOfGifts.push({...shoppingRefData, ...wishRefData} as Gift);
     }
-    return shoppingListInfo;
+    if (listOfGifts) {
+      let list: List = {
+        type: 'shopping',
+        owner: await this.accountService.getUserInfo(currentUserUID!),
+        gifts: {}
+      };
+      for (let i = 0; i < listOfGifts.length; i++) {
+        const gift = listOfGifts[i];
+        const userID = gift.isWishedBy;
+        if (!list.gifts[userID]) {
+          list.gifts[userID].user = await this.accountService.getUserInfo(userID)
+        }
+        list.gifts[userID].gifts[gift.id] = gift;
+      }
+      return list;
+    } else {
+      return undefined;
+    }
   }
 
   async addGiftToWishList(uid: string, gift: NewGift) {
