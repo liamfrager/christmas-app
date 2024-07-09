@@ -17,13 +17,15 @@ import { Gift, Gifts, List, User } from '../../../types';
 })
 export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};
-  @Input({ required: true }) list!: List;
+  @Input({ required: true }) list?: List;
   
   isOwnedByCurrentUser = true;
   noGiftsMessage: string = 
+    this.list ?
     this.isOwnedByCurrentUser ?
     `You have no gifts in your ${this.list.type} list` :
-    `${this.list.owner.displayName} has no gifts in their ${this.list.type} list`
+    `${this.list.owner.displayName} has no gifts in their ${this.list.type} list` :
+    'Could not load gifts';
   
   async ngOnChanges() {
     if (this.list) {
@@ -43,7 +45,7 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   claimGift() {
-    this.giftListService.addGiftToShoppingList(this.list.owner.uid, this.giftInModal!);
+    this.giftListService.addGiftToShoppingList(this.list!.owner.uid, this.giftInModal!);
   }
 
   async setStatus(status: string) {
@@ -64,11 +66,11 @@ export class ListDisplayComponent implements OnChanges {
 
   getIsChecked(gift: any): boolean {
     var result: boolean = false;
-    if (this.list.type === 'wish') {
+    if (this.list!.type === 'wish') {
       if (!this.isOwnedByCurrentUser && gift.isClaimedBy) {
         result = true;
       }
-    } else if (this.list.type === 'shopping') {
+    } else if (this.list!.type === 'shopping') {
         this.giftListService.getShoppingListInfo
       if (true) {
       }

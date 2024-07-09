@@ -23,7 +23,7 @@ export class GiftListService {
       let list: List = {
         type: 'wish',
         owner: user,
-        gifts: {
+        giftsByUser: {
           [user.uid]: {
             gifts: gifts,
             user: user,
@@ -51,15 +51,15 @@ export class GiftListService {
       let list: List = {
         type: 'shopping',
         owner: await this.accountService.getUserInfo(currentUserUID!),
-        gifts: {}
+        giftsByUser: {}
       };
       for (let i = 0; i < listOfGifts.length; i++) {
         const gift = listOfGifts[i];
         const userID = gift.isWishedBy;
-        if (!list.gifts[userID]) {
-          list.gifts[userID].user = await this.accountService.getUserInfo(userID)
+        if (!list.giftsByUser[userID]) {
+          list.giftsByUser[userID].user = await this.accountService.getUserInfo(userID)
         }
-        list.gifts[userID].gifts[gift.id] = gift;
+        list.giftsByUser[userID].gifts[gift.id] = gift;
       }
       return list;
     } else {

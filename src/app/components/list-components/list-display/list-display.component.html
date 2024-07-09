@@ -1,54 +1,39 @@
-<div *ngIf="listInfo; else loadingGifts">
+<div *ngIf="list; else loadingGifts">
   <!-- Display list owner -->
-  <div *ngIf="listType !== 'shopping' && !isOwnedByCurrentUser" class="list-owner-display">
-    <img [src]="listOwner?.['pfp']" alt="">
-    <span>{{listOwner?.['displayName']}}</span>
+  <div *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser" class="list-owner-display">
+    <img [src]="list.owner.pfp" alt="">
+    <span>{{list.owner.displayName}}</span>
   </div>
   <!-- Display gifts -->
-  <div *ngIf="listInfo !== {}; else noGifts">
-    <!-- If is shopping-list -->
-    <div *ngIf="listType === 'shopping'; else wishDisplay">
-      <div *ngFor="let list of listInfo | keyvalue">
-        <div class="list-owner-display">
-          <img [src]="list.value.user.pfp" [alt]="list.value.user.displayName + ' profile picture'">
-          <span>{{list.value.user.displayName}}</span>
-        </div>
-        <app-gift-display
-          *ngFor="let gift of list.value.gifts | keyvalue"
-          class="gift"
-          [gift]="gift.value"
-          [isChecked]="getIsChecked(gift.value)"
-          (giftClicked)="showInModal(gift.value)"
-          >
-        </app-gift-display>
-        <hr>
+  <div *ngIf="list.giftsByUser; else noGifts">
+    <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
+       <!-- If is shopping-list -->
+      <div *ngIf="list.type === 'shopping'" class="list-owner-display">
+        <img [src]="giftByUser.value.user.pfp" [alt]="giftByUser.value.user.displayName + ' profile picture'">
+        <span>{{giftByUser.value.user.displayName}}</span>
       </div>
+      
+      <app-gift-display
+        *ngFor="let gift of giftByUser.value.gifts | keyvalue"
+        class="gift"
+        [gift]="gift.value"
+        [isChecked]="getIsChecked(gift.value)"
+        (giftClicked)="showInModal(gift.value)"
+        >
+      </app-gift-display>
+      <hr>
     </div>
-    <!-- If is wish-list -->
-    <ng-template #wishDisplay>
-      <div *ngFor="let list of listInfo | keyvalue">
-        <app-gift-display
-          *ngFor="let gift of list.value.gifts | keyvalue"
-          class="gift"
-          [gift]="gift.value"
-          [isChecked]="getIsChecked(gift.value)"
-          (giftClicked)="showInModal(gift.value)"
-          >
-        </app-gift-display>
-      </div>
-    </ng-template>
   </div>
   <!-- If no gifts -->
   <ng-template #noGifts>{{noGiftsMessage}}</ng-template>
+  <!-- Gift details slide-over -->
+  <app-gift-details-modal
+    [gift]="giftInModal"
+    [type]="list.type"
+    (onGiftClaim)="claimGift()"
+    (onStatusUpdated)="setStatus($event)"
+    >
+  </app-gift-details-modal>
 </div>
 <!-- Loading gifts -->
 <ng-template #loadingGifts>Loading gifts...</ng-template>
-
-<!-- Gift details slide-over -->
-<app-gift-details-modal
-  [gift]="giftInModal"
-  [type]="listType"
-  (onGiftClaim)="claimGift()"
-  (onStatusUpdated)="setStatus($event)"
-  >
-</app-gift-details-modal>

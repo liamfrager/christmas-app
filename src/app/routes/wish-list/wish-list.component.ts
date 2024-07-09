@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ListDisplayComponent } from '../../components/list-components/list-display/list-display.component';
-import { AccountService } from '../../services/account.service';
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
+import { GiftListService } from '../../services/gift-list.service';
+import { AccountService } from '../../services/account.service';
 import { Router } from '@angular/router';
+import { List } from '../../types';
 
 @Component({
   selector: 'app-wish-list',
@@ -12,8 +14,8 @@ import { Router } from '@angular/router';
   styleUrl: './wish-list.component.css'
 })
 export class WishListComponent implements OnInit {
-  constructor(private accountService: AccountService, private router: Router) {};
-  uid: string = "no user logged in";
+  constructor(private accountService: AccountService, private giftListService: GiftListService, private router: Router) {};
+  listInfo!: List;
   headingButtons = ['filter_list', 'forms_add_on'];
   onHeadingIconClick(e: any) {
     switch (e) {
@@ -30,7 +32,12 @@ export class WishListComponent implements OnInit {
 
   async ngOnInit() {
     const uid = await this.accountService.getCurrentUserUID();
-    if (uid) {this.uid = uid};
+    if (uid) {
+      const listInfo = await this.giftListService.getWishListInfo(uid);
+      if (listInfo) {
+        this.listInfo = listInfo;
+      }
+    }
   }
 
 }

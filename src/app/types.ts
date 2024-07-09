@@ -26,7 +26,7 @@ export interface User extends DocumentData {
 export type List = {
     type: string,
     owner: User,
-    gifts: {
+    giftsByUser: {
         [userID: string]: {
             gifts: Gifts,
             user: User,
