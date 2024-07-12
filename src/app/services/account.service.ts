@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { doc, setDoc, getDoc, DocumentData } from "firebase/firestore";
-import { getAuth, signOut, User as FirebaseUser} from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { signOut, User as FirebaseUser} from "firebase/auth";
 import { FirebaseService } from './firebase.service';
 import { User } from '../types';
 
@@ -12,7 +12,7 @@ import { User } from '../types';
 export class AccountService {
   constructor(private firebaseService: FirebaseService, private router: Router) {}
   
-  getCurrentUserUID() {
+  getCurrentUserID() {
     return new Promise<string | undefined>((resolve, reject) => {
       const unsubscribe = this.firebaseService.auth.onAuthStateChanged(user => {
           unsubscribe();
@@ -22,22 +22,23 @@ export class AccountService {
   }
   
   get currentUser(): Promise<User> {
+    // refactor to use 
     let getCurrentUser = async () : Promise<User> => {
-      const uid = await this.getCurrentUserUID()
-      return await this.getUserInfo(uid ? uid : '');
+      const id = await this.getCurrentUserID()
+      return await this.getUserInfo(id ? id : '');
     }
     return getCurrentUser()
   };
 
-  async getUserInfo(uid: string) : Promise<User> {
-    if (uid == '') {
-      throw Error(`Could not get user info. UID is blank.`);
-    } else if (uid) {
-      const docRef = doc(this.firebaseService.db, 'users', uid)
+  async getUserInfo(id: string) : Promise<User> {
+    if (id == '') {
+      throw Error(`Could not get user info. id is blank.`);
+    } else if (id) {
+      const docRef = doc(this.firebaseService.db, 'users', id)
       const docSnap = await getDoc(docRef)
       return docSnap.data() as User;
     } else {
-      throw Error(`Could not get user info. UID is ${uid}.`);
+      throw Error(`Could not get user info. id is ${id}.`);
     }
   };
 
@@ -53,8 +54,7 @@ export class AccountService {
       displayName: user.displayName,
       email: user.email,
       pfp: user.photoURL,
-      uid: user.uid,
-      family: [],
+      id: user.uid,
     });
   }
 

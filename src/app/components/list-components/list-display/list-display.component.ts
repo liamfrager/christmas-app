@@ -29,7 +29,8 @@ export class ListDisplayComponent implements OnChanges {
   
   async ngOnChanges() {
     if (this.list) {
-      const currentUserUID = await this.accountService.getCurrentUserUID();
+      console.log('List exists!')
+      const currentUserUID = await this.accountService.getCurrentUserID();
       this.isOwnedByCurrentUser = this.list.owner.uid === currentUserUID;
     } else {
       console.log(`List empty.`)
@@ -51,7 +52,7 @@ export class ListDisplayComponent implements OnChanges {
   async setStatus(status: string) {
     console.log('status: ', status)
     try {
-      const currentUserUID = await this.accountService.getCurrentUserUID();
+      const currentUserUID = await this.accountService.getCurrentUserID();
       const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserUID!, 'shopping-list', this.giftInModal.id), {
         status: status
       })

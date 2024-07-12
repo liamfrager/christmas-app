@@ -4,18 +4,21 @@ import { PageHeadingComponent } from '../../components/page-heading/page-heading
 import { Router } from '@angular/router';
 import { GiftListService } from '../../services/gift-list.service';
 import { List } from '../../types';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-shopping-list',
   standalone: true,
-  imports: [ListDisplayComponent, PageHeadingComponent],
+  imports: [ListDisplayComponent, PageHeadingComponent, CommonModule],
   templateUrl: './shopping-list.component.html',
   styleUrl: './shopping-list.component.css'
 })
 export class ShoppingListComponent implements OnInit {
   constructor(private giftListService: GiftListService, private router: Router) {};
+
   listInfo!: List;
   headingButtons = ['forms_add_on'];
+
   onHeadingIconClick(e: any) {
     switch (e) {
       case 'forms_add_on':
@@ -28,9 +31,13 @@ export class ShoppingListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const listInfo = await this.giftListService.getShoppingListInfo();
-    if (listInfo) {
-      this.listInfo = listInfo;
+    try {
+      const listInfo = await this.giftListService.getShoppingListInfo();
+      if (listInfo) {
+        this.listInfo = listInfo;
+      }
+    } catch (error) {
+      console.error('Error loading shopping list info:', error);
     }
   }
 }

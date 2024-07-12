@@ -3,6 +3,7 @@ import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, setPersistence
 import { Router } from "@angular/router"
 import { AccountService } from "../../services/account.service.js";
 import { FirebaseService } from "../../services/firebase.service.js";
+import { User as FirebaseUser } from "firebase/auth";
 
 @Component({
   selector: 'app-login',
@@ -33,7 +34,7 @@ export class LoginComponent implements OnInit {
           // @ts-ignore: Object is possibly 'null'.
           const token = credential.accessToken;
           // The signed-in user info.
-          const user = result.user;
+          const user: FirebaseUser = result.user;
           // IdP data available using getAdditionalUserInfo(result)
           // ...
           if (await this.accountService.isNewUser(user)) {
