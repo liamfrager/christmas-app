@@ -24,7 +24,7 @@ export class GiftListService {
         type: 'wish',
         owner: user,
         giftsByUser: {
-          [user.uid]: {
+          [user.id]: {
             gifts: gifts,
             user: user,
           }
@@ -39,64 +39,89 @@ export class GiftListService {
   async getShoppingListInfo() : Promise<List | undefined> {
     let listOfGifts: Gift[] = [];
 
-    const currentUserUID = await this.accountService.getCurrentUserUID();
-    const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserUID!, 'shopping-list'), orderBy('user')));
-    for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
-      const shoppingRefData = shoppingQuerySnapshot.docs[i].data();
-      const wishQuerySnapshot = await getDoc(doc(this.db, 'lists', shoppingRefData['giftWishedBy']!, 'wish-list', shoppingRefData['id']));
-      const wishRefData = wishQuerySnapshot.data()
-      listOfGifts.push({...shoppingRefData, ...wishRefData} as Gift);
-    }
-    if (listOfGifts) {
-      let list: List = {
-        type: 'shopping',
-        owner: await this.accountService.getUserInfo(currentUserUID!),
-        giftsByUser: {}
-      };
-      for (let i = 0; i < listOfGifts.length; i++) {
-        const gift = listOfGifts[i];
-        const userID = gift.isWishedBy;
-        if (!list.giftsByUser[userID]) {
-          list.giftsByUser[userID].user = await this.accountService.getUserInfo(userID)
-        }
-        list.giftsByUser[userID].gifts[gift.id] = gift;
+    const currentUserID = await this.accountService.getCurrentUserID();
+    if (currentUserID) {
+      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('user')));
+      for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
+        const shoppingRefData = shoppingQuerySnapshot.docs[i].data();
+        const wishQuerySnapshot = await getDoc(doc(this.db, 'lists', shoppingRefData['giftWishedBy']!, 'wish-list', shoppingRefData['id']));
+        const wishRefData = wishQuerySnapshot.data()
+        const gift = {...shoppingRefData, ...wishRefData} as Gift;
+        listOfGifts.push(gift);
       }
-      return list;
-    } else {
-      return undefined;
+      if (listOfGifts) {
+        let list: List = {
+          type: 'shopping',
+          owner: await this.accountService.getUserInfo(currentUserID),
+          giftsByUser: {}
+        };
+        for (let i = 0; i < listOfGifts.length; i++) {
+          const gift = listOfGifts[i];
+          const userID = gift.isWishedBy;
+          if (!list.giftsByUser[userID]) {
+            list.giftsByUser[userID].user = await this.accountService.getUserInfo(userID)
+          }
+          list.giftsByUser[userID].gifts[gift.id] = gift;
+        }
+        return list;
+      }
     }
+    return undefined
   }
 
-  async addGiftToWishList(uid: string, gift: NewGift) {
-    const docRef = await addDoc(collection(this.firebaseService.db, 'lists', uid, 'wish-list'), {
-      name: gift.name,
-      url: gift.url,
-      details: gift.details
-    });
-    updateDoc(docRef, {
-      id: docRef.id
-    })
-  }
-
-  async addGiftToShoppingList(uid: string, gift: Gift) {
-    // Add gift to shopping list (reference to gift?);
-    const currentUserUID = await this.accountService.getCurrentUserUID();
-    const shoppingDocRef = doc(this.firebaseService.db, 'lists', currentUserUID!, 'shopping-list', gift.id);
-    const wishDocRef = doc(this.firebaseService.db, 'lists', uid, 'wish-list', gift.id);
-
-    const wishGift = (await getDoc(wishDocRef)).data();
-    const isAlreadyClaimed = wishGift?.['isClaimedBy'] ? true : false;
-    if (!isAlreadyClaimed) {
-      setDoc(shoppingDocRef, {
-        ...gift,
-        status: 'claimed'
+  async addGiftToWishList(gift: NewGift) {
+    const currentUserID = await this.accountService.getCurrentUserID();
+    if (currentUserID) {
+      // update db.gifts
+      const giftRef = await addDoc(collection(this.firebaseService.db, 'gifts'), {
+        name: gift.name,
+        url: gift.url,
+        details: gift.details,
+        isWishedBy: currentUserID,
       });
-      // Update gift to indicate that it has been claimed.
-      updateDoc(wishDocRef, {
-        isClaimedBy: uid
-      })
-    } else {
-      console.log('Gift already claimed!');
+
+      // update current user's wish-list
+      const wishRef = await updateDoc(doc(this.firebaseService.db, 'lists', currentUserID, 'wish-list', giftRef.id), {
+        id: giftRef.id,
+        name: gift.name,
+        url: gift.url,
+        details: gift.details,
+        isWishedBy: currentUserID,
+      });
     }
-  } 
+  }
+
+  /**
+  * Claims a gift for the current user.
+  *
+  * @param gift - A Gift object containing the data for the gift being claimed.
+  */
+  async addGiftToShoppingList(gift: Gift) {
+    if (gift.status === 'claimed') {
+      console.error('Gift already claimed')
+    } else {
+      const currentUserID = await this.accountService.getCurrentUserID();
+      if (currentUserID) {
+        // update db.gifts
+        const giftRef = doc(this.firebaseService.db, 'gifts', gift.id)
+        updateDoc(giftRef, {
+          isClaimedBy: currentUserID,
+          status: 'claimed',
+        })
+
+        // update current user's shopping-list
+        const shoppingRef = doc(this.firebaseService.db, 'lists', currentUserID, 'shopping-list', gift.id);
+        setDoc(shoppingRef, {
+          ...gift,
+          status: 'claimed',
+        });
+
+        // update isWishedBy user's wish-list
+        const wishRef = doc(this.firebaseService.db, 'lists', gift.isWishedBy, 'wish-list', gift.id);
+        updateDoc(wishRef, {
+          status: 'claimed',
+        })
+      } 
+    }
+  }
 }

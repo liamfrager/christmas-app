@@ -16,11 +16,11 @@ export interface Gift extends NewGift {
 export type Gifts = {[giftID: string]: Gift}
 
 export interface User extends DocumentData {
-    uid: string,
+    id: string,
     displayName: string,
     email: string,
     pfp: string,
-    family: string[],
+    family?: string[],
 }
 
 export type List = {
