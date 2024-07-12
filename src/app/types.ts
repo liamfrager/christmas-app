@@ -2,7 +2,7 @@ import { DocumentData } from "firebase/firestore"
 
 export type NewGift = {
     name: string,
-    isWishedBy: string,
+    isWishedBy: string | User,
     details?: string,
     url?: string,
     status?: string,
