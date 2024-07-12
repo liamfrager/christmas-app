@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
-import { Gift, Gifts, List, NewGift, User } from '../types';
+import { Gift, List, NewGift, User } from '../types';
 
 
 @Injectable({
@@ -12,58 +12,54 @@ export class GiftListService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {};
   db = this.firebaseService.db;
 
-  async getWishListInfo(uid: string) : Promise<List | undefined> {
-    let gifts: Gifts = {};
-    const querySnapshot = await getDocs(collection(this.db, 'lists', uid, 'wish-list'));
-    querySnapshot.forEach((doc) => {
-      gifts[doc.data()['id']] = doc.data() as Gift;
-    });
-    let user: User = await this.accountService.getUserInfo(uid);
+  async getWishListInfo(userID: string) : Promise<List | undefined> {
+    const wishQuerySnapshot = await getDocs(collection(this.db, 'lists', userID, 'wish-list'));
+    let user: User = await this.accountService.getUserInfo(userID);
     if (user) {
+      // create list
       let list: List = {
         type: 'wish',
         owner: user,
         giftsByUser: {
           [user.id]: {
-            gifts: gifts,
+            gifts: {},
             user: user,
           }
         }
       }
+      // add all gifts to list
+      wishQuerySnapshot.forEach((doc) => {
+        list.giftsByUser[userID].gifts[doc.data()['id']] = doc.data() as Gift;
+      });
       return list;
-    } else {
-      return undefined
     }
+    return undefined
   }
 
   async getShoppingListInfo() : Promise<List | undefined> {
-    let listOfGifts: Gift[] = [];
-
     const currentUserID = await this.accountService.getCurrentUserID();
     if (currentUserID) {
+      // get all gifts from shopping-list
       const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('user')));
-      for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
-        const shoppingRefData = shoppingQuerySnapshot.docs[i].data();
-        const wishQuerySnapshot = await getDoc(doc(this.db, 'lists', shoppingRefData['giftWishedBy']!, 'wish-list', shoppingRefData['id']));
-        const wishRefData = wishQuerySnapshot.data()
-        const gift = {...shoppingRefData, ...wishRefData} as Gift;
-        listOfGifts.push(gift);
-      }
-      if (listOfGifts) {
+      
+      if (shoppingQuerySnapshot.docs.length > 0) {
+        // convert DocumentData to List
         let list: List = {
           type: 'shopping',
           owner: await this.accountService.getUserInfo(currentUserID),
           giftsByUser: {}
         };
-        for (let i = 0; i < listOfGifts.length; i++) {
-          const gift = listOfGifts[i];
-          const userID = gift.isWishedBy;
-          if (!list.giftsByUser[userID]) {
-            list.giftsByUser[userID].user = await this.accountService.getUserInfo(userID)
+
+        for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
+          const gift = shoppingQuerySnapshot.docs[i].data() as Gift;
+          const userID = typeof gift.isWishedBy === 'string' ? gift.isWishedBy : gift.isWishedBy.id;
+          if (!list.giftsByUser[userID]) { // if first gift in array wished by a user
+            const userInfo = typeof gift.isWishedBy === 'string' ? await this.accountService.getUserInfo(userID) : gift.isWishedBy
+            list.giftsByUser[userID].user = userInfo // add user info to List
           }
           list.giftsByUser[userID].gifts[gift.id] = gift;
+          return list;
         }
-        return list;
       }
     }
     return undefined
@@ -113,11 +109,13 @@ export class GiftListService {
         const shoppingRef = doc(this.firebaseService.db, 'lists', currentUserID, 'shopping-list', gift.id);
         setDoc(shoppingRef, {
           ...gift,
+          isWishedBy: await this.accountService.getUserInfo(currentUserID),
           status: 'claimed',
         });
 
         // update isWishedBy user's wish-list
-        const wishRef = doc(this.firebaseService.db, 'lists', gift.isWishedBy, 'wish-list', gift.id);
+        const wishedByID = typeof gift.isWishedBy === 'string' ? gift.isWishedBy : gift.isWishedBy.id;
+        const wishRef = doc(this.firebaseService.db, 'lists', wishedByID, 'wish-list', gift.id);
         updateDoc(wishRef, {
           status: 'claimed',
         })
