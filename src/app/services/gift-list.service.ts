@@ -32,7 +32,6 @@ export class GiftListService {
       wishQuerySnapshot.forEach((doc) => {
         list.giftsByUser![userID].gifts[doc.data()['id']] = doc.data() as Gift;
       });
-      console.log(list)
       return list;
     }
     return undefined
