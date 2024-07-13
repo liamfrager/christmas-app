@@ -31,7 +31,7 @@ await: any;
     this.currentUser = await this.accountService.currentUser;
   }
   ngOnChanges() {
-    console.log(this.currentUser.uid)
+    console.log(this.currentUser.id)
     console.log(this.gift)
     this.isShown = true;
     this.currentStatus = this.gift?.status;

@@ -1,39 +1,43 @@
 <div *ngIf="list; else loadingGifts">
-  <!-- Display list owner -->
-  <div *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser" class="list-owner-display">
-    <img [src]="list.owner.pfp" alt="">
-    <span>{{list.owner.displayName}}</span>
-  </div>
-  <!-- Display gifts -->
-  <div *ngIf="list.giftsByUser; else noGifts">
-    <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
-       <!-- If is shopping-list -->
-      <div *ngIf="list.type === 'shopping'" class="list-owner-display">
-        <img [src]="giftByUser.value.user.pfp" [alt]="giftByUser.value.user.displayName + ' profile picture'">
-        <span>{{giftByUser.value.user.displayName}}</span>
-      </div>
-      
-      <app-gift-display
-        *ngFor="let gift of giftByUser.value.gifts | keyvalue"
-        class="gift"
-        [gift]="gift.value"
-        [isChecked]="getIsChecked(gift.value)"
-        (giftClicked)="showInModal(gift.value)"
-        >
-      </app-gift-display>
-      <hr>
+  <ng-container *ngIf="list.type !== 'error'; else errorLoadingGifts">
+    <!-- Display list owner -->
+    <div *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser" class="list-owner-display">
+      <img [src]="list.owner.pfp" alt="">
+      <span>{{list.owner.displayName}}</span>
     </div>
-  </div>
-  <!-- If no gifts -->
-  <ng-template #noGifts>{{noGiftsMessage}}</ng-template>
-  <!-- Gift details slide-over -->
-  <app-gift-details-modal
-    [gift]="giftInModal"
-    [type]="list.type"
-    (onGiftClaim)="claimGift()"
-    (onStatusUpdated)="setStatus($event)"
-    >
-  </app-gift-details-modal>
+    <!-- Display gifts -->
+    <div *ngIf="list.giftsByUser; else noGifts">
+      <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
+        <!-- If is shopping-list -->
+        <div *ngIf="list.type === 'shopping'" class="list-owner-display">
+          <img [src]="giftByUser.value.user.pfp" [alt]="giftByUser.value.user.displayName + ' profile picture'">
+          <span>{{giftByUser.value.user.displayName}}</span>
+        </div>
+        
+        <app-gift-display
+          *ngFor="let gift of giftByUser.value.gifts | keyvalue"
+          class="gift"
+          [gift]="gift.value"
+          [isChecked]="getIsChecked(gift.value)"
+          (giftClicked)="showInModal(gift.value)"
+          >
+        </app-gift-display>
+        <hr>
+      </div>
+    </div>
+    <!-- If no gifts -->
+    <ng-template #noGifts>{{noGiftsMessage}}</ng-template>
+    <!-- Gift details slide-over -->
+    <app-gift-details-modal
+      [gift]="giftInModal"
+      [type]="list.type"
+      (onGiftClaim)="claimGift()"
+      (onStatusUpdated)="setStatus($event)"
+      >
+    </app-gift-details-modal>
+  </ng-container>
+  <!-- If gifts failed to load -->
+  <ng-template #errorLoadingGifts>Something went wrong. The list could not be loaded.</ng-template>
 </div>
 <!-- Loading gifts -->
 <ng-template #loadingGifts>Loading gifts...</ng-template>

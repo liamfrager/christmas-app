@@ -20,17 +20,19 @@ export class GiftListService {
       let list: List = {
         type: 'wish',
         owner: user,
-        giftsByUser: {
+        giftsByUser: wishQuerySnapshot.docs.length > 0 ?
+        {
           [user.id]: {
             gifts: {},
             user: user,
           }
-        }
+        } : undefined
       }
       // add all gifts to list
       wishQuerySnapshot.forEach((doc) => {
-        list.giftsByUser[userID].gifts[doc.data()['id']] = doc.data() as Gift;
+        list.giftsByUser![userID].gifts[doc.data()['id']] = doc.data() as Gift;
       });
+      console.log(list)
       return list;
     }
     return undefined
@@ -41,25 +43,26 @@ export class GiftListService {
     if (currentUserID) {
       // get all gifts from shopping-list
       const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('user')));
-      
-      if (shoppingQuerySnapshot.docs.length > 0) {
-        // convert DocumentData to List
-        let list: List = {
-          type: 'shopping',
-          owner: await this.accountService.getUserInfo(currentUserID),
-          giftsByUser: {}
-        };
+      // convert DocumentData to List
+      let list: List = {
+        type: 'shopping',
+        owner: await this.accountService.getUserInfo(currentUserID),
+        giftsByUser: shoppingQuerySnapshot.docs.length > 0 ? {} : undefined,
+      };
 
-        for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
-          const gift = shoppingQuerySnapshot.docs[i].data() as Gift;
-          const userID = typeof gift.isWishedBy === 'string' ? gift.isWishedBy : gift.isWishedBy.id;
-          if (!list.giftsByUser[userID]) { // if first gift in array wished by a user
-            const userInfo = typeof gift.isWishedBy === 'string' ? await this.accountService.getUserInfo(userID) : gift.isWishedBy
-            list.giftsByUser[userID].user = userInfo // add user info to List
+      for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
+        const gift = shoppingQuerySnapshot.docs[i].data() as Gift;
+        console.log('gift', gift, typeof gift)
+        const userID = gift.isWishedByID;
+        if (!list.giftsByUser![userID] && gift.isWishedByUser) { // if first gift in array wished by a user
+          list.giftsByUser![userID] = {
+            user: gift.isWishedByUser, // add user info to List
+            gifts: {},
           }
-          list.giftsByUser[userID].gifts[gift.id] = gift;
-          return list;
         }
+        console.log(list)
+        list.giftsByUser![userID].gifts[gift.id] = gift;
+        return list;
       }
     }
     return undefined
@@ -114,7 +117,7 @@ export class GiftListService {
         });
 
         // update isWishedBy user's wish-list
-        const wishedByID = typeof gift.isWishedBy === 'string' ? gift.isWishedBy : gift.isWishedBy.id;
+        const wishedByID = typeof gift.isWishedByID;
         const wishRef = doc(this.firebaseService.db, 'lists', wishedByID, 'wish-list', gift.id);
         updateDoc(wishRef, {
           status: 'claimed',

@@ -24,9 +24,9 @@ export class AddGiftComponent {
         name: form.form.value.name,
         url: form.form.value.url,
         details: form.form.value.details,
-        isWishedBy: uid,
+        isWishedByID: uid,
       }
-      this.giftListService.addGiftToWishList(uid, gift)
+      this.giftListService.addGiftToWishList(gift)
     }
   }
 }

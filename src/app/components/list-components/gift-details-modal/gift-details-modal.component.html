@@ -22,9 +22,9 @@
       </div>
     </div>
     <ng-template #wishList>
-      <ng-container *ngIf="gift.wishedByUser !== currentUser.uid">
+      <ng-container *ngIf="gift.wishedByUser !== currentUser.id">
         <ng-container *ngIf="gift.isClaimedBy; else claimGiftButton">
-          <ng-container *ngIf="gift.isClaimedBy === currentUser.uid; else claimedByDifferentUser">
+          <ng-container *ngIf="gift.isClaimedBy === currentUser.id; else claimedByDifferentUser">
             <span>You have claimed this gift!</span>
           </ng-container>
           <ng-template #claimedByDifferentUser>
