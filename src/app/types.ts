@@ -2,7 +2,7 @@ import { DocumentData } from "firebase/firestore"
 
 export type NewGift = {
     name: string,
-    isWishedBy: string | User,
+    isWishedByID: string,
     details?: string,
     url?: string,
     status?: string,
@@ -11,6 +11,7 @@ export type NewGift = {
 export interface Gift extends NewGift {
     id: string,
     status: string,
+    isWishedByUser?: User,
 }
 
 export type Gifts = {[giftID: string]: Gift}
@@ -20,13 +21,13 @@ export interface User extends DocumentData {
     displayName: string,
     email: string,
     pfp: string,
-    family?: string[],
+    friends?: string[],
 }
 
 export type List = {
     type: string,
     owner: User,
-    giftsByUser: {
+    giftsByUser?: {
         [userID: string]: {
             gifts: Gifts,
             user: User,

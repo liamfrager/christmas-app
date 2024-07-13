@@ -30,11 +30,15 @@ export class ListDisplayComponent implements OnChanges {
   async ngOnChanges() {
     if (this.list) {
       console.log('List exists!')
-      const currentUserUID = await this.accountService.getCurrentUserID();
-      this.isOwnedByCurrentUser = this.list.owner.uid === currentUserUID;
-    } else {
-      console.log(`List empty.`)
+      const currentUserID = await this.accountService.getCurrentUserID();
+      this.isOwnedByCurrentUser = this.list.owner.id === currentUserID;
     }
+    this.noGiftsMessage = 
+      this.list ?
+      this.isOwnedByCurrentUser ?
+      `You have no gifts in your ${this.list.type} list.` :
+      `${this.list.owner.displayName} has no gifts in their ${this.list.type} list.` :
+      'Could not load gifts.';
   }
 
 
@@ -46,14 +50,14 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   claimGift() {
-    this.giftListService.addGiftToShoppingList(this.list!.owner.uid, this.giftInModal!);
+    this.giftListService.addGiftToShoppingList(this.giftInModal!);
   }
 
   async setStatus(status: string) {
     console.log('status: ', status)
     try {
-      const currentUserUID = await this.accountService.getCurrentUserID();
-      const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserUID!, 'shopping-list', this.giftInModal.id), {
+      const currentUserID = await this.accountService.getCurrentUserID();
+      const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserID!, 'shopping-list', this.giftInModal.id), {
         status: status
       })
       this.giftInModal = {...this.giftInModal, status: status}

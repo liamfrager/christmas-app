@@ -3,7 +3,7 @@ import { ListDisplayComponent } from '../../components/list-components/list-disp
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
 import { Router } from '@angular/router';
 import { GiftListService } from '../../services/gift-list.service';
-import { List } from '../../types';
+import { List, User } from '../../types';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -38,6 +38,11 @@ export class ShoppingListComponent implements OnInit {
       }
     } catch (error) {
       console.error('Error loading shopping list info:', error);
+      this.listInfo = {
+        type: 'error',
+        owner: {} as User,
+        giftsByUser: {},
+      }
     }
   }
 }
