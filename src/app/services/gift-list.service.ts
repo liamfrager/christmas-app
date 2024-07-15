@@ -119,7 +119,7 @@ export class GiftListService {
             isWishedBy: await this.accountService.getUserInfo(currentUserID),
             status: 'claimed',
           });
-
+          
           // update isWishedBy user's wish-list
           const wishedByID = typeof gift.isWishedByID;
           const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
