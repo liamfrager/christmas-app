@@ -104,7 +104,7 @@ export class GiftListService {
     } else {
       const currentUserID = await this.accountService.getCurrentUserID();
       if (currentUserID) {
-        runTransaction(this.db, async (transaction) => {
+        await runTransaction(this.db, async (transaction) => {
           // update db.gifts
           const giftRef = doc(this.db, 'gifts', gift.id)
           transaction.update(giftRef, {
