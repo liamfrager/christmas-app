@@ -38,8 +38,10 @@ export class GiftListService {
   }
 
   async getShoppingListInfo() : Promise<List | undefined> {
+    console.log('getting shopping list')
     const currentUserID = await this.accountService.getCurrentUserID();
     if (currentUserID) {
+      console.log('is current user')
       // get all gifts from shopping-list
       const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('user')));
       // convert DocumentData to List
@@ -61,8 +63,8 @@ export class GiftListService {
         }
         console.log(list)
         list.giftsByUser![userID].gifts[gift.id] = gift;
-        return list;
       }
+      return list;
     }
     return undefined
   }
