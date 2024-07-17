@@ -33,6 +33,7 @@ export class ShoppingListComponent implements OnInit {
   async ngOnInit() {
     try {
       const listInfo = await this.giftListService.getShoppingListInfo();
+      console.log(listInfo)
       if (listInfo) {
         this.listInfo = listInfo;
       }
