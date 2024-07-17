@@ -80,6 +80,7 @@ export class GiftListService {
           url: gift.url,
           details: gift.details,
           isWishedBy: currentUserID,
+          status: 'wished',
         });
 
         // update current user's wish-list
@@ -127,6 +128,73 @@ export class GiftListService {
           const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
           transaction.update(wishRef, {
             status: 'claimed',
+          });
+        });
+      } 
+    }
+  }
+
+
+  /**
+  * Delete a gift from the current user's wish-list, updating shopping lists claiming that gift.
+  *
+  * @param gift - A Gift object containing the data for the gift being claimed.
+  */
+  async deleteGiftFromWishList(gift: Gift) {
+    if (gift.status === 'deleted') {
+      console.error('Gift already deleted')
+    } else {
+      const currentUserID = await this.accountService.getCurrentUserID();
+      if (currentUserID) {
+        await runTransaction(this.db, async (transaction) => {
+          // update db.gifts
+          const giftRef = doc(this.db, 'gifts', gift.id)
+          transaction.delete(giftRef);
+
+          // update current user's wish-list
+          const wishRef = doc(this.db, 'lists', currentUserID, 'wish-list', gift.id);
+          transaction.delete(wishRef);
+          
+          // update isClaimedBy user's shopping-list
+          if (gift.isClaimedBy) {
+            const claimedByID = gift.isClaimedBy;
+            const shoppingRef = doc(this.db, 'lists', claimedByID, 'shopping-list', gift.id);
+            transaction.update(shoppingRef, {
+              status: 'deleted',
+            });
+          }
+        });
+      } 
+    }
+  }
+
+  /**
+  * Delete a gift from the current user's shopping-list, marking it as unclaimed.
+  *
+  * @param gift - A Gift object containing the data for the gift being claimed.
+  */
+  async deleteGiftFromShoppingList(gift: Gift) {
+    if (gift.status !== 'claimed') {
+      console.error('Gift not claimed')
+    } else {
+      const currentUserID = await this.accountService.getCurrentUserID();
+      if (currentUserID) {
+        await runTransaction(this.db, async (transaction) => {
+          // update db.gifts
+          const giftRef = doc(this.db, 'gifts', gift.id)
+          transaction.update(giftRef, {
+            status: 'wished',
+          });
+
+          // update current user's shopping-list
+          const shoppingRef = doc(this.db, 'lists', currentUserID, 'shopping-list', gift.id);
+          transaction.delete(shoppingRef);
+          
+          // update isWishedBy user's wish-list
+          const wishedByID = gift.isWishedByID;
+          const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
+          transaction.update(wishRef, {
+            status: 'wished',
           });
         });
       } 
