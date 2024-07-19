@@ -22,7 +22,7 @@
       </div>
     </div>
     <ng-template #wishList>
-      <ng-container *ngIf="gift.wishedByUser !== currentUser.id">
+      <ng-container *ngIf="gift.isWishedByID !== currentUser.id; else deleteGiftButton">
         <ng-container *ngIf="gift.isClaimedBy; else claimGiftButton">
           <ng-container *ngIf="gift.isClaimedBy === currentUser.id; else claimedByDifferentUser">
             <span>You have claimed this gift!</span>
@@ -35,6 +35,9 @@
           <button (click)="onGiftClaim.emit(true)">Claim gift</button>
         </ng-template>
       </ng-container>
+      <ng-template #deleteGiftButton>
+        <button (click)="onGiftDelete.emit(true)">Delete gift</button>
+      </ng-template>
     </ng-template>
   </div>
 </div>

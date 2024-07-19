@@ -42,31 +42,41 @@ export class ListDisplayComponent implements OnChanges {
   }
 
 
-  giftInModal!: Gift;
-  showModal: boolean = false;
+  giftInModal?: Gift;
   showInModal(gift: Gift) {
+    console.log('showInModal()')
     this.giftInModal = gift;
-    this.showModal = true;
+  }
+
+  hideModal() {
+    this.giftInModal = undefined;
   }
 
   claimGift() {
     this.giftListService.addGiftToShoppingList(this.giftInModal!);
   }
 
-  async setStatus(status: string) {
-    console.log('status: ', status)
+  async updateStatus(status: string) {
     try {
-      const currentUserID = await this.accountService.getCurrentUserID();
-      const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserID!, 'shopping-list', this.giftInModal.id), {
-        status: status
-      })
-      this.giftInModal = {...this.giftInModal, status: status}
+      if (this.giftInModal) {
+        const currentUserID = await this.accountService.getCurrentUserID();
+        const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserID!, 'shopping-list', this.giftInModal.id), {
+          status: status
+        })
+        this.giftInModal = {...this.giftInModal, status: status}
+      } else {
+        throw Error('giftInModal does not exist.');
+      }
       // TODO: update this.gifts to have the correct status.
       // - refactor this.gifts to be an object with uids as keys.
       // - refactor this.gifts.['user'].gifts to be an object with giftIDs as keys.
       // - refactor gift in database to hold 'userRequestingGift' info.
       // - this.gifts[this.giftInModal.userRequestingGift].gifts[this.giftInModal.id].status = status
     } catch(e) { console.log(e) }
+  }
+
+  deleteGift() {
+    this.giftListService.deleteGiftFromWishList(this.giftInModal!);
   }
 
   getIsChecked(gift: any): boolean {

@@ -32,7 +32,9 @@
       [gift]="giftInModal"
       [type]="list.type"
       (onGiftClaim)="claimGift()"
-      (onStatusUpdated)="setStatus($event)"
+      (onStatusUpdated)="updateStatus($event)"
+      (onGiftDelete)="deleteGift()"
+      (onModalClose)="hideModal()"
       >
     </app-gift-details-modal>
   </ng-container>

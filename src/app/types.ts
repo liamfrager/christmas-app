@@ -11,6 +11,7 @@ export type NewGift = {
 export interface Gift extends NewGift {
     id: string,
     status: string,
+    isWishedByID: string,
     isWishedByUser?: User,
 }
 
