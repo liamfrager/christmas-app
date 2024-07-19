@@ -79,7 +79,7 @@ export class GiftListService {
           name: gift.name,
           url: gift.url,
           details: gift.details,
-          isWishedBy: currentUserID,
+          isWishedByID: currentUserID,
           status: 'wished',
         });
 
@@ -90,7 +90,7 @@ export class GiftListService {
           name: gift.name,
           url: gift.url,
           details: gift.details,
-          isWishedBy: currentUserID,
+          isWishedByID: currentUserID,
         });
       })
     }
@@ -111,7 +111,7 @@ export class GiftListService {
           // update db.gifts
           const giftRef = doc(this.db, 'gifts', gift.id)
           transaction.update(giftRef, {
-            isClaimedBy: currentUserID,
+            isClaimedByID: currentUserID,
             status: 'claimed',
           });
 
@@ -119,12 +119,12 @@ export class GiftListService {
           const shoppingRef = doc(this.db, 'lists', currentUserID, 'shopping-list', gift.id);
           transaction.set(shoppingRef, {
             ...gift,
-            isWishedBy: await this.accountService.getUserInfo(currentUserID),
+            isWishedByID: await this.accountService.getUserInfo(currentUserID),
             status: 'claimed',
           });
           
           // update isWishedBy user's wish-list
-          const wishedByID = typeof gift.isWishedByID;
+          const wishedByID = gift.isWishedByID;
           const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
           transaction.update(wishRef, {
             status: 'claimed',
@@ -156,8 +156,8 @@ export class GiftListService {
           transaction.delete(wishRef);
           
           // update isClaimedBy user's shopping-list
-          if (gift.isClaimedBy) {
-            const claimedByID = gift.isClaimedBy;
+          if (gift.isClaimedByID) {
+            const claimedByID = gift.isClaimedByID;
             const shoppingRef = doc(this.db, 'lists', claimedByID, 'shopping-list', gift.id);
             transaction.update(shoppingRef, {
               status: 'deleted',

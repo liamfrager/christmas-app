@@ -31,13 +31,10 @@ await: any;
     this.currentUser = await this.accountService.currentUser;
   }
   ngOnChanges() {
-    console.log('modal.ngOnChanges()')
-    console.log(this.isShown)
     this.currentStatus = this.gift?.status;
     this.isShown = true;
   }
   closeModal() {
-    console.log('closeModal()')
     this.isShown = false;
     this.onModalClose.emit(true)
   }

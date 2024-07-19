@@ -23,8 +23,8 @@
     </div>
     <ng-template #wishList>
       <ng-container *ngIf="gift.isWishedByID !== currentUser.id; else deleteGiftButton">
-        <ng-container *ngIf="gift.isClaimedBy; else claimGiftButton">
-          <ng-container *ngIf="gift.isClaimedBy === currentUser.id; else claimedByDifferentUser">
+        <ng-container *ngIf="gift.isClaimedByID; else claimGiftButton">
+          <ng-container *ngIf="gift.isClaimedByID === currentUser.id; else claimedByDifferentUser">
             <span>You have claimed this gift!</span>
           </ng-container>
           <ng-template #claimedByDifferentUser>

@@ -29,7 +29,6 @@ export class ListDisplayComponent implements OnChanges {
   
   async ngOnChanges() {
     if (this.list) {
-      console.log('List exists!')
       const currentUserID = await this.accountService.getCurrentUserID();
       this.isOwnedByCurrentUser = this.list.owner.id === currentUserID;
     }
@@ -44,7 +43,6 @@ export class ListDisplayComponent implements OnChanges {
 
   giftInModal?: Gift;
   showInModal(gift: Gift) {
-    console.log('showInModal()')
     this.giftInModal = gift;
   }
 
@@ -67,12 +65,7 @@ export class ListDisplayComponent implements OnChanges {
       } else {
         throw Error('giftInModal does not exist.');
       }
-      // TODO: update this.gifts to have the correct status.
-      // - refactor this.gifts to be an object with uids as keys.
-      // - refactor this.gifts.['user'].gifts to be an object with giftIDs as keys.
-      // - refactor gift in database to hold 'userRequestingGift' info.
-      // - this.gifts[this.giftInModal.userRequestingGift].gifts[this.giftInModal.id].status = status
-    } catch(e) { console.log(e) }
+    } catch(e) { console.error(e) }
   }
 
   deleteGift() {
