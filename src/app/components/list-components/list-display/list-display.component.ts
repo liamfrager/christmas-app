@@ -68,8 +68,13 @@ export class ListDisplayComponent implements OnChanges {
     } catch(e) { console.error(e) }
   }
 
-  deleteGift() {
-    this.giftListService.deleteGiftFromWishList(this.giftInModal!);
+  async deleteGift() {
+    const currentUserID = await this.accountService.getCurrentUserID();
+    if (currentUserID) {
+      this.giftListService.deleteGiftFromWishList(this.giftInModal!);
+      delete this.list!.giftsByUser![currentUserID].gifts[this.giftInModal!.id]
+      this.hideModal()
+    }
   }
 
   getIsChecked(gift: any): boolean {

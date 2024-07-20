@@ -1,0 +1,9 @@
+<button (click)="popUp.showModal()">{{buttonText}}</button>
+<dialog #popUp>
+  <h3>{{title}}</h3>
+  <p>{{body}}</p>
+  <div class="buttonContainer">
+    <button (click)="this.onConfirm.emit(true)">{{confirmText}}</button>
+    <button (click)="popUp.close()">Cancel</button>
+  </div>
+</dialog>

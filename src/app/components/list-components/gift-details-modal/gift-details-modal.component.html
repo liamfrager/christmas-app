@@ -36,7 +36,14 @@
         </ng-template>
       </ng-container>
       <ng-template #deleteGiftButton>
-        <button (click)="onGiftDelete.emit(true)">Delete gift</button>
+        <app-pop-up
+          buttonText="Delete gift"
+          title="Are you sure you want to delete this gift?"
+          body="This action cannot be undone."
+          confirmText="Delete"
+          (onConfirm)="this.onGiftDelete.emit(true)"
+        >
+        </app-pop-up>
       </ng-template>
     </ng-template>
   </div>
