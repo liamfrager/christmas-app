@@ -31,7 +31,7 @@ export class WishListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const uid = await this.accountService.getCurrentUserID();
+    const uid = this.accountService.currentUser.id;
     if (uid) {
       const listInfo = await this.giftListService.getWishListInfo(uid);
       if (listInfo) {

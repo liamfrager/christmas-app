@@ -17,8 +17,8 @@ export class AddGiftComponent {
 
   
 
-  async onSubmit(form: NgForm) {
-    const uid = await this.accountService.getCurrentUserID();
+  onSubmit(form: NgForm) {
+    const uid = this.accountService.currentUser.id;
     if (uid) {
       const gift: NewGift = {
         name: form.form.value.name,

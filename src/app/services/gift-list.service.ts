@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, doc, getDoc, getDocs, orderBy, query, runTransaction, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
 import { Gift, List, NewGift, User } from '../types';
@@ -39,7 +39,7 @@ export class GiftListService {
 
   async getShoppingListInfo() : Promise<List | undefined> {
     console.log('getting shopping list')
-    const currentUserID = await this.accountService.getCurrentUserID();
+    const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
       console.log('is current user')
       // get all gifts from shopping-list
@@ -70,7 +70,7 @@ export class GiftListService {
   }
 
   async addGiftToWishList(gift: NewGift) {
-    const currentUserID = await this.accountService.getCurrentUserID();
+    const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
       await runTransaction(this.db, async (transaction) => {
         // update db.gifts
@@ -105,7 +105,7 @@ export class GiftListService {
     if (gift.status === 'claimed') {
       console.error('Gift already claimed')
     } else {
-      const currentUserID = await this.accountService.getCurrentUserID();
+      const currentUserID = this.accountService.currentUser.id;
       if (currentUserID) {
         await runTransaction(this.db, async (transaction) => {
           // update db.gifts
@@ -144,7 +144,7 @@ export class GiftListService {
     if (gift.status === 'deleted') {
       console.error('Gift already deleted')
     } else {
-      const currentUserID = await this.accountService.getCurrentUserID();
+      const currentUserID = this.accountService.currentUser.id;
       if (currentUserID) {
         await runTransaction(this.db, async (transaction) => {
           // update db.gifts
@@ -177,7 +177,7 @@ export class GiftListService {
     if (gift.status !== 'claimed') {
       console.error('Gift not claimed')
     } else {
-      const currentUserID = await this.accountService.getCurrentUserID();
+      const currentUserID = this.accountService.currentUser.id;
       if (currentUserID) {
         await runTransaction(this.db, async (transaction) => {
           // update db.gifts

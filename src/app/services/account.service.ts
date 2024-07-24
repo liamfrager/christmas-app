@@ -12,7 +12,7 @@ import { User } from '../types';
 export class AccountService {
   constructor(private firebaseService: FirebaseService, private router: Router) {}
   
-  getCurrentUserID() {
+  getCurrentUserID(): Promise<string | undefined> {
     return new Promise<string | undefined>((resolve, reject) => {
       const unsubscribe = this.firebaseService.auth.onAuthStateChanged(user => {
           unsubscribe();
@@ -21,24 +21,30 @@ export class AccountService {
     });
   }
   
-  get currentUser(): Promise<User> {
-    // refactor to use 
-    let getCurrentUser = async () : Promise<User> => {
-      const id = await this.getCurrentUserID()
-      return await this.getUserInfo(id ? id : '');
+  get currentUser(): User {
+    console.log('currentUser...')
+    const currentUser = localStorage.getItem('currentUser')
+    if (currentUser) {
+      console.log('currentUser exists')
+      return JSON.parse(currentUser) as User
     }
-    return getCurrentUser()
+    this.setCurrentUser()
+    return this.currentUser // Too much recursion?
   };
 
+  async setCurrentUser() {
+    const id = await this.getCurrentUserID();
+    const currentUser = await this.getUserInfo(id ? id : '');
+    localStorage.setItem('currentUser', JSON.stringify(currentUser))
+  }
+
   async getUserInfo(id: string) : Promise<User> {
-    if (id == '') {
-      throw Error(`Could not get user info. id is blank.`);
-    } else if (id) {
+    if (id) {
       const docRef = doc(this.firebaseService.db, 'users', id)
       const docSnap = await getDoc(docRef)
       return docSnap.data() as User;
     } else {
-      throw Error(`Could not get user info. id is ${id}.`);
+      throw Error(`Could not get user info. ID is '${id}'.`);
     }
   };
 

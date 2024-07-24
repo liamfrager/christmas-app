@@ -22,7 +22,7 @@ export class AddFamilyComponent {
 
   async onSubmit(form: NgForm) {
     const searchedEmail = form.form.value.searchedEmail
-    const currentUser = await this.accountService.currentUser;;
+    const currentUser = this.accountService.currentUser;;
       if (searchedEmail !== currentUser?.['email']) {
           const q = query(collection(this.db, "users"), where('email', '==', searchedEmail));
           const docRef = await getDocs(q);
@@ -33,16 +33,16 @@ export class AddFamilyComponent {
       }
   }
 
-  async isFamilyMember(searchedUserUID: string) {
-    const currentUser = await this.accountService.currentUser;;
+  isFamilyMember(searchedUserUID: string) {
+    const currentUser = this.accountService.currentUser;;
     if(currentUser['family']) {
         return searchedUserUID !== undefined ? currentUser['family'].indexOf(searchedUserUID) >= 0 : false;
     }
     return false;
   }
   
-  async addFriend(uid: string) {
-    const currentUser = await this.accountService.currentUser;;
+  addFriend(uid: string) {
+    const currentUser = this.accountService.currentUser;;
     if (this.icon === "person_add") {
       this.icon = "check";
       let newFamilyMembers;

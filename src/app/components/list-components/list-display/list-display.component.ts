@@ -27,9 +27,9 @@ export class ListDisplayComponent implements OnChanges {
     `${this.list.owner.displayName} has no gifts in their ${this.list.type} list` :
     'Could not load gifts';
   
-  async ngOnChanges() {
+  ngOnChanges() {
     if (this.list) {
-      const currentUserID = await this.accountService.getCurrentUserID();
+      const currentUserID = this.accountService.currentUser.id;
       this.isOwnedByCurrentUser = this.list.owner.id === currentUserID;
     }
     this.noGiftsMessage = 
@@ -54,10 +54,10 @@ export class ListDisplayComponent implements OnChanges {
     this.giftListService.addGiftToShoppingList(this.giftInModal!);
   }
 
-  async updateStatus(status: string) {
+  updateStatus(status: string) {
     try {
       if (this.giftInModal) {
-        const currentUserID = await this.accountService.getCurrentUserID();
+        const currentUserID = this.accountService.currentUser.id;
         const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserID!, 'shopping-list', this.giftInModal.id), {
           status: status
         })
@@ -68,8 +68,8 @@ export class ListDisplayComponent implements OnChanges {
     } catch(e) { console.error(e) }
   }
 
-  async deleteGift() {
-    const currentUserID = await this.accountService.getCurrentUserID();
+  deleteGift() {
+    const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
       this.giftListService.deleteGiftFromWishList(this.giftInModal!);
       delete this.list!.giftsByUser![currentUserID].gifts[this.giftInModal!.id]
