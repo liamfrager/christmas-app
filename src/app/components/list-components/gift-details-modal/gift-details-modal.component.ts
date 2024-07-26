@@ -13,8 +13,7 @@ import { PopUpComponent } from '../../pop-up/pop-up.component';
   templateUrl: './gift-details-modal.component.html',
   styleUrl: './gift-details-modal.component.css'
 })
-export class GiftDetailsModalComponent implements OnChanges, OnInit{
-await: any;
+export class GiftDetailsModalComponent implements OnChanges, OnInit {
   constructor(private accountService: AccountService) {}
   @Input() gift?: Gift;
   @Input() type?: string;
@@ -32,30 +31,24 @@ await: any;
     this.currentUser = this.accountService.currentUser;
   }
   ngOnChanges() {
-    this.currentStatus = this.gift?.status;
-    this.isShown = true;
+    if (this.gift) {
+      this.currentStatus = this.gift?.status;
+      this.isShown = true;
+    }
   }
   closeModal() {
     this.isShown = false;
-    this.onModalClose.emit(true)
+    setTimeout(() => {
+      this.onModalClose.emit(true);
+    }, 700); // Wait for the animation to complete (0.7s)
   }
 
 
   statuses = [
-    {
-      name: 'claimed',
-      icon: 'check'
-    },{
-      name: 'bought',
-      icon: 'paid'
-    }, {
-      name: 'ordered',
-      icon: 'local_shipping'
-    }, {
-      name: 'wrapped',
-      icon: 'featured_seasonal_and_gifts'
-    }, {
-      name: 'under tree',
-      icon: 'park'
-    }]
+    { name: 'claimed', icon: 'check' },
+    { name: 'bought', icon: 'paid' },
+    { name: 'ordered', icon: 'local_shipping' },
+    { name: 'wrapped', icon: 'featured_seasonal_and_gifts' },
+    { name: 'under tree', icon: 'park'},
+  ]
 }

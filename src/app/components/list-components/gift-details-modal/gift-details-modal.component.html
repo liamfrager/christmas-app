@@ -1,5 +1,5 @@
-<div *ngIf="gift" [class]="isShown ? 'show backdrop' : 'hide backdrop'">
-  <div class="modal">
+<div [ngClass]="{'show': isShown, 'hide': !isShown}" class="backdrop">
+  <div *ngIf="gift" class="modal">
     <app-page-heading
       [headingText]="gift.name"
       [buttons]="headingButtons"
