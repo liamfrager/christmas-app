@@ -42,12 +42,17 @@ export class ListDisplayComponent implements OnChanges {
 
 
   giftInModal?: Gift;
+  isModalOpen: boolean = false;
   showInModal(gift: Gift) {
+    this.isModalOpen = true;
     this.giftInModal = gift;
   }
 
   hideModal() {
-    this.giftInModal = undefined;
+    this.isModalOpen = false;
+    setTimeout(() => {
+      this.giftInModal = undefined;
+    }, 700); // Wait for the animation to complete (0.7s)
   }
 
   claimGift() {

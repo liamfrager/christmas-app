@@ -6,7 +6,7 @@
       <span>{{list.owner.displayName}}</span>
     </div>
     <!-- Display gifts -->
-    <div *ngIf="list.giftsByUser; else noGifts">
+    <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
       <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
         <!-- If is shopping-list -->
         <div *ngIf="list.type === 'shopping'" class="list-owner-display">

@@ -38,9 +38,7 @@ export class GiftDetailsModalComponent implements OnChanges, OnInit {
   }
   closeModal() {
     this.isShown = false;
-    setTimeout(() => {
-      this.onModalClose.emit(true);
-    }, 700); // Wait for the animation to complete (0.7s)
+    this.onModalClose.emit(true);
   }
 
 

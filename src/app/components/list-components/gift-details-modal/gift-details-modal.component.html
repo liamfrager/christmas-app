@@ -6,8 +6,8 @@
       (onIconClick)="closeModal()"
       >
     </app-page-heading>
-    <a [href]="gift.url">{{gift.url}}</a>
     <p>{{gift.details}}</p>
+    <a [href]="gift.url">{{gift.url}}</a>
     <div *ngIf="type === 'shopping'; else wishList" class="status-display">
       <div class="line">
         <div *ngFor="let status of statuses" class="node" [style]="status.name === currentStatus ? 'color: green' : ''">

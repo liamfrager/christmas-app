@@ -25,6 +25,15 @@
   padding: 1em;
 }
 
+@media (min-width: 800px) {
+  .modal {
+    width: 50%; /* Modal will take half of the screen width */
+  }
+  .show {
+    transform: translateX(50%)
+  }
+}
+
 .close {
   position: relative;
 }

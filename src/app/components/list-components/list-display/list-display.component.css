@@ -18,3 +18,15 @@
 hr {
   border: .5px solid black;
 }
+
+.gift-list {
+  width: 100%;
+  transition: all .7s ease-in-out;
+}
+
+@media (min-width: 800px) {
+  .modal-open {
+    width: calc(50% - .5em);
+    transition: all .7s ease-in-out;
+  }
+}
