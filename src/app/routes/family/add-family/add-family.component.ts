@@ -28,7 +28,7 @@ export class AddFamilyComponent {
           const docRef = await getDocs(q);
           docRef.forEach(async snap => {
             this.searchedUser = snap.data();
-            this.icon = await this.isFamilyMember(this.searchedUser?.['uid']) ? "check" : "person_add";
+            this.icon = this.isFamilyMember(this.searchedUser?.['uid']) ? "check" : "person_add";
           })
       }
   }

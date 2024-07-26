@@ -29,7 +29,7 @@ await: any;
   currentUser!: User;
   isShown: boolean = false;
   async ngOnInit() {
-    this.currentUser = await this.accountService.currentUser;
+    this.currentUser = this.accountService.currentUser;
   }
   ngOnChanges() {
     this.currentStatus = this.gift?.status;
