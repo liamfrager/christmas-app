@@ -16,45 +16,14 @@ import { SecretSantaComponent } from './routes/secret-santa/secret-santa.compone
 import { SettingsComponent } from './routes/settings/settings.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: '/login',
-    pathMatch: 'full'
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-  },
-  {
-    path: 'wish-list',
-    component: WishListComponent,
-  },
-  {
-    path: 'wish-list/add-gift',
-    component: AddGiftComponent,
-  },
-  {
-    path: 'family',
-    component: FamilyComponent,
-  },
-  {
-    path: 'family/add-family',
-    component: AddFamilyComponent,
-  },
-  {
-    path: 'family/list',
-    component: FamilyListComponent,
-  },
-  {
-    path: 'shopping-list',
-    component: ShoppingListComponent,
-  },
-  {
-    path: 'secret-santa',
-    component: SecretSantaComponent,
-  },
-  {
-    path: 'settings',
-    component: SettingsComponent,
-  },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent, },
+  { path: 'wish-list', component: WishListComponent, },
+  { path: 'wish-list/add-gift', component: AddGiftComponent, },
+  { path: 'family', component: FamilyComponent, },
+  { path: 'family/add-family', component: AddFamilyComponent, },
+  { path: 'family/list', component: FamilyListComponent, },
+  { path: 'shopping-list', component: ShoppingListComponent, },
+  { path: 'secret-santa', component: SecretSantaComponent, },
+  { path: 'settings', component: SettingsComponent, },
 ];

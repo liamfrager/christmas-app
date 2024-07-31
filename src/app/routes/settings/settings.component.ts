@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { AccountService } from '../../services/account.service';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-settings',
@@ -11,12 +10,11 @@ import { Router } from '@angular/router';
 })
 export class SettingsComponent {
   constructor(
-    private accountService: AccountService,
-    private router: Router
+    private authService: AuthService,
   ) {}
 
   logoutUser() {
-    this.accountService.logoutUser();
+    this.authService.logoutUser();
   }
 
 }

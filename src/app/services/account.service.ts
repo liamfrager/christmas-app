@@ -63,12 +63,4 @@ export class AccountService {
       id: user.uid,
     });
   }
-
-  logoutUser() {
-    signOut(this.firebaseService.auth).then(() => {
-      this.router.navigate(['/login']);
-    }).catch((error) => {
-      console.error('Could not logout')
-    });
-  }
 }
