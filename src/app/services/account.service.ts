@@ -22,45 +22,40 @@ export class AccountService {
   }
   
   get currentUser(): User {
-    console.log('currentUser...')
     const currentUser = localStorage.getItem('currentUser')
     if (currentUser) {
-      console.log('currentUser exists')
       return JSON.parse(currentUser) as User
+    } else {
+      throw Error('`currentUser` does not exist in local storage.')
     }
-    this.setCurrentUser()
-    return this.currentUser // Too much recursion?
   };
 
-  async setCurrentUser() {
-    const id = await this.getCurrentUserID();
-    const currentUser = await this.getUserInfo(id ? id : '');
-    localStorage.setItem('currentUser', JSON.stringify(currentUser))
-  }
-
-  async getUserInfo(id: string) : Promise<User> {
+  async getUserInfo(id: string) : Promise<User | null> {
     if (id) {
       const docRef = doc(this.firebaseService.db, 'users', id)
       const docSnap = await getDoc(docRef)
       return docSnap.data() as User;
     } else {
-      throw Error(`Could not get user info. ID is '${id}'.`);
+      console.error(`Could not get user info. ID is '${id}'.`);
+      return null;
     }
   };
 
-  async isNewUser(user: FirebaseUser): Promise<boolean> {
-    const docRef = doc(this.firebaseService.db, 'users', user.uid)
-    const res = await getDoc(docRef);
-    return res.data() ? false : true;
-  }
+  // async isNewUser(user: FirebaseUser): Promise<boolean> {
+  //   const docRef = doc(this.firebaseService.db, 'users', user.uid)
+  //   const res = await getDoc(docRef);
+  //   return res.data() ? false : true;
+  // }
 
-  createNewUser(user: FirebaseUser) {
+  createNewUser(user: FirebaseUser): User {
     const docRef = doc(this.firebaseService.db, 'users', user.uid)
-    setDoc(docRef, {
+    const userData = {
       displayName: user.displayName,
       email: user.email,
       pfp: user.photoURL,
       id: user.uid,
-    });
+    }
+    setDoc(docRef, userData);
+    return userData as User;
   }
 }
