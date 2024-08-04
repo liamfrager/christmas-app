@@ -14,7 +14,7 @@ export class GiftListService {
 
   async getWishListInfo(userID: string) : Promise<List | undefined> {
     const wishQuerySnapshot = await getDocs(collection(this.db, 'lists', userID, 'wish-list'));
-    let user: User = await this.accountService.getUserInfo(userID);
+    let user = await this.accountService.getUserInfo(userID);
     if (user) {
       // create list
       let list: List = {
@@ -45,9 +45,10 @@ export class GiftListService {
       // get all gifts from shopping-list
       const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('user')));
       // convert DocumentData to List
+      const owner = await this.accountService.getUserInfo(currentUserID)
       let list: List = {
         type: 'shopping',
-        owner: await this.accountService.getUserInfo(currentUserID),
+        owner: owner!,
         giftsByUser: shoppingQuerySnapshot.docs.length > 0 ? {} : undefined,
       };
 

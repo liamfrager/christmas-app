@@ -30,14 +30,14 @@ export class AccountService {
     }
   };
 
-  async getUserInfo(id: string) : Promise<User | null> {
+  async getUserInfo(id: string) : Promise<User | undefined> {
     if (id) {
       const docRef = doc(this.firebaseService.db, 'users', id)
       const docSnap = await getDoc(docRef)
       return docSnap.data() as User;
     } else {
       console.error(`Could not get user info. ID is '${id}'.`);
-      return null;
+      return undefined;
     }
   };
 
