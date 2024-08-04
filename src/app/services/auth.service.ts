@@ -26,7 +26,7 @@ export class AuthService {
         // IdP data available using getAdditionalUserInfo(result)
         // ...
         const user = await this.accountService.getUserInfo(fbUser.uid);
-        if (user === null) {
+        if (!user) {
           const newUser = this.accountService.createNewUser(fbUser);
           this.loginUser(newUser);
         } else {
@@ -45,7 +45,7 @@ export class AuthService {
     });
   }
 
-  async loginUser(user: User) {
+  loginUser(user: User) {
     localStorage.setItem('currentUser', JSON.stringify(user))
     this.router.navigate(['/wish-list'])
   }
