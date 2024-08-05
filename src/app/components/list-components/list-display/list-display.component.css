@@ -2,12 +2,14 @@
   margin: 0;
   background: green;
 }
+
 .list-owner-display {
   display: flex;
   flex-direction: row;
   align-items: center;
   font-weight: bold;
 }
+
 .list-owner-display img {
   border-radius: 50%;
   border: 2px solid black;
@@ -29,4 +31,9 @@ hr {
     width: calc(50% - .5em);
     transition: all .7s ease-in-out;
   }
+}
+
+:host {
+  display: block;
+  overflow-x: hidden;
 }

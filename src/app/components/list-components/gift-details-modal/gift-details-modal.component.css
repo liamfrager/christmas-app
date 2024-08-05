@@ -6,12 +6,12 @@
 
 .hide {
   transition: all .7s ease-in-out;
-  transform: translateX(100%);
+  transform: translateX(100vw);
   width: 300%;
 }
 
 .backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   align-items: center;
   background: cornsilk;
