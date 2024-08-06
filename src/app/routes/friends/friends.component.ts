@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { FamilyDisplayComponent } from '../../components/family-display/family-display.component';
+import { FriendsDisplayComponent } from '../../components/friends-display/friends-display.component';
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-family',
+  selector: 'app-friends',
   standalone: true,
-  imports: [FamilyDisplayComponent, PageHeadingComponent],
-  templateUrl: './family.component.html',
-  styleUrl: './family.component.css'
+  imports: [FriendsDisplayComponent, PageHeadingComponent],
+  templateUrl: './friends.component.html',
+  styleUrl: './friends.component.css'
 })
-export class FamilyComponent {
+export class FriendsComponent {
   constructor(private router: Router) {};
   headingButtons = ['filter_list', 'person_add'];
 
@@ -21,7 +21,7 @@ export class FamilyComponent {
         console.log('filter')
         break;
       case 'person_add':
-        this.router.navigate(['/family/add-family']);
+        this.router.navigate(['/friends/add-friend']);
         break;
       default:
         break;

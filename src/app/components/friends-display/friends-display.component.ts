@@ -5,19 +5,19 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-family-display',
+  selector: 'app-friends-display',
   standalone: true,
   imports: [UserBubbleComponent, CommonModule],
-  templateUrl: './family-display.component.html',
-  styleUrl: './family-display.component.css'
+  templateUrl: './friends-display.component.html',
+  styleUrl: './friends-display.component.css'
 })
-export class FamilyDisplayComponent {
+export class FriendsDisplayComponent {
   constructor(private accountService: AccountService, private router: Router) {
-    this.familyMembers = this.accountService.currentUser.friends
+    this.friends = this.accountService.currentUser.friends
   }
-  familyMembers?: string[];
+  friends?: string[];
 
   goToList(uid: string) {
-    this.router.navigate(['/family/list'], {queryParams: {uid: uid}});
+    this.router.navigate(['/friends/list'], {queryParams: {uid: uid}});
   }
 }

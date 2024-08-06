@@ -1,6 +1,6 @@
-<div *ngIf="familyMembers; else loadingFamily">
-  <div *ngIf="familyMembers.length > 0; else noFamily">
-    <app-user-bubble *ngFor="let member of familyMembers"
+<div *ngIf="friends; else loadingFamily">
+  <div *ngIf="friends.length > 0; else noFamily">
+    <app-user-bubble *ngFor="let member of friends"
       [uid]="member"
       icon="featured_seasonal_and_gifts"
       (buttonClicked)="goToList(member)"

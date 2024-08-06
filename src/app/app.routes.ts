@@ -4,10 +4,10 @@ import { LoginComponent } from './routes/login/login.component';
 // Wish List
 import { WishListComponent } from './routes/wish-list/wish-list.component';
 import { AddGiftComponent } from './routes/wish-list/add-gift/add-gift.component';
-// Family
-import { FamilyComponent } from './routes/family/family.component';
-import { AddFamilyComponent } from './routes/family/add-family/add-family.component';
-import { FamilyListComponent } from './routes/family/list/list.component';
+// Friends
+import { FriendsComponent } from './routes/friends/friends.component';
+import { AddFriendComponent } from './routes/friends/add-friend/add-friend.component';
+import { FriendsListComponent } from './routes/friends/list/list.component';
 // Shopping List
 import { ShoppingListComponent } from './routes/shopping-list/shopping-list.component';
 // Secret Santa
@@ -21,9 +21,9 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'wish-list', component: WishListComponent, canActivate: [authGuard]},
   { path: 'wish-list/add-gift', component: AddGiftComponent, canActivate: [authGuard]},
-  { path: 'family', component: FamilyComponent, canActivate: [authGuard]},
-  { path: 'family/add-family', component: AddFamilyComponent, canActivate: [authGuard]},
-  { path: 'family/list', component: FamilyListComponent, canActivate: [authGuard]},
+  { path: 'friends', component: FriendsComponent, canActivate: [authGuard]},
+  { path: 'friends/add-friend', component: AddFriendComponent, canActivate: [authGuard]},
+  { path: 'friends/list', component: FriendsListComponent, canActivate: [authGuard]},
   { path: 'shopping-list', component: ShoppingListComponent, canActivate: [authGuard]},
   { path: 'secret-santa', component: SecretSantaComponent, canActivate: [authGuard]},
   { path: 'settings', component: SettingsComponent, canActivate: [authGuard]},
