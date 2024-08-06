@@ -5,16 +5,15 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
 import { DocumentData, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'; 
 import { CommonModule } from '@angular/common';
-import { User } from '../../../types';
 
 @Component({
-  selector: 'app-add-family',
+  selector: 'app-add-friend',
   standalone: true,
   imports: [FormsModule, UserBubbleComponent, CommonModule],
-  templateUrl: './add-family.component.html',
-  styleUrl: './add-family.component.css'
+  templateUrl: './add-friend.component.html',
+  styleUrl: './add-friend.component.css'
 })
-export class AddFamilyComponent {
+export class AddFriendComponent {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {};
   db = this.firebaseService.db;
   searchedUser: DocumentData | undefined = undefined;
@@ -28,15 +27,15 @@ export class AddFamilyComponent {
           const docRef = await getDocs(q);
           docRef.forEach(async snap => {
             this.searchedUser = snap.data();
-            this.icon = this.isFamilyMember(this.searchedUser?.['uid']) ? "check" : "person_add";
+            this.icon = this.isFriend(this.searchedUser?.['uid']) ? "check" : "person_add";
           })
       }
   }
 
-  isFamilyMember(searchedUserUID: string) {
+  isFriend(searchedUserUID: string) {
     const currentUser = this.accountService.currentUser;;
-    if(currentUser['family']) {
-        return searchedUserUID !== undefined ? currentUser['family'].indexOf(searchedUserUID) >= 0 : false;
+    if( currentUser['friends'] ) {
+        return searchedUserUID !== undefined ? currentUser['friends'].indexOf(searchedUserUID) >= 0 : false;
     }
     return false;
   }
@@ -45,17 +44,17 @@ export class AddFamilyComponent {
     const currentUser = this.accountService.currentUser;;
     if (this.icon === "person_add") {
       this.icon = "check";
-      let newFamilyMembers;
-      if (currentUser['family'].length > 0 && currentUser['family'].indexOf(uid) < 0) {
-        newFamilyMembers = [...currentUser['family'], uid];
+      let newFriends;
+      if (currentUser['friends']!.length > 0 && currentUser['friends']!.indexOf(uid) < 0) {
+        newFriends = [...currentUser['friends']!, uid];
       } else {
-        newFamilyMembers = [uid]
+        newFriends = [uid]
       }
       
       try {
         const docRef = doc(this.db, "users", currentUser['uid']);
         updateDoc(docRef, {
-          family: newFamilyMembers
+          friends: newFriends
         });
         console.log("Document updated with ID: ", docRef.id);
       } catch (e) {

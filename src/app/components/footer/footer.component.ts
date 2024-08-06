@@ -15,7 +15,7 @@ export class FooterComponent {
       icon: 'featured_seasonal_and_gifts',
     },
     {
-      route: '/family',
+      route: '/friends',
       icon: 'group',
     },
     {

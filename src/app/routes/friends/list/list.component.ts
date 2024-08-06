@@ -5,13 +5,13 @@ import { List } from '../../../types';
 import { GiftListService } from '../../../services/gift-list.service';
 
 @Component({
-  selector: 'app-family-list',
+  selector: 'app-friends-list',
   standalone: true,
   imports: [ListDisplayComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
-export class FamilyListComponent implements OnInit {
+export class FriendsListComponent implements OnInit {
   constructor(private giftListService: GiftListService, private route: ActivatedRoute) {}
   listInfo!: List;
   ngOnInit(): void {

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddFamilyComponent } from './add-family.component';
+import { FriendsDisplayComponent } from './friends-display.component';
 
-describe('AddFamilyComponent', () => {
-  let component: AddFamilyComponent;
-  let fixture: ComponentFixture<AddFamilyComponent>;
+describe('FriendsDisplayComponent', () => {
+  let component: FriendsDisplayComponent;
+  let fixture: ComponentFixture<FriendsDisplayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddFamilyComponent]
+      imports: [FriendsDisplayComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(AddFamilyComponent);
+    fixture = TestBed.createComponent(FriendsDisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
