@@ -1,5 +1,5 @@
 <footer class="footer">
-    <a (click)="selectMenu(i)" *ngFor="let item of menu_items; let i = index;" href="{{item.route}}" class="link">
+    <a (click)="selectMenu(i)" *ngFor="let item of menu_items; let i = index;" class="link">
         <span [ngClass]="{'material-symbols-outlined menu_item': true, 'selected': i === selectedIndex}">{{item.icon}}</span>
     </a>
 </footer>
