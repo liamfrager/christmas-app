@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -9,6 +10,7 @@ import { Component } from '@angular/core';
   styleUrl: './footer.component.css',
 })
 export class FooterComponent {
+  constructor(private router: Router) {}
   menu_items = [
     {
       route: '/wish-list',
@@ -35,5 +37,6 @@ export class FooterComponent {
 
   selectMenu(index: number) {
     this.selectedIndex = index;
+    this.router.navigate([this.menu_items[index].route])
   }
 }
