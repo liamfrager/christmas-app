@@ -3,6 +3,7 @@ import { GiftListService } from '../../../services/gift-list.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AccountService } from '../../../services/account.service';
 import { NewGift } from '../../../types';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -13,9 +14,10 @@ import { NewGift } from '../../../types';
   styleUrl: './add-gift.component.css'
 })
 export class AddGiftComponent {
-  constructor(private giftListService: GiftListService, private accountService: AccountService) {};
-
-  
+  constructor(
+    private giftListService: GiftListService, 
+    private accountService: AccountService,
+    private router: Router) {};
 
   onSubmit(form: NgForm) {
     const uid = this.accountService.currentUser.id;
@@ -27,6 +29,7 @@ export class AddGiftComponent {
         isWishedByID: uid,
       }
       this.giftListService.addGiftToWishList(gift)
+      this.router.navigate(['./wish-list'])
     }
   }
 }
