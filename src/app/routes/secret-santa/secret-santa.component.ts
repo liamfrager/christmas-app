@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 // array shuffle function I found on stack overflow
 function shuffle(array: any[]) {
   let currentIndex = array.length;
-
   // While there remain elements to shuffle...
   while (currentIndex != 0) {
-
     // Pick a remaining element...
     let randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
-
     // And swap it with the current element.
     [array[currentIndex], array[randomIndex]] = [
       array[randomIndex], array[currentIndex]];
@@ -25,22 +22,7 @@ function shuffle(array: any[]) {
   templateUrl: './secret-santa.component.html',
   styleUrl: './secret-santa.component.css'
 })
-export class SecretSantaComponent implements OnInit{
-
-  ngOnInit() {
-    const ids = ['1', '2', '3', '4', '5', '6']
-    const restrictions = new Map()
-    restrictions.set('1', ['3', '4'])
-    restrictions.set('2', ['1', '6'])
-    restrictions.set('3', ['4', '5'])
-    restrictions.set('4', ['6', '1'])
-    restrictions.set('5', ['2', '3'])
-    restrictions.set('6', ['5', '2'])
-    console.log('starting the search for pairings')
-    // const pairings = this.matchSecretSanta(ids, restrictions);
-    const pairings = this.matchSecretSanta(ids, ids, restrictions);
-    console.log(pairings);
-  }
+export class SecretSantaComponent{
 
   /**
    * Function for matching gift givers to gift receivers 
@@ -64,4 +46,6 @@ export class SecretSantaComponent implements OnInit{
     }
     return new Map();
   }
+
+  
 }
