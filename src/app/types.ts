@@ -22,6 +22,7 @@ export interface User extends DocumentData {
     email: string,
     pfp: string,
     friends?: string[],
+    groups?: string[]
 }
 
 export type List = {

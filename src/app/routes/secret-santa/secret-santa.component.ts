@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SecretSantaServiceService } from '../../services/secret-santa-service.service';
+import { AccountService } from '../../services/account.service';
 
 // array shuffle function I found on stack overflow
 function shuffle(array: any[]) {
@@ -22,7 +24,24 @@ function shuffle(array: any[]) {
   templateUrl: './secret-santa.component.html',
   styleUrl: './secret-santa.component.css'
 })
-export class SecretSantaComponent{
+export class SecretSantaComponent implements OnInit {
+
+  constructor(private secretSantaService: SecretSantaServiceService, private accountService: AccountService) {}
+
+  ngOnInit() {
+    const userGroups = this.accountService.currentUser.groups;
+    if (userGroups) {
+      userGroups.forEach(groupID => {
+        this.secretSantaService.getGroupInfo(groupID).then(data => {
+          console.log(data);
+        })
+      })
+    }
+    this.secretSantaService.getGroupInfo("rS2ooxxv4L4AuxbKje5V").then(data => {
+      console.log(data);
+    })
+    console.log(this.accountService.currentUser)
+  }
 
   /**
    * Function for matching gift givers to gift receivers 
@@ -47,5 +66,5 @@ export class SecretSantaComponent{
     return new Map();
   }
 
-  
+
 }
