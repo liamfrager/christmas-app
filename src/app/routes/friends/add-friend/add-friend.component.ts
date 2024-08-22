@@ -19,7 +19,7 @@ export class AddFriendComponent {
   searchedUser: DocumentData | undefined = undefined;
   icon = "person_add";
 
-  async onSubmit(form: NgForm) {
+  async searchUsers(form: NgForm) {
     const searchedEmail = form.form.value.searchedEmail
     const currentUser = this.accountService.currentUser;;
       if (searchedEmail !== currentUser?.['email']) {
