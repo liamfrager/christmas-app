@@ -9,7 +9,7 @@
     <app-user-bubble *ngIf="searchedUser !== undefined"
         [uid]="searchedUser['uid']"
         [icon]="icon"
-        (buttonClicked)="addFriend(searchedUser['uid'])"
+        (buttonClicked)="sendFriendRequest(searchedUser['uid'])"
         >
     </app-user-bubble>
 </div>
