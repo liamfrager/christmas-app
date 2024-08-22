@@ -34,13 +34,13 @@ export class AddFriendComponent {
 
   isFriend(searchedUserUID: string) {
     const currentUser = this.accountService.currentUser;;
-    if( currentUser['friends'] ) {
-        return searchedUserUID !== undefined ? currentUser['friends'].indexOf(searchedUserUID) >= 0 : false;
+    if (currentUser['friends'] && searchedUserUID) {
+      return currentUser['friends'].indexOf(searchedUserUID) >= 0;
     }
     return false;
   }
   
-  addFriend(uid: string) {
+  sendFriendRequest(uid: string) {
     const currentUser = this.accountService.currentUser;;
     if (this.icon === "person_add") {
       this.icon = "check";
