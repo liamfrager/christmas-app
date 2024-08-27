@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserDisplayComponent } from '../user-display/user-display.component';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FriendsService } from '../../services/friends.service';
+import { User } from '../../types';
 
 @Component({
   selector: 'app-friends-display',
@@ -11,13 +13,16 @@ import { Router } from '@angular/router';
   templateUrl: './friends-display.component.html',
   styleUrl: './friends-display.component.css'
 })
-export class FriendsDisplayComponent {
-  constructor(private accountService: AccountService, private router: Router) {
-    this.friends = this.accountService.currentUser.friends
-  }
-  friends?: string[];
+export class FriendsDisplayComponent implements OnInit {
+  constructor(private friendsService: FriendsService, private router: Router) { }
+  friends?: Array<User>;
 
-  goToList(uid: string) {
-    this.router.navigate(['/friends/list'], {queryParams: {uid: uid}});
+  async ngOnInit() {
+    this.friends = await this.friendsService.getFriends()
+    console.log(this.friends)
+  }
+
+  goToList(user: User) {
+    this.router.navigate(['/friends/list'], {queryParams: {uid: user.id}});
   }
 }

@@ -6,21 +6,19 @@
         <button type="submit">Search</button>
     </form>
     
-    <ng-container *ngIf="searchResults.length > 0">
-        <ng-container *ngFor="let user of searchResults">
-            <code>{{ user['id'] }}</code><br>
-        </ng-container>
-        <!-- <app-user-bubble
-            [uid]="user['uid']"
-            [icon]="icon"
-            (buttonClicked)="sendFriendRequest(user['uid'])"
-            >
-        </app-user-bubble> -->
-    </ng-container>
+    <app-user-display *ngFor="let user of searchResults"
+        [user]="user"
+        icon="person_add"
+        (buttonClicked)="onButtonClick(user)"
+        >
+    </app-user-display>
 </div>
 <div>
     <h2>Friend requests</h2>
-    <ng-container *ngFor="let user of incomingFriendRequests">
-        <code>{{ user['id'] }}</code><br>
-    </ng-container>
+    <app-user-display *ngFor="let friendRequest of incomingFriendRequests"
+        [user]="friendRequest"
+        [icon]="friendRequest.status == 'friend' ? 'check' : 'person_add'"
+        (buttonClicked)="onButtonClick(friendRequest)"
+        >
+    </app-user-display>
 </div>

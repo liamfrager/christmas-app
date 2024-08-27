@@ -5,7 +5,7 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
 import { DocumentData, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'; 
 import { CommonModule } from '@angular/common';
-import { User } from '../../../types';
+import { Friend, User } from '../../../types';
 import { FriendsService } from '../../../services/friends.service';
 
 @Component({
@@ -20,8 +20,7 @@ export class AddFriendComponent implements OnInit {
 
   db = this.firebaseService.db;
   searchResults: Array<User> = [];
-  icon = "person_add";
-  incomingFriendRequests: Array<User> = [];
+  incomingFriendRequests: Array<Friend> = [];
 
   async ngOnInit(): Promise<void> {
     this.incomingFriendRequests = await this.friendsService.getFriendRequests();
@@ -39,6 +38,10 @@ export class AddFriendComponent implements OnInit {
       console.log(snap.data())
       // this.icon = this.isFriend(this.searchedUser?.['uid']) ? "check" : "person_add";
     })
+  }
+
+  onButtonClick(user: User) {
+
   }
 
   isFriend(searchedUserUID: string) {
