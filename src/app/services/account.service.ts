@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { signOut, User as FirebaseUser} from "firebase/auth";
 import { FirebaseService } from './firebase.service';
@@ -10,7 +9,7 @@ import { User } from '../types';
   providedIn: 'root'
 })
 export class AccountService {
-  constructor(private firebaseService: FirebaseService, private router: Router) {}
+  constructor(private firebaseService: FirebaseService) {}
   
   getCurrentUserID(): Promise<string | undefined> {
     return new Promise<string | undefined>((resolve, reject) => {
@@ -51,6 +50,7 @@ export class AccountService {
     const docRef = doc(this.firebaseService.db, 'users', user.uid)
     const userData = {
       displayName: user.displayName,
+      searchName: user.displayName?.replace(/\s+/g, '').toLowerCase(), // remove spaces and make lowercase
       email: user.email,
       pfp: user.photoURL,
       id: user.uid,

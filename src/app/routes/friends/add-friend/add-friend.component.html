@@ -2,17 +2,25 @@
     <h2>Add friend</h2>
     <form (ngSubmit)="searchUsers(searchUserForm)" #searchUserForm="ngForm">
         <span class="material-symbols-outlined">search</span>
-        <input id="searchedUser" type="text" placeholder="email" name="searchedEmail" ngModel>
+        <input id="searchedUser" type="text" placeholder="email" name="searchQuery" ngModel>
         <button type="submit">Search</button>
     </form>
     
-    <app-user-bubble *ngIf="searchedUser !== undefined"
-        [uid]="searchedUser['uid']"
-        [icon]="icon"
-        (buttonClicked)="sendFriendRequest(searchedUser['uid'])"
-        >
-    </app-user-bubble>
+    <ng-container *ngIf="searchResults.length > 0">
+        <ng-container *ngFor="let user of searchResults">
+            <code>{{ user['id'] }}</code><br>
+        </ng-container>
+        <!-- <app-user-bubble
+            [uid]="user['uid']"
+            [icon]="icon"
+            (buttonClicked)="sendFriendRequest(user['uid'])"
+            >
+        </app-user-bubble> -->
+    </ng-container>
 </div>
 <div>
     <h2>Friend requests</h2>
+    <ng-container *ngFor="let user of incomingFriendRequests">
+        <code>{{ user['id'] }}</code><br>
+    </ng-container>
 </div>
