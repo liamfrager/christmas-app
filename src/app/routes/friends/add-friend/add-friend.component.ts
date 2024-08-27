@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserBubbleComponent } from '../../../components/user-bubble/user-bubble.component';
+import { UserDisplayComponent } from '../../../components/user-display/user-display.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
@@ -11,7 +11,7 @@ import { FriendsService } from '../../../services/friends.service';
 @Component({
   selector: 'app-add-friend',
   standalone: true,
-  imports: [FormsModule, UserBubbleComponent, CommonModule],
+  imports: [FormsModule, UserDisplayComponent, CommonModule],
   templateUrl: './add-friend.component.html',
   styleUrl: './add-friend.component.css'
 })

@@ -1,0 +1,29 @@
+.user-display {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: .1em;
+    margin: .1em 0;
+    border-radius: 10px;
+    display: flex;
+}
+p {
+    margin-left: 10px;
+}
+img {
+    border-radius: 50%;
+    border: 2px solid black;
+    width: 2.2em;
+    margin-right: .5em;
+}
+button {
+    background: none;
+    border: none;
+    color: white;
+    height: 10px;
+    font-size: 30px;
+    position: relative;
+    top: 0px;
+}

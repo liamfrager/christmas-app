@@ -8,10 +8,10 @@ import { User } from '../../types';
   selector: 'app-user-bubble',
   standalone: true,
   imports: [CommonModule, IconComponent],
-  templateUrl: './user-bubble.component.html',
-  styleUrl: './user-bubble.component.css'
+  templateUrl: './user-display.component.html',
+  styleUrl: './user-display.component.css'
 })
-export class UserBubbleComponent implements OnChanges {
+export class UserDisplayComponent implements OnChanges {
   constructor(private accountService: AccountService) {};
   @Input({required: true}) uid!: string;
   @Input() icon: string = "edit";

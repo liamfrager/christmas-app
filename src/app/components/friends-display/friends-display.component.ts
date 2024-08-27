@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserBubbleComponent } from '../user-bubble/user-bubble.component';
+import { UserDisplayComponent } from '../user-display/user-display.component';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-friends-display',
   standalone: true,
-  imports: [UserBubbleComponent, CommonModule],
+  imports: [UserDisplayComponent, CommonModule],
   templateUrl: './friends-display.component.html',
   styleUrl: './friends-display.component.css'
 })

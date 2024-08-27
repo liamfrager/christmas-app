@@ -18,7 +18,7 @@ export class FriendsService {
     return friends.docs.map(doc => doc.data()) as Array<User>
   }
 
-  async getFriendRequests() {
+  async getFriendRequests(): Promise<User[]> {
     const friendRequestsQ = query(collection(this.db, "lists", this.currentUser['uid'], "friends-list"), where('status', '==', 'incoming'));
     const friendRequests = await getDocs(friendRequestsQ)
     return friendRequests.docs.map(doc => doc.data()) as Array<User>
@@ -50,6 +50,7 @@ export class FriendsService {
       await runTransaction(this.db, async (transaction) => {
         const friendRef = doc(this.db, "lists", this.currentUser['uid'], "friends-list", friend.id);
         transaction.delete(friendRef);
+
         const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUser['uid']);
         transaction.delete(userAsFriendRef);
       });
