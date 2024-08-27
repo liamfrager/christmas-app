@@ -19,7 +19,7 @@ export class AddFriendComponent implements OnInit {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService, private friendsService: FriendsService) {}
 
   db = this.firebaseService.db;
-  searchResults: Array<User> = [];
+  searchResults: Array<User> | null | undefined;
   incomingFriendRequests: Array<Friend> = [];
 
   async ngOnInit(): Promise<void> {
@@ -27,16 +27,16 @@ export class AddFriendComponent implements OnInit {
   }
 
   async searchUsers(form: NgForm) {
-    console.log('searching...');
+    this.searchResults = null;
     const searchQuery = form.form.value.searchQuery.replace(/\s+/g, '').toLowerCase();
-    console.log(searchQuery)
     const currentUser = this.accountService.currentUser;
     const q = query(collection(this.db, "users"), where('searchName', '>=', searchQuery), where('searchName', '<=', searchQuery + '\uf8ff'));
     const docRef = await getDocs(q);
+    this.searchResults = [];
     docRef.forEach(async snap => {
-      this.searchResults.push(snap.data() as User);
-      console.log(snap.data())
-      // this.icon = this.isFriend(this.searchedUser?.['uid']) ? "check" : "person_add";
+      if (this.searchResults && (snap.data() as User).id !== currentUser.id) {
+        this.searchResults.push(snap.data() as User);
+      }
     })
   }
 
