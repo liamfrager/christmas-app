@@ -44,7 +44,7 @@ export class FriendsService {
       console.error("Error adding friend: ", e);
     }
   }
-    
+
   async deleteFriend(friend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
