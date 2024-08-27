@@ -8,7 +8,7 @@
     
     <app-user-display *ngFor="let user of searchResults"
         [user]="user"
-        icon="person_add"
+        [icon]="isFriend(user) ? 'check': 'person_add'"
         (buttonClicked)="onButtonClick(user)"
         >
     </app-user-display>
