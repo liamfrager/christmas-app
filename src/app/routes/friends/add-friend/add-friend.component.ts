@@ -41,8 +41,16 @@ export class AddFriendComponent implements OnInit {
     })
   }
 
-  onButtonClick(user: User) {
+  onSendFriendRequest(user: User) {
+    this.friendsIDs.push(user.id)
+  }
 
+  onAcceptFriendRequest(user: User) {
+    this.friendsIDs.push(user.id)
+  }
+
+  onRejectFriendRequest(user: User) {
+    
   }
 
   isFriend(user: User) {

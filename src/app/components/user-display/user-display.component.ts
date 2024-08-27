@@ -14,18 +14,5 @@ import { User } from '../../types';
 export class UserDisplayComponent {
   constructor(private accountService: AccountService) {};
   @Input({required: true}) user!: User;
-  @Input() icon: string = "edit";
-  @Output() buttonClicked = new EventEmitter();
-
-  runIcon() {
-      switch (this.icon) {
-          case "edit":
-              break;
-          case "person_add":
-              this.icon = "check"
-              break;
-          default:
-              break;
-      }
-  }
+  @Input() icons?: {[icon: string]: () => void } = {};
 }

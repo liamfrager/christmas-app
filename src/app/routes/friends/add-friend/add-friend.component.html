@@ -9,7 +9,7 @@
     <app-user-display *ngFor="let user of searchResults"
         [user]="user"
         [icon]="isFriend(user) ? 'check': 'person_add'"
-        (buttonClicked)="onButtonClick(user)"
+        (buttonClicked)="onSendFriendRequest(user)"
         >
     </app-user-display>
 </div>
@@ -18,7 +18,7 @@
     <app-user-display *ngFor="let friendRequest of incomingFriendRequests"
         [user]="friendRequest"
         [icon]="friendRequest.status == 'friend' ? 'check' : 'person_add'"
-        (buttonClicked)="onButtonClick(friendRequest)"
+        (buttonClicked)="onAcceptFriendRequest(friendRequest)"
         >
     </app-user-display>
 </div>
