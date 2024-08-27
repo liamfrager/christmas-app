@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserBubbleComponent } from '../../../components/user-bubble/user-bubble.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
 import { DocumentData, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'; 
 import { CommonModule } from '@angular/common';
+import { User } from '../../../types';
+import { FriendsService } from '../../../services/friends.service';
 
 @Component({
   selector: 'app-add-friend',
@@ -13,23 +15,30 @@ import { CommonModule } from '@angular/common';
   templateUrl: './add-friend.component.html',
   styleUrl: './add-friend.component.css'
 })
-export class AddFriendComponent {
-  constructor(private firebaseService: FirebaseService, private accountService: AccountService) {};
+export class AddFriendComponent implements OnInit {
+  constructor(private firebaseService: FirebaseService, private accountService: AccountService, private friendsService: FriendsService) {}
+
   db = this.firebaseService.db;
-  searchedUser: DocumentData | undefined = undefined;
+  searchResults: Array<User> = [];
   icon = "person_add";
+  incomingFriendRequests: Array<User> = [];
+
+  async ngOnInit(): Promise<void> {
+    this.incomingFriendRequests = await this.friendsService.getFriendRequests();
+  }
 
   async searchUsers(form: NgForm) {
-    const searchedEmail = form.form.value.searchedEmail
-    const currentUser = this.accountService.currentUser;;
-      if (searchedEmail !== currentUser?.['email']) {
-          const q = query(collection(this.db, "users"), where('email', '==', searchedEmail));
-          const docRef = await getDocs(q);
-          docRef.forEach(async snap => {
-            this.searchedUser = snap.data();
-            this.icon = this.isFriend(this.searchedUser?.['uid']) ? "check" : "person_add";
-          })
-      }
+    console.log('searching...');
+    const searchQuery = form.form.value.searchQuery.replace(/\s+/g, '').toLowerCase();
+    console.log(searchQuery)
+    const currentUser = this.accountService.currentUser;
+    const q = query(collection(this.db, "users"), where('searchName', '>=', searchQuery), where('searchName', '<=', searchQuery + '\uf8ff'));
+    const docRef = await getDocs(q);
+    docRef.forEach(async snap => {
+      this.searchResults.push(snap.data() as User);
+      console.log(snap.data())
+      // this.icon = this.isFriend(this.searchedUser?.['uid']) ? "check" : "person_add";
+    })
   }
 
   isFriend(searchedUserUID: string) {
@@ -38,28 +47,5 @@ export class AddFriendComponent {
       return currentUser['friends'].indexOf(searchedUserUID) >= 0;
     }
     return false;
-  }
-  
-  sendFriendRequest(uid: string) {
-    const currentUser = this.accountService.currentUser;;
-    if (this.icon === "person_add") {
-      this.icon = "check";
-      let newFriends;
-      if (currentUser['friends']!.length > 0 && currentUser['friends']!.indexOf(uid) < 0) {
-        newFriends = [...currentUser['friends']!, uid];
-      } else {
-        newFriends = [uid]
-      }
-      
-      try {
-        const docRef = doc(this.db, "users", currentUser['uid']);
-        updateDoc(docRef, {
-          friends: newFriends
-        });
-        console.log("Document updated with ID: ", docRef.id);
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    }
   }
 }
