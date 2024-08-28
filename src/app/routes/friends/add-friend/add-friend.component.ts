@@ -41,15 +41,34 @@ export class AddFriendComponent implements OnInit {
     })
   }
 
+  getSearchIcons(user: User) {
+    const icons = {
+      [this.isFriend(user) ? 'check': 'person_add']: () => this.onSendFriendRequest(user),
+    }
+    return icons
+  }
+
+  getFriendRequestIcons(friendRequest: Friend): {[icon: string]: () => void } {
+    if (friendRequest.status == 'friend') {
+      return {
+        'cross': () => this.onRejectFriendRequest(friendRequest),
+        'person_add': () => this.onAcceptFriendRequest(friendRequest),
+      }
+    }
+    return {
+      'check': () => {},
+    }
+  }
+
   onSendFriendRequest(user: User) {
     this.friendsIDs.push(user.id)
   }
 
-  onAcceptFriendRequest(user: User) {
+  onAcceptFriendRequest(user: Friend) {
     this.friendsIDs.push(user.id)
   }
 
-  onRejectFriendRequest(user: User) {
+  onRejectFriendRequest(user: Friend) {
     
   }
 

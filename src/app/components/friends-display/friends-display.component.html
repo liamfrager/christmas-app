@@ -2,9 +2,8 @@
   <div *ngIf="friends.length > 0; else noFriends">
     <app-user-display *ngFor="let friend of friends"
       [user]="friend"
-      icon="featured_seasonal_and_gifts"
-      (buttonClicked)="goToList(friend)"
-      >
+      [icons]="getIcons(friend)"
+    >
     </app-user-display>
   </div>
   <ng-template #noFriends>There is nobody in your friends list.</ng-template>

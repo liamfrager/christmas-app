@@ -4,7 +4,7 @@ import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FriendsService } from '../../services/friends.service';
-import { User } from '../../types';
+import { Friend, User } from '../../types';
 
 @Component({
   selector: 'app-friends-display',
@@ -15,14 +15,18 @@ import { User } from '../../types';
 })
 export class FriendsDisplayComponent implements OnInit {
   constructor(private friendsService: FriendsService, private router: Router) { }
-  friends?: Array<User>;
+  friends?: Array<Friend>;
 
   async ngOnInit() {
     this.friends = await this.friendsService.getFriends()
     console.log(this.friends)
   }
 
-  goToList(user: User) {
+  getIcons(friend: Friend) {
+    return { 'featured_seasonal_and_gifts': () => this.goToList(friend) }
+  }
+
+  goToList(user: Friend) {
     this.router.navigate(['/friends/list'], {queryParams: {uid: user.id}});
   }
 }
