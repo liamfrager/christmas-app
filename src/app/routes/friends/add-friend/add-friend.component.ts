@@ -29,16 +29,18 @@ export class AddFriendComponent implements OnInit {
   }
 
   async searchUsers(form: NgForm) {
-    this.searchResults = null;
-    const searchQuery = form.form.value.searchQuery.replace(/\s+/g, '').toLowerCase();
-    const q = query(collection(this.db, "users"), where('searchName', '>=', searchQuery), where('searchName', '<=', searchQuery + '\uf8ff'));
-    const docRef = await getDocs(q);
-    this.searchResults = [];
-    docRef.forEach(async snap => {
-      if (this.searchResults && (snap.data() as User).id !== this.currentUser.id) {
-        this.searchResults.push(snap.data() as User);
-      }
-    })
+    if (form.form.value.searchQuery.length > 0) {
+      this.searchResults = null;
+      const searchQuery = form.form.value.searchQuery.replace(/\s+/g, '').toLowerCase();
+      const q = query(collection(this.db, "users"), where('searchName', '>=', searchQuery), where('searchName', '<=', searchQuery + '\uf8ff'));
+      const docRef = await getDocs(q);
+      this.searchResults = [];
+      docRef.forEach(async snap => {
+        if (this.searchResults && (snap.data() as User).id !== this.currentUser.id) {
+          this.searchResults.push(snap.data() as User);
+        }
+      });
+    }
   }
 
   getSearchIcons(user: User) {
