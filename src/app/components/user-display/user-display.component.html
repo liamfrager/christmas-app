@@ -4,7 +4,7 @@
         <span>{{user.displayName}}</span>
     </div>
     <div class="icons-display">
-        <app-icon *ngFor="let icon of icons | keyvalue"
+        <app-icon *ngFor="let icon of iconActions | keyvalue"
             [icon]="icon.key"
             (iconClicked)="icon.value()"
         >
