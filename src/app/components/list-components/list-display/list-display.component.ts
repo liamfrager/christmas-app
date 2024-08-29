@@ -19,7 +19,7 @@ export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};
   @Input({ required: true }) list?: List;
   
-  isOwnedByCurrentUser = true;
+  isOwnedByCurrentUser: boolean = true;
   noGiftsMessage: string = 
     this.list ?
     this.isOwnedByCurrentUser ?
@@ -40,14 +40,22 @@ export class ListDisplayComponent implements OnChanges {
       'Could not load gifts.';
   }
 
-
+  
   giftInModal?: Gift;
   isModalOpen: boolean = false;
+
+  /**
+   * Function that displays data for a given gift in `app-gift-details-modal`.
+   * @param gift The gift to be shown in the modal.
+   */
   showInModal(gift: Gift) {
     this.isModalOpen = true;
     this.giftInModal = gift;
   }
 
+  /**
+   * Function that closes `app-gift-details-modal`.
+   */
   hideModal() {
     this.isModalOpen = false;
     setTimeout(() => {
@@ -55,11 +63,23 @@ export class ListDisplayComponent implements OnChanges {
     }, 700); // Wait for the animation to complete (0.7s)
   }
 
+  /**
+   * Function that claims the current gift displayed in `app-gift-details-modal`.
+   * 
+   * Should only be called when gift is unclaimed.
+   */
   claimGift() {
     this.giftListService.addGiftToShoppingList(this.giftInModal!);
   }
 
-  updateStatus(status: string) {
+  /**
+   * Function that updates the status of the current gift displayed in `app-gift-details-modal`.
+   * 
+   * Should only be called when gift is claimed by the current user.
+   * 
+   * @param status The gift's new status.
+   */
+  updateStatus(status: 'claimed' | 'bought' | 'ordered' | 'wrapped' | 'under tree') {
     try {
       if (this.giftInModal) {
         const currentUserID = this.accountService.currentUser.id;
@@ -73,6 +93,11 @@ export class ListDisplayComponent implements OnChanges {
     } catch(e) { console.error(e) }
   }
 
+  /**
+   * Function that deletes the current gift displayed in `app-gift-details-modal`
+   * 
+   * Should only be called when gift is owned by the current user.
+   */
   deleteGift() {
     const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
@@ -82,6 +107,11 @@ export class ListDisplayComponent implements OnChanges {
     }
   }
 
+  /**
+   * Function that determines whether the checkbox next to a gift should be checked off.
+   * 
+   * @param gift The gift being checked.
+   */
   getIsChecked(gift: any): boolean {
     var result: boolean = false;
     if (this.list!.type === 'wish') {
@@ -89,9 +119,6 @@ export class ListDisplayComponent implements OnChanges {
         result = true;
       }
     } else if (this.list!.type === 'shopping') {
-        this.giftListService.getShoppingListInfo
-      if (true) {
-      }
     }
     return result
   }
