@@ -22,11 +22,19 @@ export class FriendsDisplayComponent implements OnInit {
     console.log(this.friends)
   }
 
-  getIcons(friend: Friend): Map<string, () => void> {
+  /**
+   * Returns icons and functions to be used in app-user-display.iconActions.
+   * @param friend - A User object representing the friend being displayed.
+   */
+  getIconActions(friend: User | Friend): Map<string, () => void> {
     return new Map([['featured_seasonal_and_gifts', () => this.goToList(friend)]])
   }
 
-  goToList(user: Friend) {
+  /**
+   * Reroutes the webpage to a given user's wish-list.
+   * @param user - A User object representing the user whose wish-list the webpage will be rerouted to.
+   */
+  goToList(user: User) {
     this.router.navigate(['/friends/list'], {queryParams: {uid: user.id}});
   }
 }
