@@ -26,7 +26,6 @@ export class AddFriendComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.incomingFriendRequests = await this.friendsService.getFriendRequests();
     const friends = await this.friendsService.getAllFriendsAndRequests()
-    console.log('friends: ', friends)
     if (friends.length > 0) {
       this.friendsStatuses = friends.reduce( (obj: {[id: string]: string}, friend) => {
         obj[friend.id] = friend.status;
@@ -53,10 +52,10 @@ export class AddFriendComponent implements OnInit {
   getSearchIcons(user: User) {
     const status = this.getFriendStatus(user)
     const icon = (status === 'friend' || status === 'outgoing') ? 'check': 'person_add'
-    const icons = {
+    const iconActions = {
       [icon]: () => this.onSendFriendRequest(user),
     }
-    return icons
+    return iconActions
   }
 
   getFriendRequestIcons(friendRequest: Friend): {[icon: string]: () => void } {
