@@ -35,8 +35,8 @@ export class AddFriendComponent implements OnInit {
   }
   
   /**
-   * Function that is run when #searchUserForm is submitted.
-   * @param form The form object.
+   * Handles #searchUserForm submission.
+   * @param form - The form object.
    */
   async onFormSubmit(form: NgForm) {
     if (form.form.value.searchQuery.length > 0) {
@@ -46,8 +46,8 @@ export class AddFriendComponent implements OnInit {
   }
 
   /**
-   * Function for searching the database for Users whose displayName starts or ends with a search term
-   * @param searchTerm A string that is used to search for users.
+   * Searches the database for Users whose displayName starts or ends with a search term.
+   * @param searchTerm - A string that is used to search for users.
    * @returns A promise that gives an array of users when resolved.
    */
   async searchUsers(searchTerm: string): Promise<Array<User>> {
@@ -64,8 +64,8 @@ export class AddFriendComponent implements OnInit {
   }
 
   /**
-   * Function that returns icons and functions to be used in app-user-display.iconActions.
-   * @param user A User object representing the result of a search query.
+   * Returns icons and functions to be used in app-user-display.iconActions.
+   * @param user - A User object representing the result of a search query.
    * @returns A map of icon names and anonymous functions to be executed when said icons are clicked.
    */
   getSearchIconActions(user: User): Map<string, () => void> {
@@ -77,8 +77,8 @@ export class AddFriendComponent implements OnInit {
   }
 
   /**
-   * Function that returns icons and functions to be used in app-user-display.iconActions.
-   * @param friendRequest A Friend object representing the sender of an incoming friend request.
+   * Returns icons and functions to be used in app-user-display.iconActions.
+   * @param friendRequest - A Friend object representing the sender of an incoming friend request.
    * @returns A map of icon names and anonymous functions to be executed when said icons are clicked.
    */
   getFriendRequestIconActions(friendRequest: Friend): Map<string, () => void> {
@@ -93,8 +93,8 @@ export class AddFriendComponent implements OnInit {
   }
 
   /**
-   * Function that handles when a friend request is sent.
-   * @param user A User object representing the intended recipient of the friend request.
+   * Handles when a friend request is sent.
+   * @param user - A User object representing the intended recipient of the friend request.
    */
   onSendFriendRequest(user: User) {
     this.friendsStatuses = {
@@ -105,8 +105,8 @@ export class AddFriendComponent implements OnInit {
   }
 
   /**
-   * Function that handles when a friend request is accepted.
-   * @param user A Friend object representing the sender of the incoming friend request.
+   * Handles when a friend request is accepted.
+   * @param user - A Friend object representing the sender of the incoming friend request.
    */
   onAcceptFriendRequest(user: Friend) {
     this.friendsStatuses = {
@@ -117,8 +117,8 @@ export class AddFriendComponent implements OnInit {
   }
 
   /**
-   * Function that handles when a friend request is rejected.
-   * @param user A Friend object representing the sender of the incoming friend request.
+   * Handles when a friend request is rejected.
+   * @param user - A Friend object representing the sender of the incoming friend request.
    */
   onRejectFriendRequest(user: Friend) {
     this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
