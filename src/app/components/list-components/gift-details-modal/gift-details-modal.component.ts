@@ -36,6 +36,10 @@ export class GiftDetailsModalComponent implements OnChanges, OnInit {
       this.isShown = true;
     }
   }
+
+  /**
+   * Hides the modal and triggers `onModalClose` eventEmitter.
+   */
   closeModal() {
     this.isShown = false;
     this.onModalClose.emit(true);
