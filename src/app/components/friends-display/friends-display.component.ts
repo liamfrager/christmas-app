@@ -22,8 +22,8 @@ export class FriendsDisplayComponent implements OnInit {
     console.log(this.friends)
   }
 
-  getIcons(friend: Friend) {
-    return { 'featured_seasonal_and_gifts': () => this.goToList(friend) }
+  getIcons(friend: Friend): Map<string, () => void> {
+    return new Map([['featured_seasonal_and_gifts', () => this.goToList(friend)]])
   }
 
   goToList(user: Friend) {

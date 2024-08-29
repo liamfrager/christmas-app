@@ -14,5 +14,5 @@ import { User } from '../../types';
 export class UserDisplayComponent {
   constructor(private accountService: AccountService) {};
   @Input({required: true}) user!: User;
-  @Input() iconActions?: {[icon: string]: () => void } = {};
+  @Input() iconActions?: Map<string, () => void> = new Map();
 }

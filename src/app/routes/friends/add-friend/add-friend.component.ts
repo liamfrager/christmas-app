@@ -20,16 +20,16 @@ export class AddFriendComponent implements OnInit {
   currentUser = this.accountService.currentUser;;
   db = this.firebaseService.db;
   searchResults: Array<User> | null | undefined;
-  friendsStatuses: {[id: string]: string} = {};
+  friendsStatuses: Record<string, string> = {};
   incomingFriendRequests: Array<Friend> = [];
 
   async ngOnInit(): Promise<void> {
     this.incomingFriendRequests = await this.friendsService.getFriendRequests();
     const friends = await this.friendsService.getAllFriendsAndRequests()
     if (friends.length > 0) {
-      this.friendsStatuses = friends.reduce( (obj: {[id: string]: string}, friend) => {
+      this.friendsStatuses = friends.reduce( (obj: Record<string, string>, friend) => {
         obj[friend.id] = friend.status;
-        return obj as {[id: string]: string} ;
+        return obj as Record<string, string> ;
       }, {});
     }
   }
@@ -49,25 +49,23 @@ export class AddFriendComponent implements OnInit {
     }
   }
 
-  getSearchIcons(user: User) {
-    const status = this.getFriendStatus(user)
-    const icon = (status === 'friend' || status === 'outgoing') ? 'check': 'person_add'
-    const iconActions = {
-      [icon]: () => this.onSendFriendRequest(user),
-    }
-    return iconActions
+  getSearchIconActions(user: User): Map<string, () => void> {
+    let iconActions = new Map<string, () => void>();
+    const status = this.getFriendStatus(user);
+    const icon = (status === 'friend' || status === 'outgoing') ? 'check': 'person_add';
+    iconActions.set(icon, () => this.onSendFriendRequest(user));
+    return iconActions;
   }
 
-  getFriendRequestIcons(friendRequest: Friend): {[icon: string]: () => void } {
+  getFriendRequestIconActions(friendRequest: Friend): Map<string, () => void> {
+    let iconActions = new Map<string, () => void>();
     if (friendRequest.status === 'friend') {
-      return {
-        'check': () => {},
-      }
+      iconActions.set('check', () => {});
+      return iconActions;
     }
-    return {
-        'close': () => this.onRejectFriendRequest(friendRequest),
-        'person_add': () => this.onAcceptFriendRequest(friendRequest),
-      }
+    iconActions.set('close', () => this.onRejectFriendRequest(friendRequest));
+    iconActions.set('person_add', () => this.onAcceptFriendRequest(friendRequest));
+    return iconActions;
   }
 
   onSendFriendRequest(user: User) {

@@ -8,7 +8,7 @@
     <ng-container *ngIf="searchResults">
         <app-user-display *ngFor="let user of searchResults"
             [user]="user"
-            [iconActions]="getSearchIcons(user)"
+            [iconActions]="getSearchIconActions(user)"
         >
         </app-user-display>
     </ng-container>
@@ -17,7 +17,7 @@
     <h2>Friend requests</h2>
     <app-user-display *ngFor="let friendRequest of incomingFriendRequests"
         [user]="friendRequest"
-        [iconActions]="getFriendRequestIcons(friendRequest)"
+        [iconActions]="getFriendRequestIconActions(friendRequest)"
     >
     </app-user-display>
 </div>
