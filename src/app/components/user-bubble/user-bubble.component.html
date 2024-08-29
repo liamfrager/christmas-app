@@ -1,9 +1,0 @@
-<div *ngIf="user" class="member">
-    <img *ngIf="user.pfp" [src]="user.pfp" alt="">
-    <p>{{user.displayName}}</p>
-    <app-icon
-        [icon]="icon"
-        (iconClicked)="buttonClicked.emit(icon)"
-        >
-    </app-icon>
-</div>

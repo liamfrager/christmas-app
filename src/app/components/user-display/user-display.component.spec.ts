@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserBubbleComponent } from './user-bubble.component';
+import { UserDisplayComponent } from './user-display.component';
 
-describe('UserBubbleComponent', () => {
-  let component: UserBubbleComponent;
-  let fixture: ComponentFixture<UserBubbleComponent>;
+describe('UserDisplayComponent', () => {
+  let component: UserDisplayComponent;
+  let fixture: ComponentFixture<UserDisplayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserBubbleComponent]
+      imports: [UserDisplayComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(UserBubbleComponent);
+    fixture = TestBed.createComponent(UserDisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

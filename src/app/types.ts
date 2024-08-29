@@ -25,6 +25,10 @@ export interface User extends DocumentData {
     groups?: string[]
 }
 
+export interface Friend extends User {
+    status: string,
+}
+
 export type List = {
     type: string,
     owner: User,
