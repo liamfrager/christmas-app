@@ -45,8 +45,8 @@ export class ListDisplayComponent implements OnChanges {
   isModalOpen: boolean = false;
 
   /**
-   * Function that displays data for a given gift in `app-gift-details-modal`.
-   * @param gift The gift to be shown in the modal.
+   * Displays data for a given gift in `app-gift-details-modal`.
+   * @param gift - The gift to be shown in the modal.
    */
   showInModal(gift: Gift) {
     this.isModalOpen = true;
@@ -54,7 +54,7 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   /**
-   * Function that closes `app-gift-details-modal`.
+   * Closes `app-gift-details-modal`.
    */
   hideModal() {
     this.isModalOpen = false;
@@ -64,8 +64,7 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   /**
-   * Function that claims the current gift displayed in `app-gift-details-modal`.
-   * 
+   * Claims the current gift displayed in `app-gift-details-modal`.
    * Should only be called when gift is unclaimed.
    */
   claimGift() {
@@ -73,11 +72,9 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   /**
-   * Function that updates the status of the current gift displayed in `app-gift-details-modal`.
-   * 
+   * Updates the status of the current gift displayed in `app-gift-details-modal`.
    * Should only be called when gift is claimed by the current user.
-   * 
-   * @param status The gift's new status.
+   * @param status - The gift's new status.
    */
   updateStatus(status: 'claimed' | 'bought' | 'ordered' | 'wrapped' | 'under tree') {
     try {
@@ -94,8 +91,7 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   /**
-   * Function that deletes the current gift displayed in `app-gift-details-modal`
-   * 
+   * Deletes the current gift displayed in `app-gift-details-modal`
    * Should only be called when gift is owned by the current user.
    */
   deleteGift() {
@@ -108,9 +104,8 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   /**
-   * Function that determines whether the checkbox next to a gift should be checked off.
-   * 
-   * @param gift The gift being checked.
+   * Determines whether the checkbox next to a gift should be checked off.
+   * @param gift - The gift being checked.
    */
   getIsChecked(gift: Gift): boolean {
     var result: boolean = false;
