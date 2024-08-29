@@ -12,7 +12,12 @@ export class GiftListService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {};
   db = this.firebaseService.db;
 
-  async getWishListInfo(userID: string) : Promise<List | undefined> {
+  /**
+   * Fetches the wish-list of a given user.
+   * @param userID - The user ID of the user whose wish-list is being fetched.
+   * @returns A promise that resolves to a List object containing the data for the current user's shopping-list.
+   */
+  async getWishListInfo(userID: string): Promise<List | undefined> {
     const wishQuerySnapshot = await getDocs(collection(this.db, 'lists', userID, 'wish-list'));
     let user = await this.accountService.getUserInfo(userID);
     if (user) {
@@ -37,7 +42,11 @@ export class GiftListService {
     return undefined
   }
 
-  async getShoppingListInfo() : Promise<List | undefined> {
+  /**
+   * Fetches the current user's shopping-list.
+   * @returns A promise that resolves to a List object containing the data for the current user's shopping-list.
+   */
+  async getShoppingListInfo(): Promise<List | undefined> {
     const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
       // get all gifts from shopping-list
@@ -66,6 +75,10 @@ export class GiftListService {
     return undefined
   }
 
+  /**
+   * Adds a gift to the current user's wish-list.
+   * @param gift - A NewGift object containing the data for the gift being added.
+   */
   async addGiftToWishList(gift: NewGift) {
     const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
@@ -94,10 +107,9 @@ export class GiftListService {
   }
 
   /**
-  * Claims a gift for the current user.
-  *
-  * @param gift - A Gift object containing the data for the gift being claimed.
-  */
+   * Claims a gift for the current user.
+   * @param gift - A Gift object containing the data for the gift being claimed.
+   */
   async addGiftToShoppingList(gift: Gift) {
     if (gift.status === 'claimed') {
       console.error('Gift already claimed')
@@ -133,10 +145,9 @@ export class GiftListService {
 
 
   /**
-  * Delete a gift from the current user's wish-list, updating shopping lists claiming that gift.
-  *
-  * @param gift - A Gift object containing the data for the gift being claimed.
-  */
+   * Deletes a gift from the current user's wish-list, updating shopping lists claiming that gift.
+   * @param gift - A Gift object containing the data for the gift being claimed.
+   */
   async deleteGiftFromWishList(gift: Gift) {
     if (gift.status === 'deleted') {
       console.error('Gift already deleted')
@@ -166,10 +177,9 @@ export class GiftListService {
   }
 
   /**
-  * Delete a gift from the current user's shopping-list, marking it as unclaimed.
-  *
-  * @param gift - A Gift object containing the data for the gift being claimed.
-  */
+   * Deletes a gift from the current user's shopping-list, marking it as unclaimed.
+   * @param gift - A Gift object containing the data for the gift being claimed.
+   */
   async deleteGiftFromShoppingList(gift: Gift) {
     if (gift.status !== 'claimed') {
       console.error('Gift not claimed')
