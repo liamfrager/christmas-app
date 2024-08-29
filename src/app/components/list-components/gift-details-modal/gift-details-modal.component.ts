@@ -45,7 +45,6 @@ export class GiftDetailsModalComponent implements OnChanges, OnInit {
     this.onModalClose.emit(true);
   }
 
-
   statuses = [
     { name: 'claimed', icon: 'check' },
     { name: 'bought', icon: 'paid' },

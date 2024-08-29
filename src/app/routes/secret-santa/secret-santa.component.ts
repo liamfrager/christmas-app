@@ -44,10 +44,10 @@ export class SecretSantaComponent implements OnInit {
   }
 
   /**
-   * Function for matching gift givers to gift receivers 
-   * @param gifters array of ids for gifters
-   * @param receivers array of ids for remaining receivers
-   * @param restrictions map of restrictions
+   * Matches gift givers to gift receivers 
+   * @param gifters - Array of ids for gifters
+   * @param receivers - Array of ids for remaining receivers
+   * @param restrictions - Map of restrictions
    * @returns A map where the key is the gift giver, and the value is the gift reciever
    */
   matchSecretSanta(gifters: string[], receivers: string[], restrictions: Map<string, string[]>): Map<string, string> {
