@@ -12,6 +12,10 @@ export class FriendsService {
   db = this.firebaseService.db;
   currentUser = this.accountService.currentUser;
 
+  /**
+   * Fetches the friends of the current user.
+   * @returns A promise that resolves to an array of Friend objects.
+   */
   async getFriends(): Promise<Friend[]> {
     const friendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"), where('status', '==', 'friends'));
     const friends = await getDocs(friendsQ);
@@ -21,18 +25,30 @@ export class FriendsService {
     return friends.docs.map(doc => doc.data()) as Array<Friend>;
   }
 
+  /**
+   * Fetches the incoming friend requests of the current user.
+   * @returns A promise that resolves to an array of Friend objects.
+   */
   async getFriendRequests(): Promise<Friend[]> {
     const friendRequestsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"), where('status', '==', 'incoming'));
     const friendRequests = await getDocs(friendRequestsQ);
     return friendRequests.docs.map(doc => doc.data()) as Array<Friend>;
   }
 
+  /**
+   * Fetches all the friends and incoming/outgoing friend requests of the current user.
+   * @returns A promise that resolves to an array of Friend objects.
+   */
   async getAllFriendsAndRequests(): Promise<Friend[]> {
     const allFriendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"));
     const allFriends = await getDocs(allFriendsQ);
     return allFriends.docs.map(doc => doc.data()) as Array<Friend>;
   }
 
+  /**
+   * Sends a friend request to a given user.
+   * @param newFriend - The User to send the friend request to.
+   */
   async sendFriendrequest(newFriend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
@@ -54,6 +70,10 @@ export class FriendsService {
     }
   }
 
+  /**
+   * Accepts a friend request from the given user.
+   * @param newFriend - The User whose friend request is being accepted.
+   */
   async acceptFriendRequest(newFriend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
@@ -73,6 +93,10 @@ export class FriendsService {
     }
   }
 
+  /**
+   * Removes the given User as a friend or rejects their incoming friend-request.
+   * @param friend - The User whose friendship is being removed.
+   */
   async removeFriend(friend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
