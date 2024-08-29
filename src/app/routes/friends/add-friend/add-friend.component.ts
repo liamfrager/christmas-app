@@ -34,6 +34,10 @@ export class AddFriendComponent implements OnInit {
     }
   }
   
+  /**
+   * Function that is run when #searchUserForm is submitted.
+   * @param form The form object.
+   */
   async onFormSubmit(form: NgForm) {
     if (form.form.value.searchQuery.length > 0) {
       const searchQuery: string = form.form.value.searchQuery
@@ -59,14 +63,24 @@ export class AddFriendComponent implements OnInit {
       return results;
   }
 
+  /**
+   * Function that returns icons and functions to be used in app-user-display.iconActions.
+   * @param user A User object representing the result of a search query.
+   * @returns A map of icon names and anonymous functions to be executed when said icons are clicked.
+   */
   getSearchIconActions(user: User): Map<string, () => void> {
     let iconActions = new Map<string, () => void>();
-    const status = this.getFriendStatus(user);
+    const status = this.friendsStatuses[user.id];
     const icon = (status === 'friend' || status === 'outgoing') ? 'check': 'person_add';
     iconActions.set(icon, () => this.onSendFriendRequest(user));
     return iconActions;
   }
 
+  /**
+   * Function that returns icons and functions to be used in app-user-display.iconActions.
+   * @param friendRequest A Friend object representing the sender of an incoming friend request.
+   * @returns A map of icon names and anonymous functions to be executed when said icons are clicked.
+   */
   getFriendRequestIconActions(friendRequest: Friend): Map<string, () => void> {
     let iconActions = new Map<string, () => void>();
     if (friendRequest.status === 'friend') {
@@ -78,6 +92,10 @@ export class AddFriendComponent implements OnInit {
     return iconActions;
   }
 
+  /**
+   * Function that handles when a friend request is sent.
+   * @param user A User object representing the intended recipient of the friend request.
+   */
   onSendFriendRequest(user: User) {
     this.friendsStatuses = {
       ...this.friendsStatuses,
@@ -86,6 +104,10 @@ export class AddFriendComponent implements OnInit {
     this.friendsService.sendFriendrequest(user);
   }
 
+  /**
+   * Function that handles when a friend request is accepted.
+   * @param user A Friend object representing the sender of the incoming friend request.
+   */
   onAcceptFriendRequest(user: Friend) {
     this.friendsStatuses = {
       [user.id]: 'friend'
@@ -94,12 +116,13 @@ export class AddFriendComponent implements OnInit {
     this.friendsService.acceptFriendRequest(user);
   }
 
+  /**
+   * Function that handles when a friend request is rejected.
+   * @param user A Friend object representing the sender of the incoming friend request.
+   */
   onRejectFriendRequest(user: Friend) {
     this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
     this.friendsService.removeFriend(user)
   }
 
-  getFriendStatus(user: User): string {
-    return this.friendsStatuses[user.id];
-  }
 }

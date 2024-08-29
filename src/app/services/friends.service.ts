@@ -54,7 +54,7 @@ export class FriendsService {
     }
   }
 
-  async acceptFriendRequest(newFriend: Friend) {
+  async acceptFriendRequest(newFriend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
         const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", newFriend.id);
