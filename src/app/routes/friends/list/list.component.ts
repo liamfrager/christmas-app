@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ListDisplayComponent } from '../../../components/list-components/list-display/list-display.component';
 import { List } from '../../../types';
 import { GiftListService } from '../../../services/gift-list.service';
+import { FriendsService } from '../../../services/friends.service';
 
 @Component({
   selector: 'app-friends-list',
@@ -12,7 +13,7 @@ import { GiftListService } from '../../../services/gift-list.service';
   styleUrl: './list.component.css'
 })
 export class FriendsListComponent implements OnInit {
-  constructor(private giftListService: GiftListService, private route: ActivatedRoute) {}
+  constructor(private giftListService: GiftListService, private route: ActivatedRoute, private friendsService: FriendsService) {}
   listInfo!: List;
   ngOnInit(): void {
     this.route.queryParams.subscribe(async params => {
@@ -21,5 +22,9 @@ export class FriendsListComponent implements OnInit {
         this.listInfo = listInfo;
       }
     });
+  }
+
+  onRemoveFriend() {
+    this.friendsService.removeFriend(this.listInfo.owner)
   }
 }

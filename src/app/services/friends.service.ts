@@ -27,37 +27,62 @@ export class FriendsService {
     return friendRequests.docs.map(doc => doc.data()) as Array<Friend>;
   }
 
-  async addFriend(newFriendData: User) {
+  async getAllFriendsAndRequests(): Promise<Friend[]> {
+    const allFriendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"));
+    const allFriends = await getDocs(allFriendsQ);
+    return allFriends.docs.map(doc => doc.data()) as Array<Friend>;
+  }
+
+  async sendFriendrequest(newFriend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
-        const newFriendRef = doc(collection(this.db, "lists", this.currentUser.id, "friends-list"));
+        const newFriendRef = doc(collection(this.db, "lists", this.currentUser.id, "friends-list"), newFriend.id);
         transaction.set(newFriendRef, {
-          ...newFriendData,
+          ...newFriend,
           status: 'outgoing',
         });
 
-        const newFriendRequestRef = doc(collection(this.db, "lists", newFriendData.id, "friends-list"));
+        const newFriendRequestRef = doc(collection(this.db, "lists", newFriend.id, "friends-list"), this.currentUser.id);
         transaction.set(newFriendRequestRef, {
           ...this.currentUser,
           status: 'incoming',
         });
       });
-      console.log("Friend successfully added");
+      console.log("Friend request successfully sent.");
+    } catch (e) {
+      console.error("Error sending friend request: ", e);
+    }
+  }
+
+  async acceptFriendRequest(newFriend: Friend) {
+    try {
+      await runTransaction(this.db, async (transaction) => {
+        const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", newFriend.id);
+        transaction.update(friendRef, {
+          status: 'friends',
+        });
+
+        const friendRequestRef = doc(this.db, "lists", newFriend.id, "friends-list", this.currentUser.id);
+        transaction.update(friendRequestRef, {
+          status: 'friends',
+        });
+      });
+      console.log("Friend successfully added.");
     } catch (e) {
       console.error("Error adding friend: ", e);
     }
   }
 
-  async deleteFriend(friend: Friend) {
+  async removeFriend(friend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
         const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", friend.id);
         transaction.delete(friendRef);
 
-        const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUser['uid']);
+        const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUser.id);
         transaction.delete(userAsFriendRef);
       });
-      console.log("Friend successfully removed");
+      console.log("Friend successfully removed.");
     } catch (e) {
       console.error("Error removing friend: ", e);
     }

@@ -5,12 +5,13 @@
         <input id="searchedUser" type="text" placeholder="email" name="searchQuery" ngModel>
         <button type="submit">Search</button>
     </form>
-    
-    <app-user-display *ngFor="let user of searchResults"
-        [user]="user"
-        [iconActions]="getSearchIcons(user)"
-    >
-    </app-user-display>
+    <ng-container *ngIf="searchResults">
+        <app-user-display *ngFor="let user of searchResults"
+            [user]="user"
+            [iconActions]="getSearchIcons(user)"
+        >
+        </app-user-display>
+    </ng-container>
 </div>
 <div>
     <h2>Friend requests</h2>
