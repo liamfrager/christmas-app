@@ -25,12 +25,13 @@ export class AddFriendComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.incomingFriendRequests = await this.friendsService.getFriendRequests();
-    const friends = await this.friendsService.getFriends()
+    const friends = await this.friendsService.getAllFriendsAndRequests()
+    console.log('friends: ', friends)
     if (friends.length > 0) {
-      this.friendsStatuses = friends.reduce( (obj, friend) => {
+      this.friendsStatuses = friends.reduce( (obj: {[id: string]: string}, friend) => {
         obj[friend.id] = friend.status;
-        return obj;
-      });
+        return obj as {[id: string]: string} ;
+      }, {});
     }
   }
 
@@ -50,8 +51,8 @@ export class AddFriendComponent implements OnInit {
   }
 
   getSearchIcons(user: User) {
-    const icon = !this.isFriend(user) ? 'person_add': 'check'
-    console.log(icon)
+    const status = this.getFriendStatus(user)
+    const icon = (status === 'friend' || status === 'outgoing') ? 'check': 'person_add'
     const icons = {
       [icon]: () => this.onSendFriendRequest(user),
     }
@@ -71,21 +72,27 @@ export class AddFriendComponent implements OnInit {
   }
 
   onSendFriendRequest(user: User) {
-    this.friendsStatuses[user.id] = 'outgoing';
+    this.friendsStatuses = {
+      ...this.friendsStatuses,
+      [user.id]: 'outgoing'
+    };
     this.friendsService.sendFriendrequest(user);
   }
 
   onAcceptFriendRequest(user: Friend) {
-    this.friendsStatuses[user.id] = 'friend';
+    this.friendsStatuses = {
+      [user.id]: 'friend'
+    };
+    this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
     this.friendsService.acceptFriendRequest(user);
   }
 
   onRejectFriendRequest(user: Friend) {
-    delete this.friendsStatuses[user.id];
+    this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
     this.friendsService.removeFriend(user)
   }
 
-  isFriend(user: User): boolean {
-    return this.friendsStatuses[user.id] === 'friend';
+  getFriendStatus(user: User): string {
+    return this.friendsStatuses[user.id];
   }
 }

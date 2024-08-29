@@ -27,6 +27,12 @@ export class FriendsService {
     return friendRequests.docs.map(doc => doc.data()) as Array<Friend>;
   }
 
+  async getAllFriendsAndRequests(): Promise<Friend[]> {
+    const allFriendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"));
+    const allFriends = await getDocs(allFriendsQ);
+    return allFriends.docs.map(doc => doc.data()) as Array<Friend>;
+  }
+
   async sendFriendrequest(newFriend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
