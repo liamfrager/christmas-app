@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { collection, doc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
-import { Gift, List, NewGift, User } from '../types';
+import { Gift, List, NewGift, Gifts } from '../types';
 
 
 @Injectable({
@@ -23,14 +23,14 @@ export class GiftListService {
         giftsByUser: wishQuerySnapshot.docs.length > 0 ?
         {
           [user.id]: {
-            gifts: {},
+            gifts: new Map() as Gifts,
             user: user,
           }
         } : undefined
       }
       // add all gifts to list
       wishQuerySnapshot.forEach((doc) => {
-        list.giftsByUser![userID].gifts[doc.data()['id']] = doc.data() as Gift;
+        list.giftsByUser![userID].gifts.set(doc.data()['id'], doc.data() as Gift);
       });
       return list;
     }
@@ -38,10 +38,8 @@ export class GiftListService {
   }
 
   async getShoppingListInfo() : Promise<List | undefined> {
-    console.log('getting shopping list')
     const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
-      console.log('is current user')
       // get all gifts from shopping-list
       const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('user')));
       // convert DocumentData to List
@@ -54,16 +52,14 @@ export class GiftListService {
 
       for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
         const gift = shoppingQuerySnapshot.docs[i].data() as Gift;
-        console.log('gift', gift, typeof gift)
         const userID = gift.isWishedByID;
         if (!list.giftsByUser![userID] && gift.isWishedByUser) { // if first gift in array wished by a user
           list.giftsByUser![userID] = {
             user: gift.isWishedByUser, // add user info to List
-            gifts: {},
+            gifts: new Map() as Gifts,
           }
         }
-        console.log(list)
-        list.giftsByUser![userID].gifts[gift.id] = gift;
+        list.giftsByUser![userID].gifts.set(gift.id, gift);
       }
       return list;
     }
