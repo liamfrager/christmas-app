@@ -102,7 +102,7 @@ export class ListDisplayComponent implements OnChanges {
     const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
       this.giftListService.deleteGiftFromWishList(this.giftInModal!);
-      delete this.list!.giftsByUser![currentUserID].gifts[this.giftInModal!.id]
+      this.list!.giftsByUser![currentUserID].gifts.delete(this.giftInModal!.id)
       this.hideModal()
     }
   }
@@ -112,10 +112,10 @@ export class ListDisplayComponent implements OnChanges {
    * 
    * @param gift The gift being checked.
    */
-  getIsChecked(gift: any): boolean {
+  getIsChecked(gift: Gift): boolean {
     var result: boolean = false;
     if (this.list!.type === 'wish') {
-      if (!this.isOwnedByCurrentUser && gift.isClaimedBy) {
+      if (!this.isOwnedByCurrentUser && gift.isClaimedByUser) {
         result = true;
       }
     } else if (this.list!.type === 'shopping') {

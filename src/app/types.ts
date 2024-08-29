@@ -12,9 +12,10 @@ export interface Gift extends NewGift {
     id: string,
     status: string,
     isWishedByUser?: User,
+    isClaimedByUser?: User,
 }
 
-export type Gifts = {[giftID: string]: Gift}
+export type Gifts = Map<string, Gift>
 
 export interface User extends DocumentData {
     id: string,
