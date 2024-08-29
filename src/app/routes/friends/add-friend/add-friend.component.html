@@ -1,6 +1,6 @@
 <div>
     <h2>Add friend</h2>
-    <form (ngSubmit)="searchUsers(searchUserForm)" #searchUserForm="ngForm">
+    <form (ngSubmit)="onFormSubmit(searchUserForm)" #searchUserForm="ngForm">
         <span class="material-symbols-outlined">search</span>
         <input id="searchedUser" type="text" placeholder="email" name="searchQuery" ngModel>
         <button type="submit">Search</button>

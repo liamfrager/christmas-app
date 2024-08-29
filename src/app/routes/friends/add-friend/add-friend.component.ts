@@ -33,20 +33,30 @@ export class AddFriendComponent implements OnInit {
       }, {});
     }
   }
-
-  async searchUsers(form: NgForm) {
+  
+  async onFormSubmit(form: NgForm) {
     if (form.form.value.searchQuery.length > 0) {
-      this.searchResults = null;
-      const searchQuery = form.form.value.searchQuery.replace(/\s+/g, '').toLowerCase();
+      const searchQuery: string = form.form.value.searchQuery
+      this.searchResults = await this.searchUsers(searchQuery)
+    }
+  }
+
+  /**
+   * Function for searching the database for Users whose displayName starts or ends with a search term
+   * @param searchTerm A string that is used to search for users.
+   * @returns A promise that gives an array of users when resolved.
+   */
+  async searchUsers(searchTerm: string): Promise<Array<User>> {
+      const searchQuery = searchTerm.replace(/\s+/g, '').toLowerCase();
       const q = query(collection(this.db, "users"), where('searchName', '>=', searchQuery), where('searchName', '<=', searchQuery + '\uf8ff'));
       const docRef = await getDocs(q);
-      this.searchResults = [];
+      let results: Array<User> = [];
       docRef.forEach(async snap => {
-        if (this.searchResults && (snap.data() as User).id !== this.currentUser.id) {
-          this.searchResults.push(snap.data() as User);
+        if ((snap.data() as User).id !== this.currentUser.id) {
+          results.push(snap.data() as User);
         }
       });
-    }
+      return results;
   }
 
   getSearchIconActions(user: User): Map<string, () => void> {
