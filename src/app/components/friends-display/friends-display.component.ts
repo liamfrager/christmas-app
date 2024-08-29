@@ -35,6 +35,6 @@ export class FriendsDisplayComponent implements OnInit {
    * @param user - A User object representing the user whose wish-list the webpage will be rerouted to.
    */
   goToList(user: User) {
-    this.router.navigate(['/friends/list'], {queryParams: {uid: user.id}});
+    this.router.navigate(['/friends/list'], {queryParams: {id: user.id}});
   }
 }
