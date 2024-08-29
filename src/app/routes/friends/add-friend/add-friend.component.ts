@@ -20,12 +20,18 @@ export class AddFriendComponent implements OnInit {
   currentUser = this.accountService.currentUser;;
   db = this.firebaseService.db;
   searchResults: Array<User> | null | undefined;
-  friendsIDs: Array<string> = [];
+  friendsStatuses: {[id: string]: string} = {};
   incomingFriendRequests: Array<Friend> = [];
 
   async ngOnInit(): Promise<void> {
     this.incomingFriendRequests = await this.friendsService.getFriendRequests();
-    this.friendsIDs = (await this.friendsService.getFriends()).map( friend => friend.id)
+    const friends = await this.friendsService.getFriends()
+    if (friends.length > 0) {
+      this.friendsStatuses = friends.reduce( (obj, friend) => {
+        obj[friend.id] = friend.status;
+        return obj;
+      });
+    }
   }
 
   async searchUsers(form: NgForm) {
@@ -44,37 +50,42 @@ export class AddFriendComponent implements OnInit {
   }
 
   getSearchIcons(user: User) {
+    const icon = !this.isFriend(user) ? 'person_add': 'check'
+    console.log(icon)
     const icons = {
-      [this.isFriend(user) ? 'check': 'person_add']: () => this.onSendFriendRequest(user),
+      [icon]: () => this.onSendFriendRequest(user),
     }
     return icons
   }
 
   getFriendRequestIcons(friendRequest: Friend): {[icon: string]: () => void } {
-    if (friendRequest.status == 'friend') {
+    if (friendRequest.status === 'friend') {
       return {
-        'cross': () => this.onRejectFriendRequest(friendRequest),
-        'person_add': () => this.onAcceptFriendRequest(friendRequest),
+        'check': () => {},
       }
     }
     return {
-      'check': () => {},
-    }
+        'close': () => this.onRejectFriendRequest(friendRequest),
+        'person_add': () => this.onAcceptFriendRequest(friendRequest),
+      }
   }
 
   onSendFriendRequest(user: User) {
-    this.friendsIDs.push(user.id)
+    this.friendsStatuses[user.id] = 'outgoing';
+    this.friendsService.sendFriendrequest(user);
   }
 
   onAcceptFriendRequest(user: Friend) {
-    this.friendsIDs.push(user.id)
+    this.friendsStatuses[user.id] = 'friend';
+    this.friendsService.acceptFriendRequest(user);
   }
 
   onRejectFriendRequest(user: Friend) {
-    
+    delete this.friendsStatuses[user.id];
+    this.friendsService.removeFriend(user)
   }
 
-  isFriend(user: User) {
-    return this.friendsIDs.indexOf(user.id) >= 0;
+  isFriend(user: User): boolean {
+    return this.friendsStatuses[user.id] === 'friend';
   }
 }
