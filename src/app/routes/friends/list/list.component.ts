@@ -17,7 +17,7 @@ export class FriendsListComponent implements OnInit {
   listInfo!: List;
   ngOnInit(): void {
     this.route.queryParams.subscribe(async params => {
-      const listInfo = await this.giftListService.getWishListInfo(params['uid']);
+      const listInfo = await this.giftListService.getWishListInfo(params['id']);
       if (listInfo) {
         this.listInfo = listInfo;
       }
