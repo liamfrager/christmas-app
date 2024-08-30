@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  login() {
+  onLogin() {
     this.authService.loginWithGoogle()
   }
 }

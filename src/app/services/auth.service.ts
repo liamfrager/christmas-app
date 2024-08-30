@@ -15,6 +15,9 @@ export class AuthService {
   // Function to login with Google.
   loginWithGoogle(): void {
     const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
     signInWithPopup(this.firebaseService.auth, provider)
       .then(async (result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
