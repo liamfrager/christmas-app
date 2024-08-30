@@ -50,7 +50,7 @@ export class GiftListService {
     const currentUserID = this.accountService.currentUser.id;
     if (currentUserID) {
       // get all gifts from shopping-list
-      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('user')));
+      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('isWishedByUser')));
       // convert DocumentData to List
       const owner = await this.accountService.getUserInfo(currentUserID)
       let list: List = {
@@ -128,7 +128,7 @@ export class GiftListService {
           const shoppingRef = doc(this.db, 'lists', currentUserID, 'shopping-list', gift.id);
           transaction.set(shoppingRef, {
             ...gift,
-            isWishedByID: await this.accountService.getUserInfo(currentUserID),
+            isWishedByUser: await this.accountService.getUserInfo(gift.isWishedByID),
             status: 'claimed',
           });
           
