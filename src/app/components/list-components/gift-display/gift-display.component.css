@@ -1,11 +1,24 @@
 .gift-wrap {
   display: flex;
   align-items: center;
-  padding: .2em;
+  /* padding: .2em; */
 }
 
 .checkbox {
   margin-right: .3em;
+  /* padding: .5em; */
+}
+
+.gift-name {
+  width: 100%;
+  border-bottom: .5px solid black;
+  padding: .8em .3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+:host-context(li:last-of-type) .gift-name {
+  border-bottom: none;
 }
 
 .gift-name:hover {
