@@ -13,15 +13,17 @@
           <img [src]="giftByUser.value.user.pfp" [alt]="giftByUser.value.user.displayName + ' profile picture'">
           <span>{{giftByUser.value.user.displayName}}</span>
         </div>
-        
-        <app-gift-display
-          *ngFor="let gift of giftByUser.value.gifts | keyvalue"
-          class="gift"
-          [gift]="gift.value"
-          [isChecked]="getIsChecked(gift.value)"
-          (giftClicked)="showInModal(gift.value)"
-          >
-        </app-gift-display>
+        <ul>
+          <li *ngFor="let gift of giftByUser.value.gifts | keyvalue">
+            <app-gift-display
+              class="gift"
+              [gift]="gift.value"
+              [isChecked]="getIsChecked(gift.value)"
+              (giftClicked)="showInModal(gift.value)"
+              >
+            </app-gift-display>
+          </li>
+        </ul>
         <hr>
       </div>
     </div>
