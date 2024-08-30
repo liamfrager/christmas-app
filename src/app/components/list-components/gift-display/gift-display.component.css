@@ -17,12 +17,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 :host-context(li:last-of-type) .gift-name {
   border-bottom: none;
 }
 
 .gift-name:hover {
-  color: darkred;
+  color: #d64541;
 }
 
 .cursor-click {
