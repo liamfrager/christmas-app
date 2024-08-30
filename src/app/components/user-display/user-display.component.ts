@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { AccountService } from '../../services/account.service';
 import { IconComponent } from '../icon/icon.component';
 import { User } from '../../types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-display',
@@ -12,7 +12,15 @@ import { User } from '../../types';
   styleUrl: './user-display.component.css'
 })
 export class UserDisplayComponent {
-  constructor(private accountService: AccountService) {};
+  constructor(private router: Router) {};
   @Input({required: true}) user!: User;
   @Input() iconActions?: Map<string, () => void> = new Map();
+
+   /**
+   * Reroutes the webpage to the displayed user's wish-list.
+   * @param user - A User object representing the user whose wish-list the webpage will be rerouted to.
+   */
+  goToList() {
+    this.router.navigate(['/friends/list'], {queryParams: {id: this.user.id}});
+  }
 }

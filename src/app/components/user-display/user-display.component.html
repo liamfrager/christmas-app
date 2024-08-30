@@ -1,5 +1,5 @@
 <div *ngIf="user" class="user-display">
-    <div class="user-info">
+    <div class="user-info" (click)="goToList()">
         <img [src]="user.pfp" [alt]="user.displayName + ' profile picture'">
         <span>{{user.displayName}}</span>
     </div>
