@@ -7,13 +7,14 @@ import { DocumentData, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore
 import { GiftDetailsModalComponent } from '../gift-details-modal/gift-details-modal.component';
 import { FirebaseService } from '../../../services/firebase.service';
 import { Gift, Gifts, List, User } from '../../../types';
+import { UserDisplayComponent } from '../../user-display/user-display.component';
 
 @Component({
     selector: 'app-list-display',
     standalone: true,
     templateUrl: './list-display.component.html',
     styleUrl: './list-display.component.css',
-    imports: [GiftDisplayComponent, GiftDetailsModalComponent, CommonModule]
+    imports: [GiftDisplayComponent, GiftDetailsModalComponent, CommonModule, UserDisplayComponent]
 })
 export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};

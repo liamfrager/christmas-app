@@ -2,7 +2,6 @@
   <div *ngIf="friends.length > 0; else noFriends">
     <app-user-display *ngFor="let friend of friends"
       [user]="friend"
-      [iconActions]="getIconActions(friend)"
     >
     </app-user-display>
   </div>

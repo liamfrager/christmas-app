@@ -3,6 +3,7 @@
     flex-direction: row;
     align-items: center;
 }
+
 .user-display {
     justify-content: space-between;
     font-weight: bold;
@@ -12,15 +13,25 @@
     border-radius: 10px;
     display: flex;
 }
+
+.user-info {
+    cursor: pointer;
+    &:hover {
+        color: darkred;
+    }
+}
+
 p {
     margin-left: 10px;
 }
+
 img {
     border-radius: 50%;
     border: 2px solid black;
     width: 2.2em;
     margin-right: .5em;
 }
+
 button {
     background: none;
     border: none;
