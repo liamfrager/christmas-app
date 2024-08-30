@@ -9,10 +9,6 @@
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
       <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
         <!-- If is shopping-list -->
-        <!-- <div *ngIf="list.type === 'shopping'" class="list-owner-display">
-          <img [src]="giftByUser.value.user.pfp" [alt]="giftByUser.value.user.displayName + ' profile picture'">
-          <span>{{giftByUser.value.user.displayName}}</span>
-        </div> -->
         <app-user-display *ngIf="list.type === 'shopping'"
           [user]="giftByUser.value.user"
         >
