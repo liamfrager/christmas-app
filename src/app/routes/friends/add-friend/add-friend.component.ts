@@ -71,7 +71,7 @@ export class AddFriendComponent implements OnInit {
   getSearchIconActions(user: User): Map<string, () => void> {
     let iconActions = new Map<string, () => void>();
     const status = this.friendsStatuses[user.id];
-    const icon = (status === 'friend' || status === 'outgoing') ? 'check': 'person_add';
+    const icon = (status === 'friends' || status === 'outgoing') ? 'check': 'person_add';
     iconActions.set(icon, () => this.onSendFriendRequest(user));
     return iconActions;
   }
@@ -83,7 +83,7 @@ export class AddFriendComponent implements OnInit {
    */
   getFriendRequestIconActions(friendRequest: Friend): Map<string, () => void> {
     let iconActions = new Map<string, () => void>();
-    if (friendRequest.status === 'friend') {
+    if (friendRequest.status === 'friends') {
       iconActions.set('check', () => {});
       return iconActions;
     }
@@ -110,7 +110,7 @@ export class AddFriendComponent implements OnInit {
    */
   onAcceptFriendRequest(user: Friend) {
     this.friendsStatuses = {
-      [user.id]: 'friend'
+      [user.id]: 'friends'
     };
     this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
     this.friendsService.acceptFriendRequest(user);
