@@ -137,6 +137,7 @@ export class GiftListService {
           const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
           transaction.update(wishRef, {
             status: 'claimed',
+            isClaimedByID: currentUserID,
           });
         });
       } 
