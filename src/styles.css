@@ -67,3 +67,27 @@ body {
 main {
   padding: 10px;
 }
+
+/* Buttons */
+button {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: .5em;
+    padding: .5em;
+
+    &:hover {
+      color: white;
+      background-color: black;
+    }
+}
+
+button.btn-red {
+  background-color: white;
+  color: #d64541;
+  border: 1px solid #d64541;
+  &:hover {
+    background-color: #d64541;
+    color: white;
+  }
+}

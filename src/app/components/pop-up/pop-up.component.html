@@ -3,7 +3,7 @@
   <h3>{{title}}</h3>
   <p>{{body}}</p>
   <div class="buttonContainer">
-    <button (click)="this.onConfirm.emit(true)">{{confirmText}}</button>
+    <button (click)="this.onConfirm.emit(true)" class="btn-red">{{confirmText}}</button>
     <button (click)="popUp.close()">Cancel</button>
   </div>
 </dialog>
