@@ -31,7 +31,7 @@ export interface Friend extends User {
 }
 
 export type List = {
-    type: string,
+    type: 'wish' | 'shopping' | 'unfriended' | 'error',
     owner: User,
     giftsByUser?: {
         [userID: string]: {
