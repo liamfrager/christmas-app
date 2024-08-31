@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
-import { collection, doc, runTransaction, where, query, getDocs, deleteField } from 'firebase/firestore';
+import { collection, doc, runTransaction, where, query, getDocs, deleteField, getDoc } from 'firebase/firestore';
 import { Friend, User } from '../types';
 
 @Injectable({
@@ -11,6 +11,20 @@ export class FriendsService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {}
   db = this.firebaseService.db;
   currentUser = this.accountService.currentUser;
+
+  /**
+   * Returns whether the given user is friends with the current user.
+   * @returns A promise that resolves to boolean indicating whether the given user is a friend.
+   */
+  async isFriend(userID: string): Promise<boolean> {
+    const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", userID);
+    const friendSnap = await getDoc(friendRef);
+    const friend = friendSnap.data() as Friend;
+    if (friend && friend.status === 'friends') {
+      return true;
+    }
+    return false;
+  }
 
   /**
    * Fetches the friends of the current user.
