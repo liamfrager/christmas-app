@@ -14,16 +14,32 @@ export class FriendsService {
 
   /**
    * Returns whether the given user is friends with the current user.
+   * @param - The id of the friend.
    * @returns A promise that resolves to boolean indicating whether the given user is a friend.
    */
-  async isFriend(userID: string): Promise<boolean> {
-    const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", userID);
+  async isFriend(id: string): Promise<boolean> {
+    const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", id);
     const friendSnap = await getDoc(friendRef);
     const friend = friendSnap.data() as Friend;
     if (friend && friend.status === 'friends') {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Fetches the friend with the given id.
+   * @param - The id of the friend.
+   * @returns A promise that resolves to a Friend objects.
+   */
+  async getFriend(id: string): Promise<Friend | undefined> {
+    const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", id);
+    const friendSnap = await getDoc(friendRef);
+    const friend = friendSnap.data() as Friend;
+    if (friend && friend.status === 'friends') {
+      return friend;
+    }
+    return undefined;
   }
 
   /**
