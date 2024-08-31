@@ -103,6 +103,11 @@ export class FriendsService {
         // Remove friend from current user's friends-list.
         const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", friend.id);
         transaction.delete(friendRef);
+        // Mark current user as 'unfriended' on friend's friends-list.
+        const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUser.id);
+        transaction.update(userAsFriendRef, {
+          status: 'unfriended'
+        });
         // Remove friend's gifts from current user's shopping-list.
         const friendGiftsInUserShoppingListQ = query(collection(this.db, "lists", this.currentUser.id, "shopping-list"), where('isWishedByID', '==', friend.id));
         const friendGiftsInUserShoppingList = await getDocs(friendGiftsInUserShoppingListQ)
@@ -119,9 +124,6 @@ export class FriendsService {
           });
         });
         // ************ ARE THESE THINGS WE WANT TO HAVE HAPPEN? *****************
-        // // Remove current user from friend's friends-list.
-        // const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUser.id);
-        // transaction.delete(userAsFriendRef);
         // // Remove current user's gifts from friend's shopping-list.
         // const userGiftsInFriendShoppingListQ = query(collection(this.db, "lists", friend.id, "shopping-list"), where('isWishedByID', '==', this.currentUser.id));
         // const userGiftsInFriendShoppingList = await getDocs(userGiftsInFriendShoppingListQ)
