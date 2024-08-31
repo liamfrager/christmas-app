@@ -1,2 +1,9 @@
 <app-list-display [list]="listInfo"></app-list-display>
-<button (click)="onRemoveFriend()" class="btn-red">Remove Friend</button>
+<app-pop-up
+  buttonText="Remove Friend"
+  [title]="'Are you sure you want to unfriend ' + listInfo.owner.displayName + '?'"
+  body="This will remove their gifts from your shopping list."
+  confirmText="Remove Friend"
+  (onConfirm)="onRemoveFriend()"
+>
+</app-pop-up>

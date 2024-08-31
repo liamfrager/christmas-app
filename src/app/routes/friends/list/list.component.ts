@@ -4,11 +4,12 @@ import { ListDisplayComponent } from '../../../components/list-components/list-d
 import { List } from '../../../types';
 import { GiftListService } from '../../../services/gift-list.service';
 import { FriendsService } from '../../../services/friends.service';
+import { PopUpComponent } from '../../../components/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-friends-list',
   standalone: true,
-  imports: [ListDisplayComponent],
+  imports: [ListDisplayComponent, PopUpComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
