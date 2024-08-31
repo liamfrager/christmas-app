@@ -28,9 +28,9 @@ export class FriendsService {
   }
 
   /**
-   * Fetches the friend with the given id.
+   * Fetches a friend with the given id. Returns undefined if the id is invalid.
    * @param - The id of the friend.
-   * @returns A promise that resolves to a Friend objects.
+   * @returns A promise that resolves to a Friend object or undefined.
    */
   async getFriend(id: string): Promise<Friend | undefined> {
     const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", id);
