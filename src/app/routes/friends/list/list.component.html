@@ -1,9 +1,19 @@
-<app-list-display [list]="listInfo"></app-list-display>
-<app-pop-up
-  buttonText="Remove Friend"
-  [title]="'Are you sure you want to unfriend ' + listInfo.owner.displayName + '?'"
-  body="This will remove their gifts from your shopping list."
-  confirmText="Remove Friend"
-  (onConfirm)="onRemoveFriend()"
->
-</app-pop-up>
+<ng-container *ngIf="listInfo; else loadingList">
+  <app-list-display *ngIf="listInfo.type !== 'unfriended'; else unfriendMessage"
+    [list]="listInfo"
+  ></app-list-display>
+  <ng-template #unfriendMessage>
+    <p>{{listInfo.owner.displayName}} has unfriended you. You can no longer view their wish list.</p>
+  </ng-template>
+  <app-pop-up
+    buttonText="Remove Friend"
+    [title]="'Are you sure you want to unfriend ' + listInfo.owner.displayName + '?'"
+    body="This will remove their gifts from your shopping list."
+    confirmText="Remove Friend"
+    (onConfirm)="onRemoveFriend()"
+  >
+  </app-pop-up>
+</ng-container>
+<ng-template #loadingList>
+  <p>Loading list...</p>
+</ng-template>

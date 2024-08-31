@@ -36,7 +36,7 @@ export class FriendsService {
     const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", id);
     const friendSnap = await getDoc(friendRef);
     const friend = friendSnap.data() as Friend;
-    if (friend && friend.status === 'friends') {
+    if (friend) {
       return friend;
     }
     return undefined;
@@ -47,7 +47,7 @@ export class FriendsService {
    * @returns A promise that resolves to an array of Friend objects.
    */
   async getFriends(): Promise<Friend[]> {
-    const friendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"), where('status', '==', 'friends'));
+    const friendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"), where('status', 'in', ['friends', 'unfriended']));
     const friends = await getDocs(friendsQ);
     if (friends.docs.length == 0) {
       return [];
