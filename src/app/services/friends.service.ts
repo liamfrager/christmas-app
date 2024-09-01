@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
-import { collection, doc, updateDoc, addDoc, runTransaction, where, query, getDocs } from 'firebase/firestore';
+import { collection, doc, runTransaction, where, query, getDocs, deleteField, getDoc } from 'firebase/firestore';
 import { Friend, User } from '../types';
 
 @Injectable({
@@ -11,6 +11,36 @@ export class FriendsService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {}
   db = this.firebaseService.db;
   currentUser = this.accountService.currentUser;
+
+  /**
+   * Returns whether the given user is friends with the current user.
+   * @param - The id of the friend.
+   * @returns A promise that resolves to boolean indicating whether the given user is a friend.
+   */
+  async isFriend(id: string): Promise<boolean> {
+    const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", id);
+    const friendSnap = await getDoc(friendRef);
+    const friend = friendSnap.data() as Friend;
+    if (friend && friend.status === 'friends') {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Fetches a friend with the given id. Returns undefined if the id is invalid.
+   * @param - The id of the friend.
+   * @returns A promise that resolves to a Friend object or undefined.
+   */
+  async getFriend(id: string): Promise<Friend | undefined> {
+    const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", id);
+    const friendSnap = await getDoc(friendRef);
+    const friend = friendSnap.data() as Friend;
+    if (friend) {
+      return friend;
+    }
+    return undefined;
+  }
 
   /**
    * Fetches the friends of the current user.
@@ -100,11 +130,27 @@ export class FriendsService {
   async removeFriend(friend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
+        // Remove friend from current user's friends-list.
         const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", friend.id);
         transaction.delete(friendRef);
-
+        // Remove current user from friend's friends-list.
         const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUser.id);
         transaction.delete(userAsFriendRef);
+        // Remove friend's gifts from current user's shopping-list.
+        const friendGiftsInUserShoppingListQ = query(collection(this.db, "lists", this.currentUser.id, "shopping-list"), where('isWishedByID', '==', friend.id));
+        const friendGiftsInUserShoppingList = await getDocs(friendGiftsInUserShoppingListQ)
+        friendGiftsInUserShoppingList.forEach(doc => {
+          transaction.delete(doc.ref);
+        });
+        // Unclaim gifts in friend's wish-list.
+        const userGiftsInFriendWishListQ = query(collection(this.db, "lists", friend.id, "wish-list"), where('isClaimedByID', '==', this.currentUser.id))
+        const userGiftsInFriendWishList = await getDocs(userGiftsInFriendWishListQ)
+        userGiftsInFriendWishList.forEach(doc => {
+          transaction.update(doc.ref, {
+            status: deleteField(),
+            isClaimedByID: deleteField(),
+          });
+        });
       });
       console.log("Friend successfully removed.");
     } catch (e) {

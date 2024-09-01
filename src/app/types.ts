@@ -10,7 +10,7 @@ export type NewGift = {
 }
 export interface Gift extends NewGift {
     id: string,
-    status: string,
+    status: 'claimed' | 'bought' | 'ordered' | 'wrapped' | 'under tree' | 'deleted',
     isWishedByUser?: User,
     isClaimedByUser?: User,
 }
@@ -27,11 +27,11 @@ export interface User extends DocumentData {
 }
 
 export interface Friend extends User {
-    status: string,
+    status: 'incoming'| 'outgoing' | 'friends',
 }
 
 export type List = {
-    type: string,
+    type: 'wish' | 'shopping' | 'error',
     owner: User,
     giftsByUser?: {
         [userID: string]: {

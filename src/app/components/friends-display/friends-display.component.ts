@@ -19,6 +19,5 @@ export class FriendsDisplayComponent implements OnInit {
 
   async ngOnInit() {
     this.friends = await this.friendsService.getFriends()
-    console.log(this.friends)
   }
 }
