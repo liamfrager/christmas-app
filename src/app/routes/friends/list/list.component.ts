@@ -26,18 +26,10 @@ export class FriendsListComponent implements OnInit {
     this.route.queryParams.subscribe(async params => {
       const userID = params['id'];
       const owner = await this.friendsService.getFriend(userID);
-      if (owner) {
-        if (owner.status === 'friends') { // If user is a friend.
-          const listInfo = await this.giftListService.getWishListInfo(userID);
-          if (listInfo) {
-            this.listInfo = listInfo;
-          }
-        } else if (owner.status === 'unfriended') { // If user has been unfriended.
-          this.listInfo = {
-            type: 'unfriended',
-            owner: owner,
-            giftsByUser: undefined,
-          }
+      if (owner && owner.status === 'friends') { // If user is a friend.
+        const listInfo = await this.giftListService.getWishListInfo(userID);
+        if (listInfo) {
+          this.listInfo = listInfo;
         }
       } else { // If user is not friends.
         this.router.navigate(['/friends'])

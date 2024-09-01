@@ -47,7 +47,7 @@ export class FriendsService {
    * @returns A promise that resolves to an array of Friend objects.
    */
   async getFriends(): Promise<Friend[]> {
-    const friendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"), where('status', 'in', ['friends', 'unfriended']));
+    const friendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"), where('status', '==', 'friends'));
     const friends = await getDocs(friendsQ);
     if (friends.docs.length == 0) {
       return [];
@@ -133,11 +133,9 @@ export class FriendsService {
         // Remove friend from current user's friends-list.
         const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", friend.id);
         transaction.delete(friendRef);
-        // Mark current user as 'unfriended' on friend's friends-list.
+        // Remove current user from friend's friends-list.
         const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUser.id);
-        transaction.update(userAsFriendRef, {
-          status: 'unfriended'
-        });
+        transaction.delete(userAsFriendRef);
         // Remove friend's gifts from current user's shopping-list.
         const friendGiftsInUserShoppingListQ = query(collection(this.db, "lists", this.currentUser.id, "shopping-list"), where('isWishedByID', '==', friend.id));
         const friendGiftsInUserShoppingList = await getDocs(friendGiftsInUserShoppingListQ)
@@ -153,22 +151,6 @@ export class FriendsService {
             isClaimedByID: deleteField(),
           });
         });
-        // ************ ARE THESE THINGS WE WANT TO HAVE HAPPEN? *****************
-        // // Remove current user's gifts from friend's shopping-list.
-        // const userGiftsInFriendShoppingListQ = query(collection(this.db, "lists", friend.id, "shopping-list"), where('isWishedByID', '==', this.currentUser.id));
-        // const userGiftsInFriendShoppingList = await getDocs(userGiftsInFriendShoppingListQ)
-        // userGiftsInFriendShoppingList.forEach(doc => {
-        //   transaction.delete(doc.ref);
-        // })
-        // // Unclaim gifts in current user's wish-list.
-        // const friendGiftsInUserWishListQ = query(collection(this.db, "lists", this.currentUser.id, "wish-list"), where('isClaimedByID', '==', friend.id))
-        // const friendGiftsInUserWishList = await getDocs(friendGiftsInUserWishListQ)
-        // friendGiftsInUserWishList.forEach(doc => {
-        //   transaction.update(doc.ref, {
-        //     status: deleteField(),
-        //     isClaimedByID: deleteField(),
-        //   });
-        // })
       });
       console.log("Friend successfully removed.");
     } catch (e) {

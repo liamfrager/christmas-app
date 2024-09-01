@@ -27,11 +27,11 @@ export interface User extends DocumentData {
 }
 
 export interface Friend extends User {
-    status: 'incoming'| 'outgoing' | 'friends' | 'unfriended',
+    status: 'incoming'| 'outgoing' | 'friends',
 }
 
 export type List = {
-    type: 'wish' | 'shopping' | 'unfriended' | 'error',
+    type: 'wish' | 'shopping' | 'error',
     owner: User,
     giftsByUser?: {
         [userID: string]: {
