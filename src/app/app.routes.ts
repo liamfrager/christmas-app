@@ -10,6 +10,7 @@ import { AddFriendComponent } from './routes/friends/add-friend/add-friend.compo
 import { FriendsListComponent } from './routes/friends/list/list.component';
 // Shopping List
 import { ShoppingListComponent } from './routes/shopping-list/shopping-list.component';
+import { AddShoppingGiftComponent } from './routes/shopping-list/add-gift/add-shopping-gift.component';
 // Secret Santa
 import { SecretSantaComponent } from './routes/secret-santa/secret-santa.component';
 // Settings
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'friends/add-friend', component: AddFriendComponent, canActivate: [authGuard]},
   { path: 'friends/list', component: FriendsListComponent, canActivate: [authGuard]},
   { path: 'shopping-list', component: ShoppingListComponent, canActivate: [authGuard]},
+  { path: 'shopping-list/add-gift', component: AddShoppingGiftComponent, canActivate: [authGuard]},
   { path: 'secret-santa', component: SecretSantaComponent, canActivate: [authGuard]},
   { path: 'settings', component: SettingsComponent, canActivate: [authGuard]},
 ];
