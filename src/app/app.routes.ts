@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './routes/login/login.component';
 // Wish List
 import { WishListComponent } from './routes/wish-list/wish-list.component';
-import { AddGiftComponent } from './routes/wish-list/add-gift/add-gift.component';
+import { AddWishGiftComponent } from './routes/wish-list/add-gift/add-wish-gift.component';
 // Friends
 import { FriendsComponent } from './routes/friends/friends.component';
 import { AddFriendComponent } from './routes/friends/add-friend/add-friend.component';
@@ -20,7 +20,7 @@ export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
   { path: 'wish-list', component: WishListComponent, canActivate: [authGuard]},
-  { path: 'wish-list/add-gift', component: AddGiftComponent, canActivate: [authGuard]},
+  { path: 'wish-list/add-gift', component: AddWishGiftComponent, canActivate: [authGuard]},
   { path: 'friends', component: FriendsComponent, canActivate: [authGuard]},
   { path: 'friends/add-friend', component: AddFriendComponent, canActivate: [authGuard]},
   { path: 'friends/list', component: FriendsListComponent, canActivate: [authGuard]},

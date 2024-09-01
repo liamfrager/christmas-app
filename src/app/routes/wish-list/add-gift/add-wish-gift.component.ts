@@ -7,13 +7,13 @@ import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-add-gift',
+  selector: 'app-add-wish-gift',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './add-gift.component.html',
-  styleUrl: './add-gift.component.css'
+  templateUrl: './add-wish-gift.component.html',
+  styleUrl: './add-wish-gift.component.css'
 })
-export class AddGiftComponent {
+export class AddWishGiftComponent {
   constructor(
     private giftListService: GiftListService, 
     private accountService: AccountService,
