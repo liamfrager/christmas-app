@@ -47,5 +47,6 @@ export class FriendsListComponent implements OnInit {
 
   onRemoveFriend() {
     this.friendsService.removeFriend(this.listInfo.owner)
+    this.router.navigate(['/friends'])
   }
 }
