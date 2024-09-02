@@ -22,7 +22,7 @@ export class ShoppingListComponent implements OnInit {
   onHeadingIconClick(e: any) {
     switch (e) {
       case 'forms_add_on':
-        this.router.navigate(['/shopping-list/add'])
+        this.router.navigate(['/shopping-list/add-gift'])
         break;
     
       default:
