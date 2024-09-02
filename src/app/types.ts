@@ -13,6 +13,7 @@ export interface Gift extends NewGift {
     status: 'claimed' | 'bought' | 'ordered' | 'wrapped' | 'under tree' | 'deleted',
     isWishedByUser?: User,
     isClaimedByUser?: User,
+    isCustom?: boolean,
 }
 
 export type Gifts = Map<string, Gift>
