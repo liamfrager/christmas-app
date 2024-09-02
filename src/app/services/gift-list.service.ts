@@ -158,6 +158,7 @@ export class GiftListService {
         isWishedByUser: friend,
         isClaimedByID: currentUserID,
         status: 'custom',
+        isCustom: true,
       });
 
       // update current user's shopping-list
@@ -168,6 +169,7 @@ export class GiftListService {
         isWishedByUser: friend,
         isClaimedByID: currentUserID,
         status: 'custom',
+        isCustom: true,
       });
     });
   }
