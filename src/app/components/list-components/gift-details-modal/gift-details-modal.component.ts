@@ -17,11 +17,10 @@ export class GiftDetailsModalComponent implements OnChanges, OnInit {
   constructor(private accountService: AccountService) {}
   @Input() gift?: Gift;
   @Input() type?: string;
+  @Input() buttonText?: string;
   @Output() onModalClose = new EventEmitter();
-  @Output() onGiftClaim = new EventEmitter();
-  @Output() onGiftEdit = new EventEmitter();
+  @Output() onButtonClick = new EventEmitter();
   @Output() onStatusUpdated = new EventEmitter();
-  @Output() onGiftDelete = new EventEmitter();
 
   headingButtons = ['close'];
   currentStatus = this.gift?.status;
