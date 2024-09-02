@@ -148,14 +148,14 @@ export class GiftListService {
    * Creates a new gift in the current user's .
    * @param gift - A Gift object containing the data for the gift being claimed.
    */
-  async createGiftInShoppingList(gift: NewGift, friend?: Friend) {
+  async createGiftInShoppingList(gift: NewGift, friend: Friend) {
     const currentUserID = this.accountService.currentUser.id;
     await runTransaction(this.db, async (transaction) => {
       // update db.gifts
       const giftRef = doc(collection(this.db, 'gifts'));
       transaction.set(giftRef, {
         ...gift,
-        isWishedByUser: friend ? friend : deleteField(),
+        isWishedByUser: friend,
         isClaimedByID: currentUserID,
         status: 'custom',
       });
@@ -165,7 +165,7 @@ export class GiftListService {
       transaction.set(shoppingRef, {
         ...gift,
         id: shoppingRef.id,
-        isWishedByUser: friend ? friend : deleteField(),
+        isWishedByUser: friend,
         isClaimedByID: currentUserID,
         status: 'custom',
       });
