@@ -27,6 +27,9 @@ export class ListDisplayComponent implements OnChanges {
     `You have no gifts in your ${this.list.type} list` :
     `${this.list.owner.displayName} has no gifts in their ${this.list.type} list` :
     'Could not load gifts';
+  giftInModal?: Gift;
+  isModalOpen: boolean = false;
+  modalButtonText: string = ''
   
   ngOnChanges() {
     if (this.list) {
@@ -41,10 +44,6 @@ export class ListDisplayComponent implements OnChanges {
       'Could not load gifts.';
   }
 
-  
-  giftInModal?: Gift;
-  isModalOpen: boolean = false;
-
   /**
    * Displays data for a given gift in `app-gift-details-modal`.
    * @param gift - The gift to be shown in the modal.
@@ -52,6 +51,29 @@ export class ListDisplayComponent implements OnChanges {
   showInModal(gift: Gift) {
     this.isModalOpen = true;
     this.giftInModal = gift;
+    // update modalButtonText
+    this.modalButtonText = (() => {
+      if (this.list?.type === 'wish') {
+        if (this.isOwnedByCurrentUser) {
+          return 'Edit gift'
+        } else {
+          if (this.giftInModal?.status !== 'claimed') {
+            return 'Claim gift'
+          } else if (this.giftInModal?.isClaimedByID === this.accountService.currentUser.id) {
+            return 'Unclaim gift'
+          } else {
+            return 'This gift has already been claimed.'
+          }
+        }
+      } else if (this.list?.type === 'shopping') {
+        if (this.giftInModal?.isCustom) {
+          return 'Delete gift'
+        } else {
+          return 'Unclaim gift'
+        }
+      }
+      return ''
+    })() // execute above function
   }
 
   /**
@@ -65,11 +87,65 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   /**
+   * Handles when the button in `app-gift-details-modal` is clicked.
+   */
+  onModalButtonClick() {
+    if (this.list?.type === 'wish') {
+      if (this.isOwnedByCurrentUser) {
+        this.editGift()
+      } else {
+        if (this.giftInModal?.status !== 'claimed') {
+          this.claimGift()
+        } else if (this.giftInModal?.isClaimedByID === this.accountService.currentUser.id) {
+          this.unclaimGift()
+        }
+      }
+    } else if (this.list?.type === 'shopping') {
+      if (this.giftInModal?.isCustom) {
+        this.deleteGift()
+      } else {
+        this.unclaimGift()
+      }
+    }
+  }
+
+  /**
+   * Opens a form to edit gift details for the gift displayed in `app-gift-details-modal`.
+   * Should only be called when gift is owned by the current user.
+   */
+  editGift() {
+    console.log('edit gift!')
+  }
+
+  /**
    * Claims the current gift displayed in `app-gift-details-modal`.
    * Should only be called when gift is unclaimed.
    */
   claimGift() {
     this.giftListService.addGiftToShoppingList(this.giftInModal!);
+    this.modalButtonText === 'This gift has already been claimed.'
+  }
+
+  /**
+   * Unclaims the current gift displayed in `app-gift-details-modal`.
+   * Should only be called when gift is unclaimed.
+   */
+  unclaimGift() {
+    this.giftListService.deleteGiftFromShoppingList(this.giftInModal!);
+    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id)
+  }
+
+  /**
+   * Deletes the current gift displayed in `app-gift-details-modal`
+   * Should only be called when gift is owned by the current user.
+   */
+  deleteGift() {
+    const currentUserID = this.accountService.currentUser.id;
+    if (currentUserID) {
+      this.giftListService.deleteGiftFromWishList(this.giftInModal!);
+      this.list!.giftsByUser![currentUserID].gifts.delete(this.giftInModal!.id)
+      this.hideModal()
+    }
   }
 
   /**
@@ -89,19 +165,6 @@ export class ListDisplayComponent implements OnChanges {
         throw Error('giftInModal does not exist.');
       }
     } catch(e) { console.error(e) }
-  }
-
-  /**
-   * Deletes the current gift displayed in `app-gift-details-modal`
-   * Should only be called when gift is owned by the current user.
-   */
-  deleteGift() {
-    const currentUserID = this.accountService.currentUser.id;
-    if (currentUserID) {
-      this.giftListService.deleteGiftFromWishList(this.giftInModal!);
-      this.list!.giftsByUser![currentUserID].gifts.delete(this.giftInModal!.id)
-      this.hideModal()
-    }
   }
 
   /**

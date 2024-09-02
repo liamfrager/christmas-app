@@ -33,9 +33,9 @@
     <app-gift-details-modal
       [gift]="giftInModal"
       [type]="list.type"
-      (onGiftClaim)="claimGift()"
+      [buttonText]="modalButtonText"
+      (onButtonClick)="onModalButtonClick()"
       (onStatusUpdated)="updateStatus($event)"
-      (onGiftDelete)="deleteGift()"
       (onModalClose)="hideModal()"
       >
     </app-gift-details-modal>
