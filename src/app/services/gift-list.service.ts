@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { collection, doc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
+import { collection, deleteField, doc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
-import { Gift, List, NewGift, Gifts } from '../types';
+import { Gift, List, NewGift, Gifts, Friend } from '../types';
 
 
 @Injectable({
@@ -142,6 +142,34 @@ export class GiftListService {
         });
       } 
     }
+  }
+
+  /**
+   * Creates a new gift in the current user's .
+   * @param gift - A Gift object containing the data for the gift being claimed.
+   */
+  async createGiftInShoppingList(gift: NewGift, friend: Friend) {
+    const currentUserID = this.accountService.currentUser.id;
+    await runTransaction(this.db, async (transaction) => {
+      // update db.gifts
+      const giftRef = doc(collection(this.db, 'gifts'));
+      transaction.set(giftRef, {
+        ...gift,
+        isWishedByUser: friend,
+        isClaimedByID: currentUserID,
+        status: 'custom',
+      });
+
+      // update current user's shopping-list
+      const shoppingRef = doc(this.db, 'lists', currentUserID, 'shopping-list', giftRef.id);
+      transaction.set(shoppingRef, {
+        ...gift,
+        id: shoppingRef.id,
+        isWishedByUser: friend,
+        isClaimedByID: currentUserID,
+        status: 'custom',
+      });
+    });
   }
 
 

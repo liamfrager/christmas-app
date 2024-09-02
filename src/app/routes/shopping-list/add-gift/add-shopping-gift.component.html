@@ -1,0 +1,12 @@
+<h2>Add A New Gift</h2>
+
+<form (ngSubmit)="onSubmit(addGiftForm)" #addGiftForm="ngForm">
+  <input type="text" name="name" id="name" placeholder="Name of Gift *" required ngModel><br>
+  <input type="url" name="url" id="url" placeholder="URL" ngModel><br>
+  <textarea name="details" id="details" placeholder="Details" style="width: 100%; resize: none" ngModel></textarea>
+  <!-- TODO: Make a custom dropdown that can display profile pictures. -->
+  <select name="friend" id="friend" ngModel>
+    <option *ngFor="let friend of friends" [ngValue]="friend">{{friend.displayName}}</option>
+  </select>
+  <input type="submit" name="submit" id="submit" value="Add Gift to List">
+</form>

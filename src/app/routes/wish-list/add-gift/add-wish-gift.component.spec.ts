@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddGiftComponent } from './add-gift.component';
+import { AddGiftComponent } from './add-wish-gift.component';
 
 describe('AddGiftComponent', () => {
   let component: AddGiftComponent;
