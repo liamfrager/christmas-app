@@ -11,6 +11,7 @@ import { Gift, List, NewGift, Gifts, Friend } from '../types';
 export class GiftListService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {};
   db = this.firebaseService.db;
+  currentUser = this.accountService.currentUser
 
   /**
    * Fetches the wish-list of a given user.
@@ -80,30 +81,13 @@ export class GiftListService {
    * @param gift - A NewGift object containing the data for the gift being added.
    */
   async addGiftToWishList(gift: NewGift) {
-    const currentUserID = this.accountService.currentUser.id;
-    if (currentUserID) {
-      await runTransaction(this.db, async (transaction) => {
-        // update db.gifts
-        const giftRef = doc(collection(this.db, 'gifts'))
-        transaction.set(giftRef, {
-          name: gift.name,
-          url: gift.url,
-          details: gift.details,
-          isWishedByID: currentUserID,
-          status: 'wished',
-        });
-
-        // update current user's wish-list
-        const wishRef = doc(this.db, 'lists', currentUserID, 'wish-list', giftRef.id)
-        transaction.set(wishRef, {
-          id: giftRef.id,
-          name: gift.name,
-          url: gift.url,
-          details: gift.details,
-          isWishedByID: currentUserID,
-        });
-      })
-    }
+    await runTransaction(this.db, async (transaction) => {
+      const giftRef = doc(collection(this.db, 'lists', this.currentUser.id, 'wish-list'))
+      transaction.set(giftRef, {
+        ...gift,
+        id: giftRef.id,
+      });
+    })
   }
 
   /**
@@ -114,60 +98,37 @@ export class GiftListService {
     if (gift.status === 'claimed') {
       console.error('Gift already claimed')
     } else {
-      const currentUserID = this.accountService.currentUser.id;
-      if (currentUserID) {
-        await runTransaction(this.db, async (transaction) => {
-          // update db.gifts
-          const giftRef = doc(this.db, 'gifts', gift.id)
-          transaction.update(giftRef, {
-            isClaimedByID: currentUserID,
-            status: 'claimed',
-          });
-
-          // update current user's shopping-list
-          const shoppingRef = doc(this.db, 'lists', currentUserID, 'shopping-list', gift.id);
-          transaction.set(shoppingRef, {
-            ...gift,
-            isWishedByUser: await this.accountService.getUserInfo(gift.isWishedByID),
-            status: 'claimed',
-          });
-          
-          // update isWishedBy user's wish-list
-          const wishedByID = gift.isWishedByID;
-          const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
-          transaction.update(wishRef, {
-            status: 'claimed',
-            isClaimedByID: currentUserID,
-          });
+      await runTransaction(this.db, async (transaction) => {
+        // update current user's shopping-list
+        const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
+        transaction.set(shoppingRef, {
+          ...gift,
+          isWishedByUser: await this.accountService.getUserInfo(gift.isWishedByID),
+          status: 'claimed',
         });
-      } 
+        
+        // update isWishedBy user's wish-list
+        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.id);
+        transaction.update(wishRef, {
+          status: 'claimed',
+          isClaimedByID: this.currentUser.id,
+        });
+      });
     }
   }
 
   /**
-   * Creates a new gift in the current user's .
+   * Creates a new gift in the current user's shopping-list.
    * @param gift - A Gift object containing the data for the gift being claimed.
    */
   async createGiftInShoppingList(gift: NewGift, friend: Friend) {
-    const currentUserID = this.accountService.currentUser.id;
     await runTransaction(this.db, async (transaction) => {
-      // update db.gifts
-      const giftRef = doc(collection(this.db, 'gifts'));
+      const giftRef = doc(collection(this.db, 'lists', this.currentUser.id, 'shopping-list'));
       transaction.set(giftRef, {
         ...gift,
+        id: giftRef.id,
         isWishedByUser: friend,
-        isClaimedByID: currentUserID,
-        status: 'custom',
-        isCustom: true,
-      });
-
-      // update current user's shopping-list
-      const shoppingRef = doc(this.db, 'lists', currentUserID, 'shopping-list', giftRef.id);
-      transaction.set(shoppingRef, {
-        ...gift,
-        id: shoppingRef.id,
-        isWishedByUser: friend,
-        isClaimedByID: currentUserID,
+        isClaimedByID: this.currentUser.id,
         status: 'custom',
         isCustom: true,
       });
@@ -183,27 +144,19 @@ export class GiftListService {
     if (gift.status === 'deleted') {
       console.error('Gift already deleted')
     } else {
-      const currentUserID = this.accountService.currentUser.id;
-      if (currentUserID) {
-        await runTransaction(this.db, async (transaction) => {
-          // update db.gifts
-          const giftRef = doc(this.db, 'gifts', gift.id)
-          transaction.delete(giftRef);
-
-          // update current user's wish-list
-          const wishRef = doc(this.db, 'lists', currentUserID, 'wish-list', gift.id);
-          transaction.delete(wishRef);
-          
-          // update isClaimedBy user's shopping-list
-          if (gift.isClaimedByID) {
-            const claimedByID = gift.isClaimedByID;
-            const shoppingRef = doc(this.db, 'lists', claimedByID, 'shopping-list', gift.id);
-            transaction.update(shoppingRef, {
-              status: 'deleted',
-            });
-          }
-        });
-      } 
+      await runTransaction(this.db, async (transaction) => {
+        // update current user's wish-list
+        const wishRef = doc(this.db, 'lists', this.currentUser.id, 'wish-list', gift.id);
+        transaction.delete(wishRef);
+        
+        // update isClaimedBy user's shopping-list
+        if (gift.isClaimedByID) {
+          const shoppingRef = doc(this.db, 'lists', gift.isClaimedByID, 'shopping-list', gift.id);
+          transaction.update(shoppingRef, {
+            status: 'deleted',
+          });
+        }
+      });
     }
   }
 
@@ -215,27 +168,18 @@ export class GiftListService {
     if (gift.status !== 'claimed') {
       console.error('Gift not claimed')
     } else {
-      const currentUserID = this.accountService.currentUser.id;
-      if (currentUserID) {
-        await runTransaction(this.db, async (transaction) => {
-          // update db.gifts
-          const giftRef = doc(this.db, 'gifts', gift.id)
-          transaction.update(giftRef, {
-            status: 'wished',
-          });
-
-          // update current user's shopping-list
-          const shoppingRef = doc(this.db, 'lists', currentUserID, 'shopping-list', gift.id);
-          transaction.delete(shoppingRef);
-          
-          // update isWishedBy user's wish-list
-          const wishedByID = gift.isWishedByID;
-          const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
-          transaction.update(wishRef, {
-            status: 'wished',
-          });
+      await runTransaction(this.db, async (transaction) => {
+        // update current user's shopping-list
+        const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
+        transaction.delete(shoppingRef);
+        
+        // update isWishedBy user's wish-list
+        const wishedByID = gift.isWishedByID;
+        const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
+        transaction.update(wishRef, {
+          status: 'wished',
         });
-      } 
+      });
     }
   }
 }
