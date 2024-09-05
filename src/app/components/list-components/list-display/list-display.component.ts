@@ -153,7 +153,7 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is claimed by the current user.
    * @param status - The gift's new status.
    */
-  updateStatus(status: 'claimed' | 'bought' | 'delivered' | 'wrapped' | 'under tree') {
+  updateStatus(status: 'claimed' | 'purchased' | 'delivered' | 'wrapped' | 'under tree') {
     try {
       if (this.giftInModal) {
         const currentUserID = this.accountService.currentUser.id;
