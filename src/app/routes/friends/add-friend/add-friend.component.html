@@ -9,6 +9,7 @@
         <app-user-display *ngFor="let user of searchResults"
             [user]="user"
             [iconActions]="getSearchIconActions(user)"
+            [onClick]="null"
         >
         </app-user-display>
     </ng-container>
@@ -18,6 +19,7 @@
     <app-user-display *ngFor="let friendRequest of incomingFriendRequests"
         [user]="friendRequest"
         [iconActions]="getFriendRequestIconActions(friendRequest)"
+        [onClick]="null"
     >
     </app-user-display>
 </div>
