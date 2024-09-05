@@ -165,21 +165,19 @@ export class GiftListService {
    * @param gift - A Gift object containing the data for the gift being claimed.
    */
   async deleteGiftFromShoppingList(gift: Gift) {
-    if (gift.status !== 'claimed') {
-      console.error('Gift not claimed')
-    } else {
-      await runTransaction(this.db, async (transaction) => {
-        // update current user's shopping-list
-        const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
-        transaction.delete(shoppingRef);
-        
+    await runTransaction(this.db, async (transaction) => {
+      // update current user's shopping-list
+      const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
+      transaction.delete(shoppingRef);
+      
+      if (!gift.isCustom) {
         // update isWishedBy user's wish-list
         const wishedByID = gift.isWishedByID;
         const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
         transaction.update(wishRef, {
           status: 'wished',
         });
-      });
-    }
+      }
+    });
   }
 }
