@@ -95,26 +95,22 @@ export class GiftListService {
    * @param gift - A Gift object containing the data for the gift being claimed.
    */
   async addGiftToShoppingList(gift: Gift) {
-    if (gift.status === 'claimed') {
-      console.error('Gift already claimed')
-    } else {
-      await runTransaction(this.db, async (transaction) => {
-        // update current user's shopping-list
-        const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
-        transaction.set(shoppingRef, {
-          ...gift,
-          isWishedByUser: await this.accountService.getUserInfo(gift.isWishedByID),
-          status: 'claimed',
-        });
-        
-        // update isWishedBy user's wish-list
-        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.id);
-        transaction.update(wishRef, {
-          status: 'claimed',
-          isClaimedByID: this.currentUser.id,
-        });
+    await runTransaction(this.db, async (transaction) => {
+      // update current user's shopping-list
+      const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
+      transaction.set(shoppingRef, {
+        ...gift,
+        isWishedByUser: await this.accountService.getUserInfo(gift.isWishedByID),
+        status: 'claimed',
       });
-    }
+      
+      // update isWishedBy user's wish-list
+      const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.id);
+      transaction.update(wishRef, {
+        status: 'claimed',
+        isClaimedByID: this.currentUser.id,
+      });
+    });
   }
 
   /**
@@ -141,23 +137,19 @@ export class GiftListService {
    * @param gift - A Gift object containing the data for the gift being claimed.
    */
   async deleteGiftFromWishList(gift: Gift) {
-    if (gift.status === 'deleted') {
-      console.error('Gift already deleted')
-    } else {
-      await runTransaction(this.db, async (transaction) => {
-        // update current user's wish-list
-        const wishRef = doc(this.db, 'lists', this.currentUser.id, 'wish-list', gift.id);
-        transaction.delete(wishRef);
-        
-        // update isClaimedBy user's shopping-list
-        if (gift.isClaimedByID) {
-          const shoppingRef = doc(this.db, 'lists', gift.isClaimedByID, 'shopping-list', gift.id);
-          transaction.update(shoppingRef, {
-            status: 'deleted',
-          });
-        }
-      });
-    }
+    await runTransaction(this.db, async (transaction) => {
+      // update current user's wish-list
+      const wishRef = doc(this.db, 'lists', this.currentUser.id, 'wish-list', gift.id);
+      transaction.delete(wishRef);
+      
+      // update isClaimedBy user's shopping-list
+      if (gift.isClaimedByID) {
+        const shoppingRef = doc(this.db, 'lists', gift.isClaimedByID, 'shopping-list', gift.id);
+        transaction.update(shoppingRef, {
+          status: 'deleted',
+        });
+      }
+    });
   }
 
   /**
@@ -165,21 +157,19 @@ export class GiftListService {
    * @param gift - A Gift object containing the data for the gift being claimed.
    */
   async deleteGiftFromShoppingList(gift: Gift) {
-    if (gift.status !== 'claimed') {
-      console.error('Gift not claimed')
-    } else {
-      await runTransaction(this.db, async (transaction) => {
-        // update current user's shopping-list
-        const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
-        transaction.delete(shoppingRef);
-        
+    await runTransaction(this.db, async (transaction) => {
+      // update current user's shopping-list
+      const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
+      transaction.delete(shoppingRef);
+      
+      if (!gift.isCustom) {
         // update isWishedBy user's wish-list
         const wishedByID = gift.isWishedByID;
         const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
         transaction.update(wishRef, {
           status: 'wished',
         });
-      });
-    }
+      }
+    });
   }
 }
