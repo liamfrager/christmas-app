@@ -10,7 +10,7 @@ export type NewGift = {
 }
 export interface Gift extends NewGift {
     id: string,
-    status: 'claimed' | 'bought' | 'ordered' | 'wrapped' | 'under tree' | 'deleted',
+    status: 'claimed' | 'bought' | 'delivered' | 'wrapped' | 'under tree',
     isWishedByUser?: User,
     isClaimedByUser?: User,
     isCustom?: boolean,

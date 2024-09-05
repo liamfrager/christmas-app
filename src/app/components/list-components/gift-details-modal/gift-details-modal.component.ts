@@ -47,7 +47,7 @@ export class GiftDetailsModalComponent implements OnChanges, OnInit {
   statuses = [
     { name: 'claimed', icon: 'check' },
     { name: 'bought', icon: 'paid' },
-    { name: 'ordered', icon: 'local_shipping' },
+    { name: 'delivered', icon: 'local_shipping' },
     { name: 'wrapped', icon: 'featured_seasonal_and_gifts' },
     { name: 'under tree', icon: 'park'},
   ]
