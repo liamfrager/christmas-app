@@ -172,14 +172,13 @@ export class ListDisplayComponent implements OnChanges {
    * @param gift - The gift being checked.
    */
   getIsChecked(gift: Gift): boolean {
-    var result: boolean = false;
     if (this.list!.type === 'wish') {
-      if (!this.isOwnedByCurrentUser && gift.isClaimedByUser) {
-        result = true;
+      if (!this.isOwnedByCurrentUser && gift.isClaimedByID) {
+        return true;
       }
     } else if (this.list!.type === 'shopping') {
     }
-    return result
+    return false;
   }
 
 }
