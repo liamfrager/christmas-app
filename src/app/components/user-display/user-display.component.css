@@ -14,7 +14,7 @@
     display: flex;
 }
 
-.user-info {
+.user-info-hover {
     cursor: pointer;
     &:hover {
         color: #d64541;
