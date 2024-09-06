@@ -29,7 +29,7 @@ export class ListDisplayComponent implements OnChanges {
     'Could not load gifts';
   giftInModal?: Gift;
   isModalOpen: boolean = false;
-  modalButtonText: string = ''
+  modalButtonText: string = '';
   
   ngOnChanges() {
     if (this.list) {
@@ -57,7 +57,7 @@ export class ListDisplayComponent implements OnChanges {
         if (this.isOwnedByCurrentUser) return 'Edit gift';
         if (!gift.isClaimedByID) return 'Claim gift';
         if (gift.isClaimedByID === this.accountService.currentUser.id) return 'Unclaim gift';
-        return 'This gift has already been claimed.'
+        return 'This gift has already been claimed.';
       } else if (this.list?.type === 'shopping') {
         if (gift.isCustom) return 'Delete gift';
         return 'Unclaim gift';
@@ -82,19 +82,19 @@ export class ListDisplayComponent implements OnChanges {
   onModalButtonClick() {
     if (this.list?.type === 'wish') {
       if (this.isOwnedByCurrentUser) {
-        this.editGift()
+        this.editGift();
       } else {
         if (!this.giftInModal?.isClaimedByID) {
-          this.claimGift()
+          this.claimGift();
         } else if (this.giftInModal?.isClaimedByID === this.accountService.currentUser.id) {
-          this.unclaimGift()
+          this.unclaimGift();
         }
       }
     } else if (this.list?.type === 'shopping') {
       if (this.giftInModal?.isCustom) {
-        this.deleteGift()
+        this.deleteGift();
       } else {
-        this.unclaimGift()
+        this.unclaimGift();
       }
     }
   }
@@ -104,7 +104,7 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is owned by the current user.
    */
   editGift() {
-    console.log('edit gift!')
+    console.log('edit gift!');
   }
 
   /**
@@ -113,8 +113,8 @@ export class ListDisplayComponent implements OnChanges {
    */
   claimGift() {
     this.giftListService.addGiftToShoppingList(this.giftInModal!);
-    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, {...this.giftInModal!, isClaimedByID: this.accountService.currentUser.id})
-    this.hideModal()
+    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, {...this.giftInModal!, isClaimedByID: this.accountService.currentUser.id});
+    this.hideModal();
   }
 
   /**
@@ -124,12 +124,16 @@ export class ListDisplayComponent implements OnChanges {
   unclaimGift() {
     this.giftListService.deleteGiftFromShoppingList(this.giftInModal!);
     if (this.list?.type === 'shopping') {
-      this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id)
+      if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
+        delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
+      } else {
+        this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id);
+      }
     } else if (this.list?.type === 'wish') {
-      const {isClaimedByID, ...unclaimedGift} = this.giftInModal!
-      this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, unclaimedGift)
+      const {isClaimedByID, ...unclaimedGift} = this.giftInModal!;
+      this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, unclaimedGift);
     }
-    this.hideModal()
+    this.hideModal();
   }
 
   /**
