@@ -160,7 +160,8 @@ export class ListDisplayComponent implements OnChanges {
         const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserID!, 'shopping-list', this.giftInModal.id), {
           status: status
         })
-        this.giftInModal = {...this.giftInModal, status: status}
+        this.list!.giftsByUser![this.giftInModal.isWishedByID].gifts.get(this.giftInModal.id)!.status = status;
+        this.giftInModal = {...this.giftInModal, status: status};
       } else {
         throw Error('giftInModal does not exist.');
       }
