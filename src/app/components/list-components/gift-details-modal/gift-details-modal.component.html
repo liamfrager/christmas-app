@@ -3,7 +3,7 @@
     <app-page-heading
       [headingText]="gift.name"
       [buttons]="headingButtons"
-      (onIconClick)="closeModal()"
+      (onIconClick)="onModalClose.emit(true);"
       >
     </app-page-heading>
     <p>{{gift.details}}</p>
@@ -11,7 +11,7 @@
     <!-- Shopping list status bar -->
     <div *ngIf="type === 'shopping'" class="status-display">
       <div class="line">
-        <div *ngFor="let status of statuses" class="node" [style]="status.name === currentStatus ? 'color: green' : ''">
+        <div *ngFor="let status of statuses" class="node" [style]="status.name === gift.status ? 'color: green' : ''">
           <app-icon
             [icon]="status.icon"
             [hover]="false"
