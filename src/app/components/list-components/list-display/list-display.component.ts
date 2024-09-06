@@ -29,7 +29,7 @@ export class ListDisplayComponent implements OnChanges {
     'Could not load gifts';
   giftInModal?: Gift;
   isModalOpen: boolean = false;
-  modalButtonText: string = ''
+  modalButtonText: string = '';
   
   ngOnChanges() {
     if (this.list) {
@@ -54,25 +54,15 @@ export class ListDisplayComponent implements OnChanges {
     // update modalButtonText
     this.modalButtonText = (() => {
       if (this.list?.type === 'wish') {
-        if (this.isOwnedByCurrentUser) {
-          return 'Edit gift'
-        } else {
-          if (this.giftInModal?.status !== 'claimed') {
-            return 'Claim gift'
-          } else if (this.giftInModal?.isClaimedByID === this.accountService.currentUser.id) {
-            return 'Unclaim gift'
-          } else {
-            return 'This gift has already been claimed.'
-          }
-        }
+        if (this.isOwnedByCurrentUser) return 'Edit gift';
+        if (!gift.isClaimedByID) return 'Claim gift';
+        if (gift.isClaimedByID === this.accountService.currentUser.id) return 'Unclaim gift';
+        return 'This gift has already been claimed.';
       } else if (this.list?.type === 'shopping') {
-        if (this.giftInModal?.isCustom) {
-          return 'Delete gift'
-        } else {
-          return 'Unclaim gift'
-        }
+        if (gift.isCustom) return 'Delete gift';
+        return 'Unclaim gift';
       }
-      return ''
+      return '';
     })() // execute above function
   }
 
@@ -92,19 +82,19 @@ export class ListDisplayComponent implements OnChanges {
   onModalButtonClick() {
     if (this.list?.type === 'wish') {
       if (this.isOwnedByCurrentUser) {
-        this.editGift()
+        this.editGift();
       } else {
-        if (this.giftInModal?.status !== 'claimed') {
-          this.claimGift()
+        if (!this.giftInModal?.isClaimedByID) {
+          this.claimGift();
         } else if (this.giftInModal?.isClaimedByID === this.accountService.currentUser.id) {
-          this.unclaimGift()
+          this.unclaimGift();
         }
       }
     } else if (this.list?.type === 'shopping') {
       if (this.giftInModal?.isCustom) {
-        this.deleteGift()
+        this.deleteGift();
       } else {
-        this.unclaimGift()
+        this.unclaimGift();
       }
     }
   }
@@ -114,7 +104,7 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is owned by the current user.
    */
   editGift() {
-    console.log('edit gift!')
+    console.log('edit gift!');
   }
 
   /**
@@ -123,7 +113,8 @@ export class ListDisplayComponent implements OnChanges {
    */
   claimGift() {
     this.giftListService.addGiftToShoppingList(this.giftInModal!);
-    this.modalButtonText === 'This gift has already been claimed.'
+    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, {...this.giftInModal!, isClaimedByID: this.accountService.currentUser.id});
+    this.hideModal();
   }
 
   /**
@@ -132,7 +123,17 @@ export class ListDisplayComponent implements OnChanges {
    */
   unclaimGift() {
     this.giftListService.deleteGiftFromShoppingList(this.giftInModal!);
-    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id)
+    if (this.list?.type === 'shopping') {
+      if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
+        delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
+      } else {
+        this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id);
+      }
+    } else if (this.list?.type === 'wish') {
+      const {isClaimedByID, ...unclaimedGift} = this.giftInModal!;
+      this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, unclaimedGift);
+    }
+    this.hideModal();
   }
 
   /**
@@ -140,12 +141,17 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is owned by the current user.
    */
   deleteGift() {
-    const currentUserID = this.accountService.currentUser.id;
-    if (currentUserID) {
-      this.giftListService.deleteGiftFromWishList(this.giftInModal!);
-      this.list!.giftsByUser![currentUserID].gifts.delete(this.giftInModal!.id)
-      this.hideModal()
+    this.giftListService.deleteGiftFromWishList(this.giftInModal!);
+    if (this.list?.type === 'shopping') {
+      if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
+        delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
+      } else {
+        this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id);
+      }
+    } else if (this.list?.type === 'wish') {
+      this.list!.giftsByUser![this.accountService.currentUser.id].gifts.delete(this.giftInModal!.id);
     }
+    this.hideModal();
   }
 
   /**
@@ -159,7 +165,7 @@ export class ListDisplayComponent implements OnChanges {
         const currentUserID = this.accountService.currentUser.id;
         const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserID!, 'shopping-list', this.giftInModal.id), {
           status: status
-        })
+        });
         this.list!.giftsByUser![this.giftInModal.isWishedByID].gifts.get(this.giftInModal.id)!.status = status;
         this.giftInModal = {...this.giftInModal, status: status};
       } else {
@@ -172,9 +178,21 @@ export class ListDisplayComponent implements OnChanges {
    * Determines whether the checkbox next to a gift should be checked off.
    * @param gift - The gift being checked.
    */
-  getCheckType(gift: Gift): 'circle' | 'check_circle' | 'error' {
-    if (gift.isDeleted) return 'error';
-    if (this.list!.type === 'wish' && gift.isClaimedByID && !this.isOwnedByCurrentUser) return 'check_circle';
-    return 'circle';
+  getCheckType(gift: Gift): 'circle' | 'check_circle' | 'paid' | 'local_shipping' | 'featured_seasonal_and_gifts' | 'park' | 'error' {
+    if (this.list!.type === 'wish') {
+      if (this.list!.type === 'wish' && gift.isClaimedByID && !this.isOwnedByCurrentUser) return 'check_circle';
+      return 'circle';
+    } else if (this.list!.type === 'shopping') {
+      if (gift.isDeleted) return 'error';
+      const statusIcons = {
+        'claimed': 'check_circle',
+        'purchased': 'paid',
+        'delivered': 'local_shipping',
+        'wrapped': 'featured_seasonal_and_gifts',
+        'under tree': 'park',
+      } as const;
+      return statusIcons[gift.status];
+    }
+    return 'error';
   }
 }

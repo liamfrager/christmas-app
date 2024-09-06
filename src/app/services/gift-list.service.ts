@@ -159,6 +159,12 @@ export class GiftListService {
       // update current user's shopping-list
       const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
       transaction.delete(shoppingRef);
+
+      // update isWishedBy user's wish-list
+      if (!gift.isCustom) {
+        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.id);
+        transaction.update(wishRef, {isClaimedByID: deleteField()})
+      }
     });
   }
 }

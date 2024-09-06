@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class GiftDisplayComponent implements OnChanges {
   @Input({required: true}) gift!: Gift;
-  @Input({required: true}) checkType!: 'circle' | 'check_circle' | 'error';
+  @Input({required: true}) checkType!: 'circle' | 'check_circle' | 'paid' | 'local_shipping' | 'featured_seasonal_and_gifts' | 'park' | 'error';
   @Output() giftClicked = new EventEmitter();
 
   checkboxTitle?: string;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PageHeadingComponent } from '../../page-heading/page-heading.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../icon/icon.component';
@@ -13,36 +13,19 @@ import { PopUpComponent } from '../../pop-up/pop-up.component';
   templateUrl: './gift-details-modal.component.html',
   styleUrl: './gift-details-modal.component.css'
 })
-export class GiftDetailsModalComponent implements OnChanges, OnInit {
+export class GiftDetailsModalComponent {
   constructor(private accountService: AccountService) {}
   @Input() gift?: Gift;
   @Input() type?: string;
   @Input() buttonText?: string;
+  @Input() isShown: boolean = false;
   @Output() onModalClose = new EventEmitter();
   @Output() onButtonClick = new EventEmitter();
   @Output() onStatusUpdated = new EventEmitter();
 
   headingButtons = ['close'];
   currentStatus = this.gift?.status;
-  currentUser!: User;
-  isShown: boolean = false;
-  async ngOnInit() {
-    this.currentUser = this.accountService.currentUser;
-  }
-  ngOnChanges() {
-    if (this.gift) {
-      this.currentStatus = this.gift?.status;
-      this.isShown = true;
-    }
-  }
-
-  /**
-   * Hides the modal and triggers `onModalClose` eventEmitter.
-   */
-  closeModal() {
-    this.isShown = false;
-    this.onModalClose.emit(true);
-  }
+  currentUser: User = this.accountService.currentUser;;
 
   statuses = [
     { name: 'claimed', icon: 'check' },
