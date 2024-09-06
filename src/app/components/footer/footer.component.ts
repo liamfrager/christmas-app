@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-footer',
@@ -9,8 +10,20 @@ import { Router } from '@angular/router';
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css',
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
   constructor(private router: Router) {}
+  
+  selectedIndex: number = 0;
+  
+  ngOnInit(): void {
+    // Listen for reroutes and update highlighted menu accordingliy.
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.selectedIndex = this.menu_items.findIndex(item => event.urlAfterRedirects.startsWith(item.route));
+      });
+  }
+
   menu_items = [
     {
       route: '/wish-list',
@@ -33,10 +46,8 @@ export class FooterComponent {
       icon: 'settings',
     },
   ];
-  selectedIndex = 0;
 
-  selectMenu(index: number) {
-    this.selectedIndex = index;
-    this.router.navigate([this.menu_items[index].route])
+  selectMenu(route: string) {
+    this.router.navigate([route])
   }
 }
