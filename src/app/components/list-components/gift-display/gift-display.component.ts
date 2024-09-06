@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class GiftDisplayComponent {
   @Input({required: true}) gift!: any;
-  @Input({required: true}) isChecked!: boolean;
+  @Input({required: true}) checkType!: 'circle' | 'check_circle' | 'error';
 
   @Output() giftClicked = new EventEmitter();
 
