@@ -13,6 +13,6 @@ import { Router } from '@angular/router';
 export class PageHeadingComponent {
   constructor(private router: Router) {};
   @Input({required: true}) headingText!: string;
-  @Input({required: true}) buttons!: string[];
+  @Input() buttons!: string[];
   @Output() onIconClick = new EventEmitter();
 }
