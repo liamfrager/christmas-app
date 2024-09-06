@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Gift } from '../../../types';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-gift-display',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './gift-display.component.html',
   styleUrl: './gift-display.component.css'
 })
