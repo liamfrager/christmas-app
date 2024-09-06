@@ -22,7 +22,7 @@
   border-bottom: none;
 }
 
-.gift-name:hover {
+.gift-name:hover, .error {
   color: #d64541;
 }
 

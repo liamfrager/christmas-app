@@ -14,6 +14,7 @@ export interface Gift extends NewGift {
     isWishedByUser?: User,
     isClaimedByUser?: User,
     isCustom?: boolean,
+    isDeleted?: boolean,
 }
 
 export type Gifts = Map<string, Gift>

@@ -1,4 +1,4 @@
 <div class="gift-wrap">
-  <span class="material-symbols-outlined checkbox cursor-arrow">{{isChecked ? "check_box" : "check_box_outline_blank"}}</span>
+  <span [ngClass]="['material-symbols-outlined', 'checkbox', 'cursor-arrow', checkType]" [title]="checkboxTitle">{{checkType}}</span>
   <span class="gift-name cursor-click" (click)="giftClicked.emit(true)">{{gift.name}}</span>
 </div>

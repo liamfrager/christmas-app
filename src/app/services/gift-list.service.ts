@@ -123,7 +123,6 @@ export class GiftListService {
         ...gift,
         id: giftRef.id,
         isWishedByUser: friend,
-        isClaimedByID: this.currentUser.id,
         status: 'claimed',
         isCustom: true,
       });
@@ -145,7 +144,7 @@ export class GiftListService {
       if (gift.isClaimedByID) {
         const shoppingRef = doc(this.db, 'lists', gift.isClaimedByID, 'shopping-list', gift.id);
         transaction.update(shoppingRef, {
-          status: 'deleted',
+          isDeleted: true,
         });
       }
     });
