@@ -170,9 +170,21 @@ export class ListDisplayComponent implements OnChanges {
    * Determines whether the checkbox next to a gift should be checked off.
    * @param gift - The gift being checked.
    */
-  getCheckType(gift: Gift): 'circle' | 'check_circle' | 'error' {
-    if (gift.isDeleted) return 'error';
-    if (this.list!.type === 'wish' && gift.isClaimedByID && !this.isOwnedByCurrentUser) return 'check_circle';
-    return 'circle';
+  getCheckType(gift: Gift): 'circle' | 'check_circle' | 'paid' | 'local_shipping' | 'featured_seasonal_and_gifts' | 'park' | 'error' {
+    if (this.list!.type === 'wish') {
+      if (this.list!.type === 'wish' && gift.isClaimedByID && !this.isOwnedByCurrentUser) return 'check_circle';
+      return 'circle';
+    } else if (this.list!.type === 'shopping') {
+      if (gift.isDeleted) return 'error';
+      const statusIcons = {
+        'claimed': 'check_circle',
+        'purchased': 'paid',
+        'delivered': 'local_shipping',
+        'wrapped': 'featured_seasonal_and_gifts',
+        'under tree': 'park',
+      } as const;
+      return statusIcons[gift.status];
+    }
+    return 'error';
   }
 }
