@@ -23,7 +23,9 @@
       </div>
     </div>
     <!-- Bottom button (edit/claim/unclaim/delete) -->
-    <span *ngIf="buttonText === 'This gift has already been claimed.'; else modalButton">{{buttonText}}</span>
-    <ng-template #modalButton>
-      <button (click)="onButtonClick.emit(true)">{{buttonText}}</button>
-    </ng-template>
+    <div class="bottom-button-wrap">
+      <span *ngIf="buttonText === 'This gift has already been claimed.'; else modalButton">{{buttonText}}</span>
+      <ng-template #modalButton>
+        <button class="bottom-button" (click)="onButtonClick.emit(true)">{{buttonText}}</button>
+      </ng-template>
+    </div>
