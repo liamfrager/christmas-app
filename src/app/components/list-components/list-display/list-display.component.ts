@@ -54,25 +54,15 @@ export class ListDisplayComponent implements OnChanges {
     // update modalButtonText
     this.modalButtonText = (() => {
       if (this.list?.type === 'wish') {
-        if (this.isOwnedByCurrentUser) {
-          return 'Edit gift'
-        } else {
-          if (this.giftInModal?.status !== 'claimed') {
-            return 'Claim gift'
-          } else if (this.giftInModal?.isClaimedByID === this.accountService.currentUser.id) {
-            return 'Unclaim gift'
-          } else {
-            return 'This gift has already been claimed.'
-          }
-        }
+        if (this.isOwnedByCurrentUser) return 'Edit gift';
+        if (!gift.isClaimedByID) return 'Claim gift';
+        if (gift.isClaimedByID === this.accountService.currentUser.id) return 'Unclaim gift';
+        return 'This gift has already been claimed.'
       } else if (this.list?.type === 'shopping') {
-        if (this.giftInModal?.isCustom) {
-          return 'Delete gift'
-        } else {
-          return 'Unclaim gift'
-        }
+        if (gift.isCustom) return 'Delete gift';
+        return 'Unclaim gift';
       }
-      return ''
+      return '';
     })() // execute above function
   }
 
