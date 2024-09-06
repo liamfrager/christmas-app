@@ -153,7 +153,7 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is claimed by the current user.
    * @param status - The gift's new status.
    */
-  updateStatus(status: 'claimed' | 'bought' | 'ordered' | 'wrapped' | 'under tree' | 'deleted') {
+  updateStatus(status: 'claimed' | 'purchased' | 'delivered' | 'wrapped' | 'under tree') {
     try {
       if (this.giftInModal) {
         const currentUserID = this.accountService.currentUser.id;
@@ -172,14 +172,13 @@ export class ListDisplayComponent implements OnChanges {
    * @param gift - The gift being checked.
    */
   getIsChecked(gift: Gift): boolean {
-    var result: boolean = false;
     if (this.list!.type === 'wish') {
-      if (!this.isOwnedByCurrentUser && gift.isClaimedByUser) {
-        result = true;
+      if (!this.isOwnedByCurrentUser && gift.isClaimedByID) {
+        return true;
       }
     } else if (this.list!.type === 'shopping') {
     }
-    return result
+    return false;
   }
 
 }

@@ -107,7 +107,6 @@ export class GiftListService {
       // update isWishedBy user's wish-list
       const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.id);
       transaction.update(wishRef, {
-        status: 'claimed',
         isClaimedByID: this.currentUser.id,
       });
     });
@@ -125,7 +124,7 @@ export class GiftListService {
         id: giftRef.id,
         isWishedByUser: friend,
         isClaimedByID: this.currentUser.id,
-        status: 'custom',
+        status: 'claimed',
         isCustom: true,
       });
     });
@@ -161,15 +160,6 @@ export class GiftListService {
       // update current user's shopping-list
       const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
       transaction.delete(shoppingRef);
-      
-      if (!gift.isCustom) {
-        // update isWishedBy user's wish-list
-        const wishedByID = gift.isWishedByID;
-        const wishRef = doc(this.db, 'lists', wishedByID, 'wish-list', gift.id);
-        transaction.update(wishRef, {
-          status: 'wished',
-        });
-      }
     });
   }
 }

@@ -16,7 +16,7 @@
             [icon]="status.icon"
             [hover]="false"
             (iconClicked)="onStatusUpdated.emit(status.name)"
-            [title]="status.name"
+            [title]="status.name | titlecase"
             >
           </app-icon>
         </div>
