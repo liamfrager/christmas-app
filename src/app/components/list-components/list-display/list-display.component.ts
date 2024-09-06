@@ -142,7 +142,15 @@ export class ListDisplayComponent implements OnChanges {
    */
   deleteGift() {
     this.giftListService.deleteGiftFromWishList(this.giftInModal!);
-    this.list!.giftsByUser![this.accountService.currentUser.id].gifts.delete(this.giftInModal!.id);
+    if (this.list?.type === 'shopping') {
+      if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
+        delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
+      } else {
+        this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id);
+      }
+    } else if (this.list?.type === 'wish') {
+      this.list!.giftsByUser![this.accountService.currentUser.id].gifts.delete(this.giftInModal!.id);
+    }
     this.hideModal();
   }
 
