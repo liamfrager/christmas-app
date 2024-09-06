@@ -142,8 +142,8 @@ export class ListDisplayComponent implements OnChanges {
    */
   deleteGift() {
     this.giftListService.deleteGiftFromWishList(this.giftInModal!);
-    this.list!.giftsByUser![this.accountService.currentUser.id].gifts.delete(this.giftInModal!.id)
-    this.hideModal()
+    this.list!.giftsByUser![this.accountService.currentUser.id].gifts.delete(this.giftInModal!.id);
+    this.hideModal();
   }
 
   /**
@@ -157,7 +157,7 @@ export class ListDisplayComponent implements OnChanges {
         const currentUserID = this.accountService.currentUser.id;
         const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserID!, 'shopping-list', this.giftInModal.id), {
           status: status
-        })
+        });
         this.list!.giftsByUser![this.giftInModal.isWishedByID].gifts.get(this.giftInModal.id)!.status = status;
         this.giftInModal = {...this.giftInModal, status: status};
       } else {
