@@ -17,7 +17,6 @@ export class GiftDisplayComponent implements OnChanges {
   checkboxTitle?: string;
 
   ngOnChanges(): void {
-    console.log(this.gift);
     this.checkboxTitle = this.checkType === 'error' ? `This gift has been deleted by ${this.gift.isWishedByUser?.displayName}. It is no longer on their wish list.` : '';
   }
 
