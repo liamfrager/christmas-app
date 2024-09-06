@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SecretSantaServiceService } from '../../services/secret-santa-service.service';
 import { AccountService } from '../../services/account.service';
+import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
 
 // array shuffle function I found on stack overflow
 function shuffle(array: any[]) {
@@ -20,7 +21,7 @@ function shuffle(array: any[]) {
 @Component({
   selector: 'app-secret-santa',
   standalone: true,
-  imports: [],
+  imports: [PageHeadingComponent],
   templateUrl: './secret-santa.component.html',
   styleUrl: './secret-santa.component.css'
 })
