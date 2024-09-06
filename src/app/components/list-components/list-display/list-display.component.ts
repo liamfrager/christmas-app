@@ -84,7 +84,7 @@ export class ListDisplayComponent implements OnChanges {
       if (this.isOwnedByCurrentUser) {
         this.editGift()
       } else {
-        if (this.giftInModal?.status !== 'claimed') {
+        if (!this.giftInModal?.isClaimedByID) {
           this.claimGift()
         } else if (this.giftInModal?.isClaimedByID === this.accountService.currentUser.id) {
           this.unclaimGift()
@@ -113,7 +113,8 @@ export class ListDisplayComponent implements OnChanges {
    */
   claimGift() {
     this.giftListService.addGiftToShoppingList(this.giftInModal!);
-    this.modalButtonText === 'This gift has already been claimed.'
+    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, {...this.giftInModal!, isClaimedByID: this.accountService.currentUser.id})
+    this.hideModal()
   }
 
   /**
@@ -122,7 +123,13 @@ export class ListDisplayComponent implements OnChanges {
    */
   unclaimGift() {
     this.giftListService.deleteGiftFromShoppingList(this.giftInModal!);
-    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id)
+    if (this.list?.type === 'shopping') {
+      this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id)
+    } else if (this.list?.type === 'wish') {
+      const {isClaimedByID, ...unclaimedGift} = this.giftInModal!
+      this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, unclaimedGift)
+    }
+    this.hideModal()
   }
 
   /**
@@ -130,12 +137,9 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is owned by the current user.
    */
   deleteGift() {
-    const currentUserID = this.accountService.currentUser.id;
-    if (currentUserID) {
-      this.giftListService.deleteGiftFromWishList(this.giftInModal!);
-      this.list!.giftsByUser![currentUserID].gifts.delete(this.giftInModal!.id)
-      this.hideModal()
-    }
+    this.giftListService.deleteGiftFromWishList(this.giftInModal!);
+    this.list!.giftsByUser![this.accountService.currentUser.id].gifts.delete(this.giftInModal!.id)
+    this.hideModal()
   }
 
   /**
