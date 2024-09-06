@@ -123,7 +123,6 @@ export class GiftListService {
         ...gift,
         id: giftRef.id,
         isWishedByUser: friend,
-        isClaimedByID: this.currentUser.id,
         status: 'claimed',
         isCustom: true,
       });
