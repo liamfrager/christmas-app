@@ -145,7 +145,7 @@ export class GiftListService {
       if (gift.isClaimedByID) {
         const shoppingRef = doc(this.db, 'lists', gift.isClaimedByID, 'shopping-list', gift.id);
         transaction.update(shoppingRef, {
-          status: 'deleted',
+          isDeleted: true,
         });
       }
     });
