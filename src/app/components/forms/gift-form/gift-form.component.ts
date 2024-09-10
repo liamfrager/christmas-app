@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { GiftListService } from '../../../services/gift-list.service';
 import { FriendsService } from '../../../services/friends.service';
@@ -20,6 +20,7 @@ export class GiftFormComponent {
     private friendsService: FriendsService,
     private router: Router
   ) {}
+  @Input() type!: 'wish' | 'shopping';
   
   friends!: Array<Friend>
   selectedFriend?: Friend;
