@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { User } from '../../types';
+import { Friend } from '../../types';
 
 @Component({
   selector: 'app-pfp-select',
@@ -10,18 +10,18 @@ import { User } from '../../types';
   styleUrl: './pfp-select.component.css'
 })
 export class PfpSelectComponent {
-  @Input() users: User[] = [];
-  @Output() onSelectUser =  new EventEmitter<User>;
-  selectedUser: User | null = null;
+  @Input() friends: Friend[] = [];
+  @Output() onSelectFriend =  new EventEmitter<Friend>;
+  selectedFriend: Friend | null = null;
   dropdownOpen: boolean = false;
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
-  selectUser(user: User) {
-    this.selectedUser = user;
+  selectFriend(friend: Friend) {
+    this.selectedFriend = friend;
     this.dropdownOpen = false;
-    this.onSelectUser.emit(this.selectedUser);
+    this.onSelectFriend.emit(this.selectedFriend);
   }
 }
