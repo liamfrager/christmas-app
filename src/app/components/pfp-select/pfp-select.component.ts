@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from '../../types';
 
 @Component({
@@ -11,6 +11,7 @@ import { User } from '../../types';
 })
 export class PfpSelectComponent {
   @Input() users: User[] = [];
+  @Output() onSelectUser =  new EventEmitter<User>;
   selectedUser: User | null = null;
   dropdownOpen: boolean = false;
 
@@ -21,5 +22,6 @@ export class PfpSelectComponent {
   selectUser(user: User) {
     this.selectedUser = user;
     this.dropdownOpen = false;
+    this.onSelectUser.emit(this.selectedUser);
   }
 }
