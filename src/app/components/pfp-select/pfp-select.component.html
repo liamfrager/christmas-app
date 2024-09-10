@@ -1,0 +1,16 @@
+<div class="dropdown">
+  <button class="dropdown-toggle" type="button" (click)="toggleDropdown()">
+    <span class="user-info">
+      <img *ngIf="selectedUser" [src]="selectedUser.pfp" alt="profile picture" class="pfp">
+      {{ selectedUser?.displayName || 'Select User' }}
+    </span>
+    <span class="material-symbols-outlined dropdown-arrow">{{dropdownOpen ? 'arrow_drop_down' : 'arrow_drop_up'}}</span>
+  </button>
+  
+  <ul *ngIf="dropdownOpen" class="dropdown-menu">
+    <li *ngFor="let user of users" class="dropdown-item" (click)="selectUser(user)">
+      <img [src]="user.pfp" alt="profile picture" class="pfp">
+      {{ user.displayName }}
+    </li>
+  </ul>
+</div>
