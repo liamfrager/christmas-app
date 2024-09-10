@@ -6,11 +6,12 @@ import { Router } from '@angular/router';
 import { Friend, NewGift } from '../../../types';
 import { PageHeadingComponent } from "../../page-heading/page-heading.component";
 import { PfpSelectComponent } from '../../pfp-select/pfp-select.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-gift-form',
   standalone: true,
-  imports: [FormsModule, PageHeadingComponent, PfpSelectComponent],
+  imports: [CommonModule, FormsModule, PageHeadingComponent, PfpSelectComponent],
   templateUrl: './gift-form.component.html',
   styleUrl: './gift-form.component.css'
 })
@@ -20,13 +21,15 @@ export class GiftFormComponent {
     private friendsService: FriendsService,
     private router: Router
   ) {}
-  @Input() type!: 'wish' | 'shopping';
+  @Input({required: true}) type!: 'wish' | 'shopping';
   
-  friends!: Array<Friend>
+  friends: Array<Friend> = [];
   selectedFriend?: Friend;
   
   async ngOnInit() {
-    this.friends = await this.friendsService.getFriends()
+    if (this.type === 'shopping') {
+      this.friends = await this.friendsService.getFriends()
+    }
   }
 
   onSubmit(form: NgForm) {
