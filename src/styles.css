@@ -83,6 +83,22 @@ button, input[type="submit"] {
     &:hover {
       color: white;
       background-color: black;
+      cursor: pointer;
+    }
+}
+
+input:disabled {
+    background-color: #ccc;
+    color: #444;
+    opacity: .8;
+    border: 1px solid #444;
+    border-radius: .5em;
+    padding: .5em;
+    margin: 0 0 10px 0;
+    &:hover {
+      color: #444;
+      background-color: #ccc;
+      cursor: auto;
     }
 }
 
