@@ -34,7 +34,7 @@ export class GiftFormComponent {
 
   onSubmit(form: NgForm) {
     const gift: NewGift = {
-      name: form.form.value.name,
+      name: form.form.value.gift,
       url: form.form.value.url,
       details: form.form.value.details,
       isWishedByID: form.form.value.friend.id,

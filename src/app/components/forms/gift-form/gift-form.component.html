@@ -1,5 +1,5 @@
 <form (ngSubmit)="onSubmit(giftForm)" #giftForm="ngForm">
-  <input type="text" name="name" id="name" placeholder="Name of Gift *" required ngModel><br>
+  <input type="text" name="gift" id="gift" placeholder="Gift *" required ngModel autocomplete="off"><br>
   <input type="url" name="url" id="url" placeholder="URL" ngModel><br>
   <textarea name="details" id="details" placeholder="Details" ngModel></textarea>
   <app-pfp-select *ngIf="type === 'shopping'" [friends]="friends" name="friend" required [(ngModel)]="selectedFriend"></app-pfp-select>
