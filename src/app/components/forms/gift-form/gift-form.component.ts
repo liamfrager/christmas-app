@@ -42,5 +42,4 @@ export class GiftFormComponent {
     this.giftListService.createGiftInShoppingList(gift, this.selectedFriend!); // Must check that a user is selected.
     this.router.navigate(['./shopping-list'])
   }
-
 }
