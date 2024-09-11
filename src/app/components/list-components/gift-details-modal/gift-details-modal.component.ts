@@ -5,11 +5,12 @@ import { IconComponent } from '../../icon/icon.component';
 import { AccountService } from '../../../services/account.service';
 import { Gift, User } from '../../../types';
 import { PopUpComponent } from '../../pop-up/pop-up.component';
+import { GiftFormComponent } from "../../forms/gift-form/gift-form.component";
 
 @Component({
   selector: 'app-gift-details-modal',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent],
+  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, GiftFormComponent],
   templateUrl: './gift-details-modal.component.html',
   styleUrl: './gift-details-modal.component.css'
 })
@@ -25,7 +26,16 @@ export class GiftDetailsModalComponent {
 
   headingButtons = ['close'];
   currentStatus = this.gift?.status;
-  currentUser: User = this.accountService.currentUser;;
+  currentUser: User = this.accountService.currentUser;
+  editingGift: boolean = false;
+
+  buttonClick() {
+    if (this.buttonText === 'Edit gift') {
+      this.editingGift = true;
+    } else {
+      this.onButtonClick.emit(true)
+    }
+  }
 
   statuses = [
     { name: 'claimed', icon: 'check' },
