@@ -1,7 +1,7 @@
-<form (ngSubmit)="onSubmit(addGiftForm)" #addGiftForm="ngForm">
+<form (ngSubmit)="onSubmit(giftForm)" #giftForm="ngForm">
   <input type="text" name="name" id="name" placeholder="Name of Gift *" required ngModel><br>
   <input type="url" name="url" id="url" placeholder="URL" ngModel><br>
   <textarea name="details" id="details" placeholder="Details" style="width: 100%; resize: none" ngModel></textarea>
   <app-pfp-select *ngIf="type === 'shopping'" [friends]="friends" (onSelectFriend)="selectedFriend = $event" name="friend" [(ngModel)]="selectedFriend"></app-pfp-select>
-  <input type="submit" name="submit" id="submit" value="Add Gift to List">
+  <input type="submit" name="submit" id="submit" value="Add Gift to List" [disabled]="">
 </form>
