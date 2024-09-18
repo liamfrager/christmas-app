@@ -11,7 +11,7 @@ export type NewGift = {
 export interface Gift extends NewGift {
     id: string,
     status: 'claimed' | 'purchased' | 'delivered' | 'wrapped' | 'under tree',
-    isWishedByUser?: User,
+    isWishedByUser: User,
     isClaimedByUser?: User,
     isCustom?: boolean,
     isDeleted?: boolean,
