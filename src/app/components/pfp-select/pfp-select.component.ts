@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
-import { Friend } from '../../types';
+import { Friend, User } from '../../types';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator } from '@angular/forms';
 
 @Component({
@@ -24,8 +24,16 @@ import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator } fro
 })
 export class PfpSelectComponent implements ControlValueAccessor, Validator {
   @Input() friends: Friend[] = [];
-  @Output() onSelectFriend =  new EventEmitter<Friend | null>;
-  selectedFriend: Friend | null = null;
+  @Input() _selectedFriend?: User;
+  @Input() 
+  set selectedFriend(value: User | undefined) {
+    this._selectedFriend = value;
+    this.onChange(this._selectedFriend);  // Ensure form control is updated if selectedFriend changes
+  }
+  get selectedFriend(): User | undefined {
+    return this._selectedFriend;
+  }
+  @Output() onSelectFriend =  new EventEmitter<User | undefined>;
   dropdownOpen: boolean = false;
 
   toggleDropdown() {
@@ -46,7 +54,7 @@ export class PfpSelectComponent implements ControlValueAccessor, Validator {
 
   // ControlValueAccessor methods
   writeValue(friend: any): void {
-    this.selectedFriend = friend;
+    this.selectedFriend = friend || this.selectedFriend;
   }
 
   registerOnChange(fn: any): void {
