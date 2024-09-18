@@ -30,7 +30,7 @@
     type="submit"
     name="submit"
     id="submit"
-    value="Add Gift to List"
+    [value]="gift ? 'Save' : 'Add Gift to List'"
     [disabled]="giftForm.invalid"
   >
 </form>

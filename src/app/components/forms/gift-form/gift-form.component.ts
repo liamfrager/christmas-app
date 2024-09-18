@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { GiftListService } from '../../../services/gift-list.service';
 import { FriendsService } from '../../../services/friends.service';
-import { Router } from '@angular/router';
 import { Friend, Gift, NewGift } from '../../../types';
 import { PageHeadingComponent } from "../../page-heading/page-heading.component";
 import { PfpSelectComponent } from '../../pfp-select/pfp-select.component';
 import { CommonModule } from '@angular/common';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'app-gift-form',
@@ -19,10 +19,11 @@ export class GiftFormComponent {
   constructor(
     private giftListService: GiftListService, 
     private friendsService: FriendsService,
-    private router: Router
+    private accountService: AccountService,
   ) {}
   @Input({required: true}) type!: 'wish' | 'shopping';
   @Input() gift?: Gift;
+  @Output() onFormSubmit = new EventEmitter();
   
   friends: Array<Friend> = [];
   selectedFriend?: Friend;
@@ -48,9 +49,13 @@ export class GiftFormComponent {
       name: form.form.value.gift,
       url: form.form.value.url,
       details: form.form.value.details,
-      isWishedByID: form.form.value.friend.id,
+      isWishedByID: this.gift?.isCustom ? form.form.value.friend.id : this.accountService.currentUser.id,
     }
-    this.giftListService.createGiftInShoppingList(gift, this.selectedFriend!); // Must check that a user is selected.
-    this.router.navigate(['./shopping-list'])
+    if (this.gift) { // If gift already exists.
+      this.giftListService.updateGift(this.gift, gift);
+    } else {
+      this.giftListService.createGiftInShoppingList(gift, this.selectedFriend!);
+    }
+    this.onFormSubmit.emit(true);
   }
 }
