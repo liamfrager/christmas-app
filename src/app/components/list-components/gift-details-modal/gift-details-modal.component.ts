@@ -3,13 +3,14 @@ import { PageHeadingComponent } from '../../page-heading/page-heading.component'
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../icon/icon.component';
 import { AccountService } from '../../../services/account.service';
-import { Gift, User } from '../../../types';
+import { Gift, NewGift, User } from '../../../types';
 import { PopUpComponent } from '../../pop-up/pop-up.component';
+import { GiftFormComponent } from "../../forms/gift-form/gift-form.component";
 
 @Component({
   selector: 'app-gift-details-modal',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent],
+  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, GiftFormComponent],
   templateUrl: './gift-details-modal.component.html',
   styleUrl: './gift-details-modal.component.css'
 })
@@ -25,7 +26,23 @@ export class GiftDetailsModalComponent {
 
   headingButtons = ['close'];
   currentStatus = this.gift?.status;
-  currentUser: User = this.accountService.currentUser;;
+  currentUser: User = this.accountService.currentUser;
+  editingGift: boolean = false;
+
+  buttonClick(event?: any) {
+    console.log(event);
+    if (event) { // If gift has been edited
+      this.editingGift = false;
+      this.onButtonClick.emit(event);
+    } else {
+      if (this.buttonText === 'Edit gift' && this.editingGift == false) {
+        this.editingGift = true;
+      } else {
+        this.editingGift = false;
+        this.onButtonClick.emit();
+      }
+    }
+  }
 
   statuses = [
     { name: 'claimed', icon: 'check' },

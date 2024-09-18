@@ -1,31 +1,39 @@
 <div [ngClass]="{'show': isShown, 'hide': !isShown}" class="backdrop">
   <div *ngIf="gift" class="modal">
-    <app-page-heading
-      [headingText]="gift.name"
-      [buttons]="headingButtons"
-      (onIconClick)="onModalClose.emit(true);"
-      >
-    </app-page-heading>
-    <p>{{gift.details}}</p>
-    <a [href]="gift.url">{{gift.url}}</a>
-    <!-- Shopping list status bar -->
-    <div *ngIf="type === 'shopping'" class="status-display">
-      <div class="line">
-        <div *ngFor="let status of statuses" class="node" [style]="status.name === gift.status ? 'color: green' : ''">
-          <app-icon
-            [icon]="status.icon"
-            [hover]="false"
-            (iconClicked)="onStatusUpdated.emit(status.name)"
-            [title]="status.name | titlecase"
-            >
-          </app-icon>
+    <ng-container *ngIf="!editingGift; else editForm">
+      <app-page-heading
+        [headingText]="gift.name"
+        [buttons]="headingButtons"
+        (onIconClick)="onModalClose.emit(true);"
+        >
+      </app-page-heading>
+      <p>{{gift.details}}</p>
+      <a [href]="gift.url">{{gift.url}}</a>
+      <!-- Shopping list status bar -->
+      <div *ngIf="type === 'shopping'" class="status-display">
+        <div class="line">
+          <div *ngFor="let status of statuses" class="node" [style]="status.name === gift.status ? 'color: green' : ''">
+            <app-icon
+              [icon]="status.icon"
+              [hover]="false"
+              (iconClicked)="onStatusUpdated.emit(status.name)"
+              [title]="status.name | titlecase"
+              >
+            </app-icon>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Bottom button (edit/claim/unclaim/delete) -->
-    <div class="bottom-button-wrap">
-      <span *ngIf="buttonText === 'This gift has already been claimed.'; else modalButton">{{buttonText}}</span>
-      <ng-template #modalButton>
-        <button class="bottom-button" (click)="onButtonClick.emit(true)">{{buttonText}}</button>
-      </ng-template>
-    </div>
+      <!-- Bottom button (edit/claim/unclaim/delete) -->
+      <div class="bottom-button-wrap">
+        <span *ngIf="buttonText === 'This gift has already been claimed.'; else modalButton">{{buttonText}}</span>
+        <ng-template #modalButton>
+          <button class="bottom-button" (click)="buttonClick()">{{buttonText}}</button>
+        </ng-template>
+      </div>
+    </ng-container>
+    <ng-template #editForm>
+      <app-page-heading headingText="Edit Gift"></app-page-heading>
+      <app-gift-form [type]="gift.isCustom ? 'shopping' : 'wish'" [gift]="gift" (onFormSubmit)="buttonClick($event)"></app-gift-form>
+    </ng-template>
+  </div>
+</div>

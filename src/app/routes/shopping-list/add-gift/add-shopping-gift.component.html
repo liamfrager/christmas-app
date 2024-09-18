@@ -1,9 +1,2 @@
-<h2>Add A New Gift</h2>
-
-<form (ngSubmit)="onSubmit(addGiftForm)" #addGiftForm="ngForm">
-  <input type="text" name="name" id="name" placeholder="Name of Gift *" required ngModel><br>
-  <input type="url" name="url" id="url" placeholder="URL" ngModel><br>
-  <textarea name="details" id="details" placeholder="Details" style="width: 100%; resize: none" ngModel></textarea>
-  <app-pfp-select [friends]="friends" (onSelectFriend)="selectedFriend = $event" name="friend" [(ngModel)]="selectedFriend"></app-pfp-select>
-  <input type="submit" name="submit" id="submit" value="Add Gift to List">
-</form>
+<app-page-heading headingText="Add A New Gift"></app-page-heading>
+<app-gift-form type="shopping" (onFormSubmit)="reroute()"></app-gift-form>

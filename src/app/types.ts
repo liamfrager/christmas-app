@@ -5,13 +5,12 @@ export type NewGift = {
     isWishedByID: string,
     details?: string,
     url?: string,
-    status?: string,
     isClaimedByID?: string,
 }
 export interface Gift extends NewGift {
     id: string,
     status: 'claimed' | 'purchased' | 'delivered' | 'wrapped' | 'under tree',
-    isWishedByUser?: User,
+    isWishedByUser: User,
     isClaimedByUser?: User,
     isCustom?: boolean,
     isDeleted?: boolean,

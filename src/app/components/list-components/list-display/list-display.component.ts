@@ -6,7 +6,7 @@ import { AccountService } from '../../../services/account.service';
 import { DocumentData, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { GiftDetailsModalComponent } from '../gift-details-modal/gift-details-modal.component';
 import { FirebaseService } from '../../../services/firebase.service';
-import { Gift, Gifts, List, User } from '../../../types';
+import { Gift, Gifts, List, NewGift, User } from '../../../types';
 import { UserDisplayComponent } from '../../user-display/user-display.component';
 
 @Component({
@@ -59,7 +59,7 @@ export class ListDisplayComponent implements OnChanges {
         if (gift.isClaimedByID === this.accountService.currentUser.id) return 'Unclaim gift';
         return 'This gift has already been claimed.';
       } else if (this.list?.type === 'shopping') {
-        if (gift.isCustom) return 'Delete gift';
+        if (gift.isCustom) return 'Edit gift';
         return 'Unclaim gift';
       }
       return '';
@@ -79,10 +79,10 @@ export class ListDisplayComponent implements OnChanges {
   /**
    * Handles when the button in `app-gift-details-modal` is clicked.
    */
-  onModalButtonClick() {
+  onModalButtonClick(event: any) {
     if (this.list?.type === 'wish') {
       if (this.isOwnedByCurrentUser) {
-        this.editGift();
+        this.editGift(event as NewGift);
       } else {
         if (!this.giftInModal?.isClaimedByID) {
           this.claimGift();
@@ -92,7 +92,7 @@ export class ListDisplayComponent implements OnChanges {
       }
     } else if (this.list?.type === 'shopping') {
       if (this.giftInModal?.isCustom) {
-        this.deleteGift();
+        this.editGift(event as NewGift);
       } else {
         this.unclaimGift();
       }
@@ -103,8 +103,9 @@ export class ListDisplayComponent implements OnChanges {
    * Opens a form to edit gift details for the gift displayed in `app-gift-details-modal`.
    * Should only be called when gift is owned by the current user.
    */
-  editGift() {
-    console.log('edit gift!');
+  editGift(new_gift: NewGift) {
+    this.giftInModal = {...this.giftInModal!, ...new_gift};
+    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, this.giftInModal);
   }
 
   /**

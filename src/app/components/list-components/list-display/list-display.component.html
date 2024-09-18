@@ -35,7 +35,7 @@
       [type]="list.type"
       [buttonText]="modalButtonText"
       [isShown]="isModalOpen"
-      (onButtonClick)="onModalButtonClick()"
+      (onButtonClick)="onModalButtonClick($event)"
       (onStatusUpdated)="updateStatus($event)"
       (onModalClose)="hideModal()"
       >

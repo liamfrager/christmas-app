@@ -37,11 +37,14 @@ fieldset {
 input[type="text"],
 input[type="url"],
 input[type="file"],
+textarea,
 fieldset {
-  height: 20px;
   width: 100%;
   margin: 0 0 10px 0;
-  padding: 2px;
+  border: 1px solid black;
+  border-radius: .5em;
+  padding: .5em;
+  font-size: .8em;
 }
 
 /* ... */
@@ -69,16 +72,33 @@ main {
 }
 
 /* Buttons */
-button {
+button, input[type="submit"] {
     background-color: white;
     color: black;
     border: 1px solid black;
     border-radius: .5em;
     padding: .5em;
+    margin: 0 0 10px 0;
 
     &:hover {
       color: white;
       background-color: black;
+      cursor: pointer;
+    }
+}
+
+input:disabled {
+    background-color: #ccc;
+    color: #444;
+    opacity: .8;
+    border: 1px solid #444;
+    border-radius: .5em;
+    padding: .5em;
+    margin: 0 0 10px 0;
+    &:hover {
+      color: #444;
+      background-color: #ccc;
+      cursor: auto;
     }
 }
 
