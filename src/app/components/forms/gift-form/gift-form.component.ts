@@ -52,10 +52,15 @@ export class GiftFormComponent {
       isWishedByID: this.gift?.isCustom ? form.form.value.friend.id : this.accountService.currentUser.id,
     }
     if (this.gift) { // If gift already exists.
-      this.giftListService.updateGift(this.gift, new_gift);
+      if (JSON.stringify(this.gift) == JSON.stringify({...this.gift, ...new_gift})) { // If gift hasn't changed.
+        this.onFormSubmit.emit(false);
+      } else {
+        this.giftListService.updateGift(this.gift, new_gift);
+        this.onFormSubmit.emit(new_gift);
+      }
     } else {
       this.giftListService.createGiftInShoppingList(new_gift, this.selectedFriend!);
+      this.onFormSubmit.emit(new_gift);
     }
-    this.onFormSubmit.emit(new_gift);
   }
 }

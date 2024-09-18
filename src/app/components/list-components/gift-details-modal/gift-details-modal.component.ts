@@ -30,14 +30,16 @@ export class GiftDetailsModalComponent {
   editingGift: boolean = false;
 
   buttonClick(event?: any) {
+    console.log(event);
     if (event) { // If gift has been edited
       this.editingGift = false;
       this.onButtonClick.emit(event);
     } else {
-      if (this.buttonText === 'Edit gift') {
+      if (this.buttonText === 'Edit gift' && this.editingGift == false) {
         this.editingGift = true;
       } else {
-        this.onButtonClick.emit(true);
+        this.editingGift = false;
+        this.onButtonClick.emit();
       }
     }
   }
