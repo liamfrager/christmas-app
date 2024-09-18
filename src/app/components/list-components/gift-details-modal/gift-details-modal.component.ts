@@ -3,7 +3,7 @@ import { PageHeadingComponent } from '../../page-heading/page-heading.component'
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../icon/icon.component';
 import { AccountService } from '../../../services/account.service';
-import { Gift, User } from '../../../types';
+import { Gift, NewGift, User } from '../../../types';
 import { PopUpComponent } from '../../pop-up/pop-up.component';
 import { GiftFormComponent } from "../../forms/gift-form/gift-form.component";
 
@@ -29,11 +29,16 @@ export class GiftDetailsModalComponent {
   currentUser: User = this.accountService.currentUser;
   editingGift: boolean = false;
 
-  buttonClick() {
-    if (this.buttonText === 'Edit gift') {
-      this.editingGift = true;
+  buttonClick(event?: any) {
+    if (event) { // If gift has been edited
+      this.editingGift = false;
+      this.onButtonClick.emit(event);
     } else {
-      this.onButtonClick.emit(true)
+      if (this.buttonText === 'Edit gift') {
+        this.editingGift = true;
+      } else {
+        this.onButtonClick.emit(true);
+      }
     }
   }
 
