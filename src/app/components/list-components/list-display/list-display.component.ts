@@ -59,7 +59,7 @@ export class ListDisplayComponent implements OnChanges {
         if (gift.isClaimedByID === this.accountService.currentUser.id) return 'Unclaim gift';
         return 'This gift has already been claimed.';
       } else if (this.list?.type === 'shopping') {
-        if (gift.isCustom) return 'Delete gift';
+        if (gift.isCustom) return 'Edit gift';
         return 'Unclaim gift';
       }
       return '';
@@ -92,7 +92,7 @@ export class ListDisplayComponent implements OnChanges {
       }
     } else if (this.list?.type === 'shopping') {
       if (this.giftInModal?.isCustom) {
-        this.deleteGift();
+        this.editGift();
       } else {
         this.unclaimGift();
       }
