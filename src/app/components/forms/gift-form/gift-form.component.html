@@ -1,7 +1,36 @@
 <form (ngSubmit)="onSubmit(giftForm)" #giftForm="ngForm">
-  <input type="text" name="gift" id="gift" placeholder="Gift *" required ngModel autocomplete="off"><br>
-  <input type="url" name="url" id="url" placeholder="URL" ngModel><br>
-  <textarea name="details" id="details" placeholder="Details" ngModel></textarea>
-  <app-pfp-select *ngIf="type === 'shopping'" [friends]="friends" name="friend" required [(ngModel)]="selectedFriend"></app-pfp-select>
-  <input type="submit" name="submit" id="submit" value="Add Gift to List" [disabled]="giftForm.invalid">
+  <input 
+    type="text"
+    name="gift"
+    id="gift"
+    placeholder="Gift *"
+    required [(ngModel)]="nameVal"
+  ><br>
+  <input
+    type="url"
+    name="url"
+    id="url"
+    placeholder="URL"
+    [(ngModel)]="urlVal"
+    ><br>
+  <textarea
+    name="details"
+    id="details"
+    placeholder="Details"
+    [(ngModel)]="detailsVal"
+  ></textarea>
+  <app-pfp-select
+    *ngIf="type === 'shopping'"
+    [friends]="friends"
+    name="friend"
+    [selectedFriend]="gift ? gift.isWishedByUser : undefined"
+    required [(ngModel)]="selectedFriend"
+  ></app-pfp-select>
+  <input
+    type="submit"
+    name="submit"
+    id="submit"
+    value="Add Gift to List"
+    [disabled]="giftForm.invalid"
+  >
 </form>

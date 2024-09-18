@@ -33,7 +33,7 @@
     </ng-container>
     <ng-template #editForm>
       <app-page-heading headingText="Edit Gift"></app-page-heading>
-      <app-gift-form [type]="gift.isCustom ? 'shopping' : 'wish'"></app-gift-form>
+      <app-gift-form [type]="gift.isCustom ? 'shopping' : 'wish'" [gift]="gift"></app-gift-form>
     </ng-template>
   </div>
 </div>
