@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { GiftFormComponent } from "../../../components/forms/gift-form/gift-form.component";
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-shopping-gift',
@@ -10,4 +11,9 @@ import { PageHeadingComponent } from "../../../components/page-heading/page-head
   styleUrl: './add-shopping-gift.component.css'
 })
 export class AddShoppingGiftComponent {
+  constructor (private router: Router) {}
+  
+  reroute() {
+    this.router.navigate(['/shopping-list']);
+  }
 }
