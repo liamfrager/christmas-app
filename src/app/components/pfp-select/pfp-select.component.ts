@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, HostListener, Input, Output } from '@angular/core';
 import { Friend, User } from '../../types';
 import { ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator } from '@angular/forms';
 
@@ -36,6 +36,16 @@ export class PfpSelectComponent implements ControlValueAccessor, Validator {
   @Output() onSelectFriend =  new EventEmitter<User | undefined>;
   dropdownOpen: boolean = false;
 
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const dropdownElement = document.querySelector('.dropdown');
+    
+    if (this.dropdownOpen && dropdownElement && !dropdownElement.contains(target)) {
+      this.dropdownOpen = false;
+    }
+  }
+  
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
