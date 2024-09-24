@@ -27,14 +27,11 @@ export class GiftFormComponent {
   
   friends: Array<Friend> = [];
   selectedFriend?: Friend;
-  
   // Form values
   nameVal?: string;
   urlVal?: string;
   detailsVal?: string;
 
-
-  
   async ngOnInit() {
     this.nameVal = this.gift ? this.gift.name : '';
     this.urlVal = this.gift ? this.gift.url : '';
