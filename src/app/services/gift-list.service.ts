@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { collection, deleteField, doc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
-import { Gift, List, NewGift, Gifts, Friend } from '../types';
+import { Gift, List, NewGift, Gifts, Friend, User } from '../types';
 
 
 @Injectable({
