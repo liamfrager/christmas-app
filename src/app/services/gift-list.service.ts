@@ -131,21 +131,21 @@ export class GiftListService {
 
   /**
    * Updates a gift in the database.
-   * @param old_gift - A Gift object containing the data for the gift to be updated.
+   * @param oldGift - A Gift object containing the data for the gift to be updated.
    * @param newGift - A NewGift object containing the updated data for the gift.
    */
-  async updateGift(old_gift: Gift, newGift: NewGift) {
+  async updateGift(oldGift: Gift, newGift: NewGift) {
     await runTransaction(this.db, async (transaction) => {
       let refs = [];
       
-      if (old_gift.isCustom) {
-        const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', old_gift.id);
+      if (oldGift.isCustom) {
+        const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', oldGift.id);
         refs.push(shoppingRef);
       } else {
-        const wishRef = doc(this.db, 'lists', this.currentUser.id, 'wish-list', old_gift.id);
+        const wishRef = doc(this.db, 'lists', this.currentUser.id, 'wish-list', oldGift.id);
         refs.push(wishRef);
-        if (old_gift.isClaimedByID) {
-          const shoppingRef = doc(this.db, 'lists', old_gift.isClaimedByID, 'shopping-list', old_gift.id);
+        if (oldGift.isClaimedByID) {
+          const shoppingRef = doc(this.db, 'lists', oldGift.isClaimedByID, 'shopping-list', oldGift.id);
           refs.push(shoppingRef);
         }
       }
