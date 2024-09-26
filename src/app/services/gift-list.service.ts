@@ -132,9 +132,9 @@ export class GiftListService {
   /**
    * Updates a gift in the database.
    * @param old_gift - A Gift object containing the data for the gift to be updated.
-   * @param new_gift - A NewGift object containing the updated data for the gift.
+   * @param newGift - A NewGift object containing the updated data for the gift.
    */
-  async updateGift(old_gift: Gift, new_gift: NewGift) {
+  async updateGift(old_gift: Gift, newGift: NewGift) {
     await runTransaction(this.db, async (transaction) => {
       let refs = [];
       
@@ -151,7 +151,7 @@ export class GiftListService {
       }
 
       refs.forEach(ref => {
-        transaction.update(ref, new_gift);
+        transaction.update(ref, newGift);
       })
     });
   }

@@ -100,8 +100,8 @@ export class ListDisplayComponent implements OnChanges {
    * Opens a form to edit gift details for the gift displayed in `app-gift-details-modal`.
    * Should only be called when gift is owned by the current user.
    */
-  editGift(new_gift: NewGift) {
-    this.giftInModal = {...this.giftInModal!, ...new_gift};
+  editGift(newGift: NewGift) {
+    this.giftInModal = {...this.giftInModal!, ...newGift};
     this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, this.giftInModal);
   }
 
