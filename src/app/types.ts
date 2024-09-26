@@ -6,6 +6,7 @@ export type NewGift = {
     details?: string,
     url?: string,
     isClaimedByID?: string,
+    isWishedByUser?: User,
 }
 export interface Gift extends NewGift {
     id: string,
