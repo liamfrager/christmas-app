@@ -15,18 +15,46 @@ import { AddShoppingGiftComponent } from './routes/shopping-list/add-gift/add-sh
 import { SecretSantaComponent } from './routes/secret-santa/secret-santa.component';
 // Settings
 import { SettingsComponent } from './routes/settings/settings.component';
+// Guards
 import { authGuard } from './guards/auth.guard';
+import { rootRedirectGuard } from './guards/root-redirect.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent},
-  { path: 'wish-list', component: WishListComponent, canActivate: [authGuard]},
-  { path: 'wish-list/add-gift', component: AddWishGiftComponent, canActivate: [authGuard]},
-  { path: 'friends', component: FriendsComponent, canActivate: [authGuard]},
-  { path: 'friends/add-friend', component: AddFriendComponent, canActivate: [authGuard]},
-  { path: 'friends/list', component: FriendsListComponent, canActivate: [authGuard]},
-  { path: 'shopping-list', component: ShoppingListComponent, canActivate: [authGuard]},
-  { path: 'shopping-list/add-gift', component: AddShoppingGiftComponent, canActivate: [authGuard]},
-  { path: 'secret-santa', component: SecretSantaComponent, canActivate: [authGuard]},
-  { path: 'settings', component: SettingsComponent, canActivate: [authGuard]},
+  { path: '',
+    canActivate: [rootRedirectGuard],
+    component: LoginComponent,
+  },
+  { path: 'login',
+    component: LoginComponent,
+  },
+  { path: 'wish-list',
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: WishListComponent },
+      { path: 'add-gift', component: AddWishGiftComponent },
+    ],
+  },
+  { path: 'friends',
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: FriendsComponent },
+      { path: 'add-friend', component: AddFriendComponent },
+      { path: 'list', component: FriendsListComponent },
+    ],
+  },
+  { path: 'shopping-list',
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: ShoppingListComponent },
+      { path: 'add-gift', component: AddShoppingGiftComponent },
+    ],
+  },
+  { path: 'secret-santa',
+    canActivate: [authGuard],
+    component: SecretSantaComponent,
+  },
+  { path: 'settings',
+    canActivate: [authGuard],
+    component: SettingsComponent,
+  },
 ];
