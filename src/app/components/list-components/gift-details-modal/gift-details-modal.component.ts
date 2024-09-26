@@ -18,7 +18,7 @@ export class GiftDetailsModalComponent {
   constructor(private accountService: AccountService) {}
   @Input() gift?: Gift;
   @Input() type?: string;
-  @Input() buttonText?: string;
+  @Input() buttonType!: 'claim' | 'unclaim' | 'claimed' | 'edit';
   @Input() isShown: boolean = false;
   @Output() onModalClose = new EventEmitter();
   @Output() onButtonClick = new EventEmitter();
@@ -28,19 +28,16 @@ export class GiftDetailsModalComponent {
   currentStatus = this.gift?.status;
   currentUser: User = this.accountService.currentUser;
   editingGift: boolean = false;
-
-  buttonClick(event?: any) {
-    console.log(event);
-    if (event) { // If gift has been edited
+  public get buttonText() : string {
+    return this.buttonType === 'claimed' ? 'This gift has already been claimed.' : this.buttonType.charAt(0).toUpperCase() + this.buttonType.slice(1) + ' gift';
+  }
+  
+  buttonClick(event: any) {
+    if (event === 'edit') {
+      this.editingGift = true;
+    } else {
       this.editingGift = false;
       this.onButtonClick.emit(event);
-    } else {
-      if (this.buttonText === 'Edit gift' && this.editingGift == false) {
-        this.editingGift = true;
-      } else {
-        this.editingGift = false;
-        this.onButtonClick.emit();
-      }
     }
   }
 

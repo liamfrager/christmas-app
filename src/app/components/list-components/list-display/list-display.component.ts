@@ -29,7 +29,7 @@ export class ListDisplayComponent implements OnChanges {
     'Could not load gifts';
   giftInModal?: Gift;
   isModalOpen: boolean = false;
-  modalButtonText: string = '';
+  modalButtonType: 'claim' | 'unclaim' | 'claimed' | 'edit' = 'claimed';
   
   ngOnChanges() {
     if (this.list) {
@@ -52,17 +52,17 @@ export class ListDisplayComponent implements OnChanges {
     this.isModalOpen = true;
     this.giftInModal = gift;
     // update modalButtonText
-    this.modalButtonText = (() => {
+    this.modalButtonType = (() => {
       if (this.list?.type === 'wish') {
-        if (this.isOwnedByCurrentUser) return 'Edit gift';
-        if (!gift.isClaimedByID) return 'Claim gift';
-        if (gift.isClaimedByID === this.accountService.currentUser.id) return 'Unclaim gift';
-        return 'This gift has already been claimed.';
+        if (this.isOwnedByCurrentUser) return 'edit';
+        if (!gift.isClaimedByID) return 'claim';
+        if (gift.isClaimedByID === this.accountService.currentUser.id) return 'unclaim';
+        return 'claimed';
       } else if (this.list?.type === 'shopping') {
-        if (gift.isCustom) return 'Edit gift';
-        return 'Unclaim gift';
+        if (gift.isCustom) return 'edit';
+        return 'unclaim';
       }
-      return '';
+      return 'claimed';
     })() // execute above function
   }
 
@@ -80,22 +80,19 @@ export class ListDisplayComponent implements OnChanges {
    * Handles when the button in `app-gift-details-modal` is clicked.
    */
   onModalButtonClick(event: any) {
-    if (this.list?.type === 'wish') {
-      if (this.isOwnedByCurrentUser) {
-        this.editGift(event as NewGift);
-      } else {
-        if (!this.giftInModal?.isClaimedByID) {
-          this.claimGift();
-        } else if (this.giftInModal?.isClaimedByID === this.accountService.currentUser.id) {
-          this.unclaimGift();
-        }
-      }
-    } else if (this.list?.type === 'shopping') {
-      if (this.giftInModal?.isCustom) {
-        this.editGift(event as NewGift);
-      } else {
+    switch (event) {
+      case 'delete':
+        this.deleteGift();
+        break;
+      case 'claim':
+        this.claimGift();
+        break;
+      case 'unclaim':
         this.unclaimGift();
-      }
+        break;
+      default:
+        this.editGift(event);
+        break;
     }
   }
 
@@ -142,14 +139,15 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is owned by the current user.
    */
   deleteGift() {
-    this.giftListService.deleteGiftFromWishList(this.giftInModal!);
     if (this.list?.type === 'shopping') {
+      this.giftListService.deleteGiftFromShoppingList(this.giftInModal!);
       if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
         delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
       } else {
         this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id);
       }
     } else if (this.list?.type === 'wish') {
+      this.giftListService.deleteGiftFromWishList(this.giftInModal!);
       this.list!.giftsByUser![this.accountService.currentUser.id].gifts.delete(this.giftInModal!.id);
     }
     this.hideModal();
