@@ -101,6 +101,13 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is owned by the current user.
    */
   editGift(newGift: NewGift) {
+    if (this.giftInModal!.isWishedByID !== newGift.isWishedByID) {
+      if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
+        delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
+      } else {
+        this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id);
+      }
+    }
     this.giftInModal = {...this.giftInModal!, ...newGift};
     this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, this.giftInModal);
   }
