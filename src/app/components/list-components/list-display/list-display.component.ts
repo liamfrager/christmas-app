@@ -109,6 +109,13 @@ export class ListDisplayComponent implements OnChanges {
       }
     }
     this.giftInModal = {...this.giftInModal!, ...newGift};
+    console.log(this.list!.giftsByUser)
+    if (!this.list!.giftsByUser![this.giftInModal!.isWishedByID]) {
+      this.list!.giftsByUser![this.giftInModal!.isWishedByID] = {
+        gifts: new Map<string, Gift>(),
+        user: this.giftInModal!.isWishedByUser,
+      };
+    }
     this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, this.giftInModal);
   }
 
