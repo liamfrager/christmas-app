@@ -18,13 +18,15 @@ import { SettingsComponent } from './routes/settings/settings.component';
 // Guards
 import { authGuard } from './guards/auth.guard';
 import { rootRedirectGuard } from './guards/root-redirect.guard';
+import { loginRedirectGuard } from './guards/login-redirect.guard';
 
 export const routes: Routes = [
   { path: '',
     canActivate: [rootRedirectGuard],
-    component: LoginComponent,
+    component: FriendsComponent,
   },
   { path: 'login',
+    canActivate: [loginRedirectGuard],
     component: LoginComponent,
   },
   { path: 'wish-list',

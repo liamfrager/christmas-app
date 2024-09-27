@@ -1,16 +1,23 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { Router } from '@angular/router';
-import { GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { Auth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { User as FirebaseUser } from "firebase/auth";
 import { AccountService } from './account.service';
 import { User } from '../types';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private firebaseService: FirebaseService, private accountService: AccountService, private router: Router) { }
+  constructor(private firebaseService: FirebaseService, private accountService: AccountService, private router: Router) {
+    this.firebaseService.auth.onAuthStateChanged(user => {
+      this.loggedIn.next(!!user);
+    });
+  }
+  private loggedIn = new BehaviorSubject<boolean> (!!localStorage.getItem('currentUser'));
+  public isLoggedIn$ = this.loggedIn.asObservable();
 
   // Function to login with Google.
   loginWithGoogle(): void {
@@ -49,21 +56,18 @@ export class AuthService {
   }
 
   loginUser(user: User) {
+    this.loggedIn.next(true);
     localStorage.setItem('currentUser', JSON.stringify(user))
     this.router.navigate(['/wish-list'])
   }
 
   logoutUser(): void {
     signOut(this.firebaseService.auth).then(() => {
+      this.loggedIn.next(false);
       localStorage.removeItem('currentUser')
       this.router.navigate(['/login']);
     }).catch((error) => {
       console.error('Could not logout')
     });
-  }
-
-  isLoggedIn(): boolean {
-    const user = localStorage.getItem('currentUser');
-    return user ? true : false;
   }
 }
