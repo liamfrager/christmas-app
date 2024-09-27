@@ -11,6 +11,7 @@ export class FriendsService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {}
   db = this.firebaseService.db;
   currentUser = this.accountService.currentUser;
+  currentUserID = this.accountService.currentUserID;
 
   /**
    * Returns whether the given user is friends with the current user.
@@ -18,7 +19,7 @@ export class FriendsService {
    * @returns A promise that resolves to boolean indicating whether the given user is a friend.
    */
   async isFriend(id: string): Promise<boolean> {
-    const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", id);
+    const friendRef = doc(this.db, "lists", this.currentUserID!, "friends-list", id);
     const friendSnap = await getDoc(friendRef);
     const friend = friendSnap.data() as Friend;
     if (friend && friend.status === 'friends') {
@@ -33,7 +34,7 @@ export class FriendsService {
    * @returns A promise that resolves to a Friend object or undefined.
    */
   async getFriend(id: string): Promise<Friend | undefined> {
-    const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", id);
+    const friendRef = doc(this.db, "lists", this.currentUserID!, "friends-list", id);
     const friendSnap = await getDoc(friendRef);
     const friend = friendSnap.data() as Friend;
     if (friend) {
@@ -47,7 +48,7 @@ export class FriendsService {
    * @returns A promise that resolves to an array of Friend objects.
    */
   async getFriends(): Promise<Friend[]> {
-    const friendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"), where('status', '==', 'friends'));
+    const friendsQ = query(collection(this.db, "lists", this.currentUserID!, "friends-list"), where('status', '==', 'friends'));
     const friends = await getDocs(friendsQ);
     if (friends.docs.length == 0) {
       return [];
@@ -60,7 +61,7 @@ export class FriendsService {
    * @returns A promise that resolves to an array of Friend objects.
    */
   async getFriendRequests(): Promise<Friend[]> {
-    const friendRequestsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"), where('status', '==', 'incoming'));
+    const friendRequestsQ = query(collection(this.db, "lists", this.currentUserID!, "friends-list"), where('status', '==', 'incoming'));
     const friendRequests = await getDocs(friendRequestsQ);
     return friendRequests.docs.map(doc => doc.data()) as Array<Friend>;
   }
@@ -70,7 +71,7 @@ export class FriendsService {
    * @returns A promise that resolves to an array of Friend objects.
    */
   async getAllFriendsAndRequests(): Promise<Friend[]> {
-    const allFriendsQ = query(collection(this.db, "lists", this.currentUser.id, "friends-list"));
+    const allFriendsQ = query(collection(this.db, "lists", this.currentUserID!, "friends-list"));
     const allFriends = await getDocs(allFriendsQ);
     return allFriends.docs.map(doc => doc.data()) as Array<Friend>;
   }
@@ -82,13 +83,13 @@ export class FriendsService {
   async sendFriendrequest(newFriend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
-        const newFriendRef = doc(collection(this.db, "lists", this.currentUser.id, "friends-list"), newFriend.id);
+        const newFriendRef = doc(collection(this.db, "lists", this.currentUserID!, "friends-list"), newFriend.id);
         transaction.set(newFriendRef, {
           ...newFriend,
           status: 'outgoing',
         });
 
-        const newFriendRequestRef = doc(collection(this.db, "lists", newFriend.id, "friends-list"), this.currentUser.id);
+        const newFriendRequestRef = doc(collection(this.db, "lists", newFriend.id, "friends-list"), this.currentUserID);
         transaction.set(newFriendRequestRef, {
           ...this.currentUser,
           status: 'incoming',
@@ -107,12 +108,12 @@ export class FriendsService {
   async acceptFriendRequest(newFriend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
-        const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", newFriend.id);
+        const friendRef = doc(this.db, "lists", this.currentUserID!, "friends-list", newFriend.id);
         transaction.update(friendRef, {
           status: 'friends',
         });
 
-        const friendRequestRef = doc(this.db, "lists", newFriend.id, "friends-list", this.currentUser.id);
+        const friendRequestRef = doc(this.db, "lists", newFriend.id, "friends-list", this.currentUserID!);
         transaction.update(friendRequestRef, {
           status: 'friends',
         });
@@ -131,19 +132,19 @@ export class FriendsService {
     try {
       await runTransaction(this.db, async (transaction) => {
         // Remove friend from current user's friends-list.
-        const friendRef = doc(this.db, "lists", this.currentUser.id, "friends-list", friend.id);
+        const friendRef = doc(this.db, "lists", this.currentUserID!, "friends-list", friend.id);
         transaction.delete(friendRef);
         // Remove current user from friend's friends-list.
-        const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUser.id);
+        const userAsFriendRef = doc(this.db, "lists", friend.id, "friends-list", this.currentUserID!);
         transaction.delete(userAsFriendRef);
         // Remove friend's gifts from current user's shopping-list.
-        const friendGiftsInUserShoppingListQ = query(collection(this.db, "lists", this.currentUser.id, "shopping-list"), where('isWishedByID', '==', friend.id));
+        const friendGiftsInUserShoppingListQ = query(collection(this.db, "lists", this.currentUserID!, "shopping-list"), where('isWishedByID', '==', friend.id));
         const friendGiftsInUserShoppingList = await getDocs(friendGiftsInUserShoppingListQ)
         friendGiftsInUserShoppingList.forEach(doc => {
           transaction.delete(doc.ref);
         });
         // Unclaim gifts in friend's wish-list.
-        const userGiftsInFriendWishListQ = query(collection(this.db, "lists", friend.id, "wish-list"), where('isClaimedByID', '==', this.currentUser.id))
+        const userGiftsInFriendWishListQ = query(collection(this.db, "lists", friend.id, "wish-list"), where('isClaimedByID', '==', this.currentUserID!))
         const userGiftsInFriendWishList = await getDocs(userGiftsInFriendWishListQ)
         userGiftsInFriendWishList.forEach(doc => {
           transaction.update(doc.ref, {

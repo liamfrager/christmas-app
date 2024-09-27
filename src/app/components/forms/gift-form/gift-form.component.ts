@@ -42,8 +42,9 @@ export class GiftFormComponent {
   }
 
   async onSubmit(form: NgForm) {
-    const isWishedByID = this.gift?.isCustom ? form.form.value.friend.id : this.accountService.currentUser.id
+    const isWishedByID = this.type === 'shopping' ? form.form.value.friend.id : this.accountService.currentUserID
     const isWishedByUser = this.gift?.isWishedByID === isWishedByID ? this.gift?.isWishedByUser : await this.accountService.getUserInfo(isWishedByID);
+    console.log(isWishedByID, isWishedByUser)
     const newGift: NewGift = {
       name: form.form.value.gift,
       url: form.form.value.url,
@@ -51,7 +52,7 @@ export class GiftFormComponent {
       isWishedByID: isWishedByID,
       isWishedByUser: isWishedByUser,
     }
-    if (this.gift) { // If gift already exists.
+    if (this.gift) { // If editing gift.
       if (JSON.stringify(this.gift) == JSON.stringify({...this.gift, ...newGift})) { // If gift hasn't changed.
         this.onFormSubmit.emit(false);
       } else {
@@ -59,7 +60,6 @@ export class GiftFormComponent {
         this.onFormSubmit.emit(newGift);
       }
     } else {
-      this.giftListService.createGiftInShoppingList(newGift, this.selectedFriend!);
       this.onFormSubmit.emit(newGift);
     }
   }

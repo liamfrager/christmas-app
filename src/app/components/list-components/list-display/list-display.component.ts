@@ -33,7 +33,7 @@ export class ListDisplayComponent implements OnChanges {
   
   ngOnChanges() {
     if (this.list) {
-      const currentUserID = this.accountService.currentUser.id;
+      const currentUserID = this.accountService.currentUserID;
       this.isOwnedByCurrentUser = this.list.owner.id === currentUserID;
     }
     this.noGiftsMessage = 
@@ -56,7 +56,7 @@ export class ListDisplayComponent implements OnChanges {
       if (this.list?.type === 'wish') {
         if (this.isOwnedByCurrentUser) return 'edit';
         if (!gift.isClaimedByID) return 'claim';
-        if (gift.isClaimedByID === this.accountService.currentUser.id) return 'unclaim';
+        if (gift.isClaimedByID === this.accountService.currentUserID) return 'unclaim';
         return 'claimed';
       } else if (this.list?.type === 'shopping') {
         if (gift.isCustom) return 'edit';
@@ -125,7 +125,7 @@ export class ListDisplayComponent implements OnChanges {
    */
   claimGift() {
     this.giftListService.addGiftToShoppingList(this.giftInModal!);
-    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, {...this.giftInModal!, isClaimedByID: this.accountService.currentUser.id});
+    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, {...this.giftInModal!, isClaimedByID: this.accountService.currentUserID});
     this.hideModal();
   }
 
@@ -162,7 +162,7 @@ export class ListDisplayComponent implements OnChanges {
       }
     } else if (this.list?.type === 'wish') {
       this.giftListService.deleteGiftFromWishList(this.giftInModal!);
-      this.list!.giftsByUser![this.accountService.currentUser.id].gifts.delete(this.giftInModal!.id);
+      this.list!.giftsByUser![this.accountService.currentUserID!].gifts.delete(this.giftInModal!.id);
     }
     this.hideModal();
   }
@@ -175,8 +175,7 @@ export class ListDisplayComponent implements OnChanges {
   updateStatus(status: 'claimed' | 'purchased' | 'delivered' | 'wrapped' | 'under tree') {
     try {
       if (this.giftInModal) {
-        const currentUserID = this.accountService.currentUser.id;
-        const res = updateDoc(doc(this.firebaseService.db, 'lists', currentUserID!, 'shopping-list', this.giftInModal.id), {
+        const res = updateDoc(doc(this.firebaseService.db, 'lists', this.accountService.currentUserID!, 'shopping-list', this.giftInModal.id), {
           status: status
         });
         this.list!.giftsByUser![this.giftInModal.isWishedByID].gifts.get(this.giftInModal.id)!.status = status;

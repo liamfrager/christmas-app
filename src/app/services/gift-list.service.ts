@@ -11,7 +11,6 @@ import { Gift, List, NewGift, Gifts, Friend, User } from '../types';
 export class GiftListService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {};
   db = this.firebaseService.db;
-  currentUser = this.accountService.currentUser
 
   /**
    * Fetches the wish-list of a given user.
@@ -48,12 +47,11 @@ export class GiftListService {
    * @returns A promise that resolves to a List object containing the data for the current user's shopping-list.
    */
   async getShoppingListInfo(): Promise<List | undefined> {
-    const currentUserID = this.accountService.currentUser.id;
-    if (currentUserID) {
+    if (this.accountService.currentUserID) {
       // get all gifts from shopping-list
-      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', currentUserID, 'shopping-list'), orderBy('isWishedByUser')));
+      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', this.accountService.currentUserID, 'shopping-list'), orderBy('isWishedByUser')));
       // convert DocumentData to List
-      const owner = await this.accountService.getUserInfo(currentUserID)
+      const owner = await this.accountService.getUserInfo(this.accountService.currentUserID)
       let list: List = {
         type: 'shopping',
         owner: owner!,
@@ -81,8 +79,9 @@ export class GiftListService {
    * @param gift - A NewGift object containing the data for the gift being added.
    */
   async addGiftToWishList(gift: NewGift) {
+    console.log('adding gift: ', gift)
     await runTransaction(this.db, async (transaction) => {
-      const giftRef = doc(collection(this.db, 'lists', this.currentUser.id, 'wish-list'))
+      const giftRef = doc(collection(this.db, 'lists', this.accountService.currentUserID!, 'wish-list'))
       transaction.set(giftRef, {
         ...gift,
         id: giftRef.id,
@@ -97,7 +96,7 @@ export class GiftListService {
   async addGiftToShoppingList(gift: Gift) {
     await runTransaction(this.db, async (transaction) => {
       // update current user's shopping-list
-      const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
+      const shoppingRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'shopping-list', gift.id);
       transaction.set(shoppingRef, {
         ...gift,
         isWishedByUser: await this.accountService.getUserInfo(gift.isWishedByID),
@@ -107,7 +106,7 @@ export class GiftListService {
       // update isWishedBy user's wish-list
       const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.id);
       transaction.update(wishRef, {
-        isClaimedByID: this.currentUser.id,
+        isClaimedByID: this.accountService.currentUserID!,
       });
     });
   }
@@ -118,7 +117,7 @@ export class GiftListService {
    */
   async createGiftInShoppingList(gift: NewGift, friend: Friend) {
     await runTransaction(this.db, async (transaction) => {
-      const giftRef = doc(collection(this.db, 'lists', this.currentUser.id, 'shopping-list'));
+      const giftRef = doc(collection(this.db, 'lists', this.accountService.currentUserID!, 'shopping-list'));
       transaction.set(giftRef, {
         ...gift,
         id: giftRef.id,
@@ -139,10 +138,10 @@ export class GiftListService {
       let refs = [];
       
       if (oldGift.isCustom) {
-        const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', oldGift.id);
+        const shoppingRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'shopping-list', oldGift.id);
         refs.push(shoppingRef);
       } else {
-        const wishRef = doc(this.db, 'lists', this.currentUser.id, 'wish-list', oldGift.id);
+        const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-list', oldGift.id);
         refs.push(wishRef);
         if (oldGift.isClaimedByID) {
           const shoppingRef = doc(this.db, 'lists', oldGift.isClaimedByID, 'shopping-list', oldGift.id);
@@ -164,7 +163,7 @@ export class GiftListService {
   async deleteGiftFromWishList(gift: Gift) {
     await runTransaction(this.db, async (transaction) => {
       // update current user's wish-list
-      const wishRef = doc(this.db, 'lists', this.currentUser.id, 'wish-list', gift.id);
+      const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-list', gift.id);
       transaction.delete(wishRef);
       
       // update isClaimedBy user's shopping-list
@@ -184,7 +183,7 @@ export class GiftListService {
   async deleteGiftFromShoppingList(gift: Gift) {
     await runTransaction(this.db, async (transaction) => {
       // update current user's shopping-list
-      const shoppingRef = doc(this.db, 'lists', this.currentUser.id, 'shopping-list', gift.id);
+      const shoppingRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'shopping-list', gift.id);
       transaction.delete(shoppingRef);
 
       // update isWishedBy user's wish-list

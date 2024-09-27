@@ -11,21 +11,21 @@ import { User } from '../types';
 export class AccountService {
   constructor(private firebaseService: FirebaseService) {}
   
-  getCurrentUserID(): Promise<string | undefined> {
-    return new Promise<string | undefined>((resolve, reject) => {
-      const unsubscribe = this.firebaseService.auth.onAuthStateChanged(user => {
-          unsubscribe();
-          resolve(user?.uid);
-      }, reject);
-    });
+  get currentUserID(): string | undefined {
+    return this.firebaseService.auth.currentUser?.uid;
   }
   
   get currentUser(): User {
-    const currentUser = localStorage.getItem('currentUser')
+    const currentUser = this.firebaseService.auth.currentUser;
     if (currentUser) {
-      return JSON.parse(currentUser) as User
+      return {
+        id: currentUser.uid,
+        displayName: currentUser.displayName,
+        email: currentUser.email,
+        pfp: currentUser.photoURL,
+      } as User;
     } else {
-      throw Error('`currentUser` does not exist in local storage.')
+      throw Error('`currentUser` is not logged in');
     }
   };
 
