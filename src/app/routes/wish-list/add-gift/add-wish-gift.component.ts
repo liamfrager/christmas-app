@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { GiftFormComponent } from "../../../components/forms/gift-form/gift-form.component";
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
 import { Router } from '@angular/router';
+import { GiftListService } from '../../../services/gift-list.service';
+import { NewGift } from '../../../types';
 
 
 @Component({
@@ -12,9 +14,10 @@ import { Router } from '@angular/router';
   styleUrl: './add-wish-gift.component.css'
 })
 export class AddWishGiftComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private giftListService: GiftListService) {}
 
-  reroute() {
+  async onSubmit(gift: NewGift) {
+    await this.giftListService.addGiftToWishList(gift);
     this.router.navigate(['/wish-list']);
   }
 }

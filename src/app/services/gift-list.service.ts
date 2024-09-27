@@ -81,6 +81,7 @@ export class GiftListService {
    * @param gift - A NewGift object containing the data for the gift being added.
    */
   async addGiftToWishList(gift: NewGift) {
+    console.log('adding gift: ', gift)
     await runTransaction(this.db, async (transaction) => {
       const giftRef = doc(collection(this.db, 'lists', this.currentUser.id, 'wish-list'))
       transaction.set(giftRef, {
