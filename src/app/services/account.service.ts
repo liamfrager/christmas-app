@@ -13,20 +13,19 @@ export class AccountService {
   
   get currentUserID(): string | undefined {
     return this.firebaseService.auth.currentUser?.uid;
-    // return new Promise<string | undefined>((resolve, reject) => {
-    //   const unsubscribe = this.firebaseService.auth.onAuthStateChanged(user => {
-    //       unsubscribe();
-    //       resolve(user?.uid);
-    //   }, reject);
-    // });
   }
   
   get currentUser(): User {
-    const currentUser = localStorage.getItem('currentUser')
+    const currentUser = this.firebaseService.auth.currentUser;
     if (currentUser) {
-      return JSON.parse(currentUser) as User
+      return {
+        id: currentUser.uid,
+        displayName: currentUser.displayName,
+        email: currentUser.email,
+        pfp: currentUser.photoURL,
+      } as User;
     } else {
-      throw Error('`currentUser` does not exist in local storage.')
+      throw Error('`currentUser` is not logged in');
     }
   };
 

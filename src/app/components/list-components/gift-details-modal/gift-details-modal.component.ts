@@ -26,7 +26,6 @@ export class GiftDetailsModalComponent {
 
   headingButtons = ['close'];
   currentStatus = this.gift?.status;
-  currentUser: User = this.accountService.currentUser;
   editingGift: boolean = false;
   public get buttonText() : string {
     return this.buttonType === 'claimed' ? 'This gift has already been claimed.' : this.buttonType.charAt(0).toUpperCase() + this.buttonType.slice(1) + ' gift';

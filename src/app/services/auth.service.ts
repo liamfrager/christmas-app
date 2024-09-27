@@ -16,7 +16,7 @@ export class AuthService {
       this.loggedIn.next(!!user);
     });
   }
-  private loggedIn = new BehaviorSubject<boolean> (!!localStorage.getItem('currentUser'));
+  private loggedIn = new BehaviorSubject<boolean> (!!localStorage.getItem('isLoggedIn'));
   public isLoggedIn$ = this.loggedIn.asObservable();
 
   // Function to login with Google.
@@ -57,17 +57,17 @@ export class AuthService {
 
   loginUser(user: User) {
     this.loggedIn.next(true);
-    localStorage.setItem('currentUser', JSON.stringify(user))
-    this.router.navigate(['/wish-list'])
+    localStorage.setItem('isLoggedIn', 'true');
+    this.router.navigate(['/wish-list']);
   }
 
   logoutUser(): void {
     signOut(this.firebaseService.auth).then(() => {
       this.loggedIn.next(false);
-      localStorage.removeItem('currentUser')
+      localStorage.removeItem('isLoggedIn');
       this.router.navigate(['/login']);
     }).catch((error) => {
-      console.error('Could not logout')
+      console.error('Could not logout');
     });
   }
 }
