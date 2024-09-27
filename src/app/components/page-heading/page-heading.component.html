@@ -1,6 +1,6 @@
 <div class="heading">
     <h2>{{headingText}}</h2>
-    <div>
+    <div *ngIf="buttons">
       <app-icon *ngFor="let icon of buttons"
         [icon]="icon"
         (iconClicked)="onIconClick.emit(icon)"

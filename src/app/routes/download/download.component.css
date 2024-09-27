@@ -1,0 +1,15 @@
+.centered {
+  display: flex;
+  justify-content: center;
+}
+
+.link-style {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: center;
+}
+
+.link-style:hover {
+  color: darkblue;
+}
