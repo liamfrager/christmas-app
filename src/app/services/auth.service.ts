@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { Router } from '@angular/router';
-import { Auth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { Auth, browserLocalPersistence, GoogleAuthProvider, setPersistence, signInWithPopup, signOut } from 'firebase/auth';
 import { User as FirebaseUser } from "firebase/auth";
 import { AccountService } from './account.service';
 import { User } from '../types';
@@ -11,13 +11,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private firebaseService: FirebaseService, private accountService: AccountService, private router: Router) {
-    this.firebaseService.auth.onAuthStateChanged(user => {
-      this.loggedIn.next(!!user);
-    });
-  }
-  private loggedIn = new BehaviorSubject<boolean> (!!localStorage.getItem('isLoggedIn'));
-  public isLoggedIn$ = this.loggedIn.asObservable();
+  constructor(private firebaseService: FirebaseService, private accountService: AccountService, private router: Router) {}
 
   // Function to login with Google.
   loginWithGoogle(): void {
@@ -38,10 +32,8 @@ export class AuthService {
         const user = await this.accountService.getUserInfo(fbUser.uid);
         if (!user) {
           const newUser = this.accountService.createNewUser(fbUser);
-          this.loginUser(newUser);
-        } else {
-          this.loginUser(user);
         }
+        this.loginUser();
       }).catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
@@ -55,15 +47,19 @@ export class AuthService {
     });
   }
 
-  loginUser(user: User) {
-    this.loggedIn.next(true);
-    localStorage.setItem('isLoggedIn', 'true');
-    this.router.navigate(['/wish-list']);
+  loginUser() {
+    setPersistence(this.firebaseService.auth, browserLocalPersistence)
+    .then(() => {
+      this.router.navigate(['/wish-list']);
+      localStorage.setItem('isLoggedIn', 'true');
+    })
+    .catch((error) => {
+      console.error('Error setting persistence', error);
+    });
   }
 
   logoutUser(): void {
     signOut(this.firebaseService.auth).then(() => {
-      this.loggedIn.next(false);
       localStorage.removeItem('isLoggedIn');
       this.router.navigate(['/login']);
     }).catch((error) => {

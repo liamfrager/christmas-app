@@ -23,7 +23,7 @@ import { loginRedirectGuard } from './guards/login-redirect.guard';
 export const routes: Routes = [
   { path: '',
     canActivate: [rootRedirectGuard],
-    component: FriendsComponent,
+    component: LoginComponent,
   },
   { path: 'login',
     canActivate: [loginRedirectGuard],
