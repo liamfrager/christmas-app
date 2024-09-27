@@ -19,11 +19,12 @@ import { SettingsComponent } from './routes/settings/settings.component';
 import { authGuard } from './guards/auth.guard';
 import { rootRedirectGuard } from './guards/root-redirect.guard';
 import { loginRedirectGuard } from './guards/login-redirect.guard';
+import { DownloadComponent } from './routes/download/download.component';
 
 export const routes: Routes = [
   { path: '',
     canActivate: [rootRedirectGuard],
-    component: LoginComponent,
+    component: DownloadComponent,
   },
   { path: 'login',
     canActivate: [loginRedirectGuard],

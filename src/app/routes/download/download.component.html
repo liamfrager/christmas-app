@@ -1,0 +1,27 @@
+<app-page-heading class="centered" headingText="Welcome to The List!"></app-page-heading>
+
+<!-- iOS Instructions -->
+<ng-container *ngIf="userOS === 'iOS'; else androidInstructions">
+  <p>For the best experience follow the steps below to add <i>The List</i> to your homescreen.</p>
+  <ul>
+    <li>Tap the Share icon in Safari.</li>
+    <li>Choose "Add to Home Screen".</li>
+    <li>Press "Add".</li>
+  </ul>
+</ng-container>
+<!-- Android Instructions -->
+<ng-template #androidInstructions>
+  <ng-container *ngIf="userOS === 'Android'; else notMobile">
+    <p>For the best experience follow the steps below to add <i>The List</i> to your homescreen.</p>
+    <ul>
+      <li>Open the menu.</li>
+      <li>Select "Add to Home Screen".</li>
+    </ul>
+  </ng-container>
+</ng-template>
+<!-- Not Mobile Instructions -->
+<ng-template #notMobile>
+  <p>Uh, Oh! You don't seem to be on a mobile device.<br><br>For the best experience, try again from another device and add the app to your homescreen.</p>
+</ng-template>
+<br>
+<p class="link-style" (click)="continueInBrowser()">Continue in browser.</p>
