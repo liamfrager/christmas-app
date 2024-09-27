@@ -1,0 +1,17 @@
+{
+  "name": "The List",
+  "short_name": "TheList",
+  "theme_color": "#d64541",
+  "background_color": "#ffffcc.",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "icons": [
+    {
+      "src": "icons/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ]
+}
