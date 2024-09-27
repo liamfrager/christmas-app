@@ -11,13 +11,14 @@ import { User } from '../types';
 export class AccountService {
   constructor(private firebaseService: FirebaseService) {}
   
-  getCurrentUserID(): Promise<string | undefined> {
-    return new Promise<string | undefined>((resolve, reject) => {
-      const unsubscribe = this.firebaseService.auth.onAuthStateChanged(user => {
-          unsubscribe();
-          resolve(user?.uid);
-      }, reject);
-    });
+  get currentUserID(): string | undefined {
+    return this.firebaseService.auth.currentUser?.uid;
+    // return new Promise<string | undefined>((resolve, reject) => {
+    //   const unsubscribe = this.firebaseService.auth.onAuthStateChanged(user => {
+    //       unsubscribe();
+    //       resolve(user?.uid);
+    //   }, reject);
+    // });
   }
   
   get currentUser(): User {

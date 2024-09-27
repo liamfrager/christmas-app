@@ -17,7 +17,6 @@ import { FriendsService } from '../../../services/friends.service';
 })
 export class AddFriendComponent implements OnInit {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService, private friendsService: FriendsService) {}
-  currentUser = this.accountService.currentUser;;
   db = this.firebaseService.db;
   searchResults: Array<User> | null | undefined;
   friendsStatuses: Record<string, string> = {};
@@ -56,7 +55,7 @@ export class AddFriendComponent implements OnInit {
       const docRef = await getDocs(q);
       let results: Array<User> = [];
       docRef.forEach(async snap => {
-        if ((snap.data() as User).id !== this.currentUser.id) {
+        if ((snap.data() as User).id !== this.accountService.currentUserID) {
           results.push(snap.data() as User);
         }
       });

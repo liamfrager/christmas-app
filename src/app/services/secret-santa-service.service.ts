@@ -18,7 +18,7 @@ export class SecretSantaServiceService {
   }
 
   async createSecretSanta(giftingMap: Map<string, string>, year: number, name: string) {
-    const currentUserID = this.accountService.currentUser.id;
+    const currentUserID = this.accountService.currentUserID;
     if(currentUserID) {
       await runTransaction(this.db, async (transaction) => {
         const groupRef = doc(collection(this.db, "groups"));

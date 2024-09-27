@@ -42,7 +42,7 @@ export class GiftFormComponent {
   }
 
   async onSubmit(form: NgForm) {
-    const isWishedByID = this.type === 'shopping' ? form.form.value.friend.id : this.accountService.currentUser.id
+    const isWishedByID = this.type === 'shopping' ? form.form.value.friend.id : this.accountService.currentUserID
     const isWishedByUser = this.gift?.isWishedByID === isWishedByID ? this.gift?.isWishedByUser : await this.accountService.getUserInfo(isWishedByID);
     console.log(isWishedByID, isWishedByUser)
     const newGift: NewGift = {
