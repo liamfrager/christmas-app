@@ -2,10 +2,10 @@
   "name": "The List",
   "short_name": "TheList",
   "theme_color": "#d64541",
-  "background_color": "#ffffcc.",
+  "background_color": "#ffffcc",
   "display": "standalone",
-  "scope": "./",
-  "start_url": "./",
+  "scope": "/",
+  "start_url": "/index.html",
   "icons": [
     {
       "src": "icons/icon.png",
