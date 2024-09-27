@@ -1,17 +1,12 @@
 import { Component } from "@angular/core";
-import { AuthService } from "../../services/auth.service.js";
+import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
+import { GoogleSignInComponent } from "../../components/forms/buttons/google-sign-in/google-sign-in.component";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [PageHeadingComponent, GoogleSignInComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
-  constructor(private authService: AuthService) {}
-
-  onLogin() {
-    this.authService.loginWithGoogle()
-  }
-}
+export class LoginComponent {}
