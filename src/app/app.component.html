@@ -3,5 +3,7 @@
 <div class="body">
   <router-outlet />
 </div>
-<div class="filler-footer"></div>
-<app-footer></app-footer>
+<ng-container *ngIf="authService.isLoggedIn$ | async">
+  <div class="filler-footer"></div>
+  <app-footer></app-footer>
+</ng-container>
