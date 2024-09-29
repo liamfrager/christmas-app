@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer [ngClass]="{'footer': true, 'footer-padding': isPWA}">
     <a (click)="selectMenu(item.route)" *ngFor="let item of menu_items; let i = index;" class="link">
         <span [ngClass]="{'material-symbols-outlined menu_item': true, 'selected': i === selectedIndex}">{{item.icon}}</span>
     </a>
