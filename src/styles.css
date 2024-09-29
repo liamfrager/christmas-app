@@ -10,6 +10,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
 }
 /* Subheading on each page and functional icons */
 .heading {
@@ -58,9 +59,6 @@ h1 {
 h2 {
   font-size: 40px;
   margin: 0 0 10px 0;
-}
-p {
-  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 body {
