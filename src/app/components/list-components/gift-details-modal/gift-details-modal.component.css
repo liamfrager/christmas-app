@@ -89,3 +89,15 @@
 .bottom-button, .bottom-button-wrap {
   width: 100%;
 }
+
+.link-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.pad-r {
+  margin-right: .5em;
+}
