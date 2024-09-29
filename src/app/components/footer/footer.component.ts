@@ -13,6 +13,7 @@ import { filter } from 'rxjs/operators';
 export class FooterComponent implements OnInit {
   constructor(private router: Router) {}
   
+  isPWA = window.matchMedia('(display-mode: standalone)').matches;
   selectedIndex: number = 0;
   
   ngOnInit(): void {

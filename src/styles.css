@@ -10,6 +10,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
 }
 /* Subheading on each page and functional icons */
 .heading {
@@ -59,9 +60,6 @@ h2 {
   font-size: 40px;
   margin: 0 0 10px 0;
 }
-p {
-  font-family: Georgia, "Times New Roman", Times, serif;
-}
 
 body {
   background-color: cornsilk;
@@ -79,6 +77,7 @@ button, input[type="submit"] {
     border-radius: .5em;
     padding: .5em;
     margin: 0 0 10px 0;
+    width: 100%;
 
     &:hover {
       color: white;

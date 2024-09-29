@@ -1,11 +1,11 @@
 .show {
-  transition: all .7s ease-in-out;
+  transition: all .3s ease-in-out;
   transform: translateX(-3px);
   width: 100%;
 }
 
 .hide {
-  transition: all .7s ease-in-out;
+  transition: all .3s ease-in-out;
   transform: translateX(100vw);
   width: 300%;
 }
@@ -88,4 +88,15 @@
 
 .bottom-button, .bottom-button-wrap {
   width: 100%;
+}
+
+.link-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+}
+
+.pad-r {
+  margin-right: .5em;
 }

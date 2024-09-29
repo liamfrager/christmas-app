@@ -10,12 +10,11 @@ import { GiftFormComponent } from "../../forms/gift-form/gift-form.component";
 @Component({
   selector: 'app-gift-details-modal',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, GiftFormComponent],
+  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, GiftFormComponent, IconComponent],
   templateUrl: './gift-details-modal.component.html',
   styleUrl: './gift-details-modal.component.css'
 })
 export class GiftDetailsModalComponent {
-  constructor(private accountService: AccountService) {}
   @Input() gift?: Gift;
   @Input() type?: string;
   @Input() buttonType!: 'claim' | 'unclaim' | 'claimed' | 'edit';
