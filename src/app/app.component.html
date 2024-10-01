@@ -1,9 +1,9 @@
 <app-header></app-header>
-<div class="filler-header"></div>
+<app-filler size="header"></app-filler>
 <div class="body">
   <router-outlet />
 </div>
 <ng-container *ngIf="firebaseService.auth.currentUser">
-  <div class="filler-footer"></div>
+  <app-filler size="footer"></app-filler>
   <app-footer></app-footer>
 </ng-container>
