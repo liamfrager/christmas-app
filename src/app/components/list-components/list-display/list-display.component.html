@@ -28,7 +28,9 @@
       </div>
     </div>
     <!-- If no gifts -->
-    <ng-template #noGifts>{{noGiftsMessage}}</ng-template>
+    <ng-template #noGifts>
+      <p>{{noGiftsMessage}}</p>
+    </ng-template>
     <!-- Gift details slide-over -->
     <app-gift-details-modal
       [gift]="giftInModal"

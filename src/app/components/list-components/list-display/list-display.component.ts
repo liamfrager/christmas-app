@@ -3,10 +3,10 @@ import { GiftDisplayComponent } from '../gift-display/gift-display.component';
 import { GiftListService } from '../../../services/gift-list.service';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../../services/account.service';
-import { DocumentData, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { GiftDetailsModalComponent } from '../gift-details-modal/gift-details-modal.component';
 import { FirebaseService } from '../../../services/firebase.service';
-import { Gift, Gifts, List, NewGift, User } from '../../../types';
+import { Gift, List, NewGift } from '../../../types';
 import { UserDisplayComponent } from '../../user-display/user-display.component';
 
 @Component({
@@ -20,7 +20,7 @@ export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};
   @Input({ required: true }) list?: List;
   
-  isOwnedByCurrentUser: boolean = true;
+  get isOwnedByCurrentUser(): boolean { return this.list?.owner.id === this.accountService.currentUserID };
   noGiftsMessage: string = 
     this.list ?
     this.isOwnedByCurrentUser ?
@@ -32,10 +32,6 @@ export class ListDisplayComponent implements OnChanges {
   modalButtonType: 'claim' | 'unclaim' | 'claimed' | 'edit' = 'claimed';
   
   ngOnChanges() {
-    if (this.list) {
-      const currentUserID = this.accountService.currentUserID;
-      this.isOwnedByCurrentUser = this.list.owner.id === currentUserID;
-    }
     this.noGiftsMessage = 
       this.list ?
       this.isOwnedByCurrentUser ?
