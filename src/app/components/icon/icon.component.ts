@@ -10,6 +10,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 export class IconComponent implements OnChanges {
   @Input({required: true}) icon!: string;
   @Input() hover: boolean = true;
+  @Input() size: string = '30px'; // Default size.
   @Output() iconClicked = new EventEmitter();
 
   style = "material-symbols-outlined icon"
