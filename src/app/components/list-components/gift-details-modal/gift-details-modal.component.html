@@ -15,6 +15,7 @@
       </a>
       <!-- Shopping list status bar -->
       <div *ngIf="type === 'shopping'" class="status-display">
+        <h4 class="track-gift">Track your gift:</h4>
         <div class="line">
           <div *ngFor="let status of statuses" class="node" [style]="status.name === gift.status ? 'color: green' : ''">
             <app-icon
