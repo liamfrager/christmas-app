@@ -33,3 +33,7 @@
 .cursor-arrow {
   cursor: default;
 }
+
+.isClaimedByUser {
+  color: #4daf7c;
+}

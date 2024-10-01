@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Gift } from '../../../types';
 import { CommonModule } from '@angular/common';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'app-gift-display',
@@ -10,11 +11,17 @@ import { CommonModule } from '@angular/common';
   styleUrl: './gift-display.component.css'
 })
 export class GiftDisplayComponent implements OnChanges {
+  constructor(private accountService: AccountService) {};
   @Input({required: true}) gift!: Gift;
   @Input({required: true}) checkType!: 'circle' | 'check_circle' | 'paid' | 'local_shipping' | 'featured_seasonal_and_gifts' | 'park' | 'error';
   @Output() giftClicked = new EventEmitter();
 
   checkboxTitle?: string;
+  get claimedByUser(): string {
+    if (this.gift.isClaimedByID === this.accountService.currentUserID)
+      return 'isClaimedByUser';
+    return 'false';
+  }
 
   ngOnChanges(): void {
     this.checkboxTitle = this.checkType === 'error' ? `This gift has been deleted by ${this.gift.isWishedByUser?.displayName}. It is no longer on their wish list.` : '';
