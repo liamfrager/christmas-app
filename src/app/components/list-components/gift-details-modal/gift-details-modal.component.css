@@ -104,3 +104,20 @@
 .track-gift {
   align-self: flex-start;
 }
+
+.error {
+  color: #d64541;
+  text-justify: center;
+  display: flex;
+  flex-direction: row;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 1em;
+  }
+}
+
+.error app-icon .material-symbols-outlined {
+  font-size: 2px;
+}
