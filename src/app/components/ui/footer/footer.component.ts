@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'app-footer',
@@ -11,7 +12,7 @@ import { filter } from 'rxjs/operators';
   styleUrl: './footer.component.css',
 })
 export class FooterComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private accountService: AccountService) {}
   
   isPWA = window.matchMedia('(display-mode: standalone)').matches;
   selectedIndex: number = 0;
@@ -44,7 +45,7 @@ export class FooterComponent implements OnInit {
     },
     {
       route: '/settings',
-      icon: 'settings',
+      pfp: this.accountService.currentUser.pfp,
     },
   ];
 
