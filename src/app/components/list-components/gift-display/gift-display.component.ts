@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Gift } from '../../../types';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from "../../icon/icon.component";
 import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'app-gift-display',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   templateUrl: './gift-display.component.html',
   styleUrl: './gift-display.component.css'
 })
