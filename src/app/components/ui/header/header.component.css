@@ -1,0 +1,16 @@
+:host {
+  font-size: 1.3em;
+  text-align: center;
+  background-color: #d64541;
+  color: white;
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  width: 100vw;
+  height: 4em;
+  margin-bottom: 1.55em;
+  box-shadow:
+    0 0 0 .05em #26251d,
+    0 0 0 1.5em white,
+    0 0 0 1.55em #26251d;
+}

@@ -1,10 +1,13 @@
-<div *ngIf="friends; else loadingFriends">
-  <div *ngIf="friends.length > 0; else noFriends">
-    <app-user-display *ngFor="let friend of friends"
+<ng-container *ngIf="friends; else loadingFriends">
+  <ng-container *ngIf="friends.length > 0; else noFriends">
+    <ng-container *ngFor="let friend of friends">
+      <app-user-display
       [user]="friend"
-    >
-    </app-user-display>
-  </div>
+      >
+      </app-user-display>
+      <hr>
+    </ng-container>
+  </ng-container>
   <ng-template #noFriends>There is nobody in your friends list.</ng-template>
-</div>
+</ng-container>
 <ng-template #loadingFriends>Loading friends list...</ng-template>

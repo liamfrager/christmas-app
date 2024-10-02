@@ -3,10 +3,10 @@
     display: flex;
     position: fixed;
     justify-content: space-around;
-    align-items: end;
+    align-items: center;
     bottom: 0;
-    left: 0;
     width: 100vw;
+    height: 4em;
 }
 
 .footer-padding {

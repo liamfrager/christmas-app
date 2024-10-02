@@ -12,19 +12,6 @@
   box-sizing: border-box;
   font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
 }
-/* Subheading on each page and functional icons */
-.heading {
-  display: flex;
-  justify-content: space-between;
-}
-.heading span {
-  font-size: 30px;
-  color: #26251d;
-  padding: 0px 10px;
-}
-.material-symbols-outlined {
-  font-size: 30px;
-}
 
 /* Friends page */
 #friends {
@@ -45,7 +32,7 @@ fieldset {
   border: 1px solid black;
   border-radius: .5em;
   padding: .5em;
-  font-size: .8em;
+  font-size: 1em;
 }
 
 /* ... */
@@ -61,12 +48,14 @@ h2 {
   margin: 0 0 10px 0;
 }
 
+hr {
+  border: .5px solid #26251d44;
+  margin: 0;
+}
+
 body {
   background-color: cornsilk;
   margin: 0;
-}
-main {
-  padding: 10px;
 }
 
 /* Buttons */

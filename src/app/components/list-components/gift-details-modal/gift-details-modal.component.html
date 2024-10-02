@@ -1,6 +1,10 @@
 <div [ngClass]="{'show': isShown, 'hide': !isShown}" class="backdrop">
   <div *ngIf="gift" class="modal">
     <ng-container *ngIf="!editingGift; else editForm">
+      <span *ngIf="gift.isDeleted" class="error">
+        <div><app-icon icon="error" [hover]="false" size="1.5em"></app-icon></div>
+        <p>{{'This gift has been deleted by ' + this.gift.isWishedByUser.displayName + '. It is no longer on their wish list.'}}</p>
+      </span>
       <app-page-heading
         [headingText]="gift.name"
         [buttons]="headingButtons"
@@ -15,6 +19,7 @@
       </a>
       <!-- Shopping list status bar -->
       <div *ngIf="type === 'shopping'" class="status-display">
+        <h4 class="track-gift">Track your gift:</h4>
         <div class="line">
           <div *ngFor="let status of statuses" class="node" [style]="status.name === gift.status ? 'color: green' : ''">
             <app-icon
@@ -47,4 +52,5 @@
       ></app-pop-up>
     </ng-template>
   </div>
+  <app-filler size="footer"></app-filler>
 </div>

@@ -11,7 +11,7 @@
 
 .gift-name {
   width: 100%;
-  border-bottom: .5px solid black;
+  border-bottom: .5px solid #26251d44;
   padding: .8em .3em;
   white-space: nowrap;
   overflow: hidden;
@@ -32,4 +32,8 @@
 
 .cursor-arrow {
   cursor: default;
+}
+
+.isClaimedByUser {
+  color: #4daf7c;
 }
