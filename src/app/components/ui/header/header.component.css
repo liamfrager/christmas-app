@@ -8,10 +8,9 @@
   top: 0;
   width: 100vw;
   height: 4em;
-  margin-bottom: 31px;
+  margin-bottom: 1.55em;
   box-shadow:
-    0 0 0 1px #26251d,
-    0 0 0 30px white,
-    0 0 0 31px #26251d;
-  /* border-radius: 0px 0px 50% 50%; */
+    0 0 0 .05em #26251d,
+    0 0 0 1.5em white,
+    0 0 0 1.55em #26251d;
 }

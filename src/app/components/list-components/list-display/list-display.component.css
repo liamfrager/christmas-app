@@ -12,10 +12,6 @@
   background: green;
 }
 
-hr {
-  border: .5px solid black;
-}
-
 .gift-list {
   width: 100%;
   transition: all .3s ease-in-out;

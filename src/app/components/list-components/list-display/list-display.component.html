@@ -14,6 +14,7 @@
           [user]="giftByUser.value.user"
         >
         </app-user-display>
+        <hr>
         <ul>
           <li *ngFor="let gift of giftByUser.value.gifts | keyvalue">
             <app-gift-display

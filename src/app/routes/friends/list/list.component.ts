@@ -6,11 +6,12 @@ import { GiftListService } from '../../../services/gift-list.service';
 import { FriendsService } from '../../../services/friends.service';
 import { PopUpComponent } from '../../../components/pop-up/pop-up.component';
 import { CommonModule } from '@angular/common';
+import { FillerComponent } from "../../../components/ui/filler/filler.component";
 
 @Component({
   selector: 'app-friends-list',
   standalone: true,
-  imports: [ListDisplayComponent, PopUpComponent, CommonModule],
+  imports: [ListDisplayComponent, PopUpComponent, CommonModule, FillerComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css'
 })
