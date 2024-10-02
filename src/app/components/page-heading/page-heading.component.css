@@ -1,7 +1,7 @@
 :host {
     padding-block: 1em;
     position: sticky;
-    top: calc(4em + 33px + 1em); /* header height + header box-shadow + padding */
+    top: calc(5em + 1.55em + 1.55em); /* header height + header box-shadow + padding */
     display: flex;
     flex-direction: row;
     justify-content: space-between;

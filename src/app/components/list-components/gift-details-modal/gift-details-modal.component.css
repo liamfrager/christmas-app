@@ -23,7 +23,7 @@
 .modal {
   display: flex;
   flex-direction: column;
-  margin-top: calc(4em + 33px + 1em); /* header height + header box-shadow + padding */
+  margin-top: calc(5em + 33px + 1.55em); /* header height + header box-shadow + padding */
   padding: 1.5em;
 }
 
