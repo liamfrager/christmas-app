@@ -1,8 +1,10 @@
 <div>
-    <h2>Add friend</h2>
+    <app-page-heading headingText="Add Friend"></app-page-heading>
     <form (ngSubmit)="onFormSubmit(searchUserForm)" #searchUserForm="ngForm">
-        <span class="material-symbols-outlined">search</span>
-        <input id="searchedUser" type="text" placeholder="email" name="searchQuery" ngModel>
+        <div>
+            <span class="material-symbols-outlined">search</span>
+            <input id="searchedUser" type="text" placeholder="Search" name="searchQuery" ngModel>
+        </div>
         <button type="submit">Search</button>
     </form>
     <ng-container *ngIf="searchResults">
@@ -15,7 +17,7 @@
     </ng-container>
 </div>
 <div>
-    <h2>Friend requests</h2>
+    <app-page-heading headingText="Friend Requests"></app-page-heading>
     <app-user-display *ngFor="let friendRequest of incomingFriendRequests"
         [user]="friendRequest"
         [iconActions]="getFriendRequestIconActions(friendRequest)"

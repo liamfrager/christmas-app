@@ -3,15 +3,16 @@ import { UserDisplayComponent } from '../../../components/user-display/user-disp
 import { FormsModule, NgForm } from '@angular/forms';
 import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
-import { DocumentData, collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore'; 
+import { collection, query, where, getDocs } from 'firebase/firestore'; 
 import { CommonModule } from '@angular/common';
 import { Friend, User } from '../../../types';
 import { FriendsService } from '../../../services/friends.service';
+import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
 
 @Component({
   selector: 'app-add-friend',
   standalone: true,
-  imports: [FormsModule, UserDisplayComponent, CommonModule],
+  imports: [FormsModule, UserDisplayComponent, CommonModule, PageHeadingComponent],
   templateUrl: './add-friend.component.html',
   styleUrl: './add-friend.component.css'
 })
