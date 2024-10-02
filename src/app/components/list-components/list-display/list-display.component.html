@@ -10,11 +10,13 @@
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
       <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
         <!-- If is shopping-list -->
-        <app-user-display *ngIf="list.type === 'shopping'"
+        <ng-container *ngIf="list.type === 'shopping'">
+          <app-user-display
           [user]="giftByUser.value.user"
-        >
-        </app-user-display>
-        <hr>
+          >
+          </app-user-display>
+          <hr>
+        </ng-container>
         <ul>
           <li *ngFor="let gift of giftByUser.value.gifts | keyvalue">
             <app-gift-display
