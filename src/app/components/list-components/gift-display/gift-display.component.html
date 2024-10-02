@@ -1,4 +1,10 @@
 <div class="gift-wrap" (click)="giftClicked.emit(true)">
-  <span [ngClass]="['material-symbols-outlined', 'checkbox', 'cursor-arrow', checkType, claimedByUser]" [title]="checkboxTitle">{{checkType}}</span>
-  <span class="gift-name cursor-click">{{gift.name}}</span>
+  <app-icon
+    [icon]="checkType"
+    [hover]="null"
+    [ngClass]="[checkType, claimedByUser]"
+    [title]="checkboxTitle"
+  >
+  </app-icon>
+  <span class="gift-name">{{gift.name}}</span>
 </div>

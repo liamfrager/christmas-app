@@ -10,11 +10,13 @@
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
       <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
         <!-- If is shopping-list -->
-        <app-user-display *ngIf="list.type === 'shopping'"
+        <ng-container *ngIf="list.type === 'shopping'">
+          <app-user-display
           [user]="giftByUser.value.user"
-        >
-        </app-user-display>
-        <hr>
+          >
+          </app-user-display>
+          <hr>
+        </ng-container>
         <ul>
           <li *ngFor="let gift of giftByUser.value.gifts | keyvalue">
             <app-gift-display
@@ -46,7 +48,11 @@
     </ng-template>
   </ng-container>
   <!-- If gifts failed to load -->
-  <ng-template #errorLoadingGifts>Something went wrong. The list could not be loaded.</ng-template>
+  <ng-template #errorLoadingGifts>
+    <p>Something went wrong. The list could not be loaded.</p>
+  </ng-template>
 </div>
 <!-- Loading gifts -->
-<ng-template #loadingGifts>Loading gifts...</ng-template>
+<ng-template #loadingGifts>
+  <p>Loading gifts...</p>
+</ng-template>

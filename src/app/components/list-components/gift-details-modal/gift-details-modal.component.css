@@ -23,7 +23,7 @@
 .modal {
   display: flex;
   flex-direction: column;
-  margin-top: calc(4em + 33px + 1em); /* header height + header box-shadow + padding */
+  margin-top: calc(5em + 1.55em + 1.55em); /* header height + header box-shadow + padding */
   padding: 1.5em;
 }
 
@@ -116,7 +116,7 @@
   align-items: center;
   background-color: #d6454144;
   border: 1px solid #d64541;
-  border-radius: 10px;
+  border-radius: .5em;
   padding: 1em;
   p {
     margin: 0;

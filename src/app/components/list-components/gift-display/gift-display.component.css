@@ -1,18 +1,13 @@
 .gift-wrap {
   display: flex;
   align-items: center;
-  /* padding: .2em; */
-}
-
-.checkbox {
-  margin-right: .3em;
-  /* padding: .5em; */
+  cursor: pointer;
 }
 
 .gift-name {
   width: 100%;
   border-bottom: .5px solid #26251d44;
-  padding: .8em .3em;
+  padding: .8em 1.4em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -24,14 +19,6 @@
 
 .gift-name:hover, .error {
   color: #d64541;
-}
-
-.cursor-click {
-  cursor: pointer;
-}
-
-.cursor-arrow {
-  cursor: default;
 }
 
 .isClaimedByUser {

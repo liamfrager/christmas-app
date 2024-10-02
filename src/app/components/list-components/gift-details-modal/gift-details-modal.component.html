@@ -2,7 +2,7 @@
   <div *ngIf="gift" class="modal">
     <ng-container *ngIf="!editingGift; else editForm">
       <span *ngIf="gift.isDeleted" class="error">
-        <div><app-icon icon="error" [hover]="false" size="1.5em"></app-icon></div>
+        <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
         <p>{{'This gift has been deleted by ' + this.gift.isWishedByUser.displayName + '. It is no longer on their wish list.'}}</p>
       </span>
       <app-page-heading
@@ -14,7 +14,7 @@
       <p>{{gift.details}}</p>
       <a class="link-btn" [href]="gift.url">
         <button class="link-btn">
-          <app-icon class="pad-r" icon="link" [hover]="false"></app-icon>Link to gift
+          <app-icon class="pad-r" icon="link" [hover]="null"></app-icon>Link to gift
         </button>
       </a>
       <!-- Shopping list status bar -->
