@@ -1,10 +1,11 @@
-<div *ngIf="list; else loadingGifts">
+<div *ngIf="list; else loadingGifts" class="list">
   <ng-container *ngIf="list.type !== 'error'; else errorLoadingGifts">
     <!-- Display list owner -->
-    <div *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser" class="list-owner-display">
-      <img [src]="list.owner.pfp" alt="">
-      <span>{{list.owner.displayName}}</span>
-    </div>
+     <app-user-display *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser"
+      [user]="list.owner"
+      [onClick]="null"
+      >
+    </app-user-display>
     <!-- Display gifts -->
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
       <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
@@ -26,22 +27,22 @@
         </ul>
         <hr>
       </div>
+      <!-- Gift details slide-over -->
+      <app-gift-details-modal
+        [gift]="giftInModal"
+        [type]="list.type"
+        [buttonType]="modalButtonType"
+        [isShown]="isModalOpen"
+        (onButtonClick)="onModalButtonClick($event)"
+        (onStatusUpdated)="updateStatus($event)"
+        (onModalClose)="hideModal()"
+        >
+      </app-gift-details-modal>
     </div>
     <!-- If no gifts -->
     <ng-template #noGifts>
       <p>{{noGiftsMessage}}</p>
     </ng-template>
-    <!-- Gift details slide-over -->
-    <app-gift-details-modal
-      [gift]="giftInModal"
-      [type]="list.type"
-      [buttonType]="modalButtonType"
-      [isShown]="isModalOpen"
-      (onButtonClick)="onModalButtonClick($event)"
-      (onStatusUpdated)="updateStatus($event)"
-      (onModalClose)="hideModal()"
-      >
-    </app-gift-details-modal>
   </ng-container>
   <!-- If gifts failed to load -->
   <ng-template #errorLoadingGifts>Something went wrong. The list could not be loaded.</ng-template>

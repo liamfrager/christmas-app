@@ -1,3 +1,18 @@
-.heading {
-    margin: 1em;
+:host {
+    padding-block: 1em;
+    position: sticky;
+    top: calc(4em + 33px + 1em); /* header height + header box-shadow + padding */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: cornsilk;
+    border-bottom: .5px solid #26251d44;
+    margin-bottom: 1em;
+}
+h2 {
+    margin: 0;
+}
+app-icon {
+  color: #26251d;
+  padding: 0 0 0 .5em;
 }

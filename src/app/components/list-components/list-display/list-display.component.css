@@ -1,20 +1,15 @@
+:host {
+  display: block;
+  overflow-x: hidden;
+}
+
+.list {
+  height: auto;
+}
+
 .gift {
   margin: 0;
   background: green;
-}
-
-.list-owner-display {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-weight: bold;
-}
-
-.list-owner-display img {
-  border-radius: 50%;
-  border: 2px solid black;
-  width: 2.2em;
-  margin-right: .5em;
 }
 
 hr {
@@ -31,11 +26,6 @@ hr {
     width: calc(50% - .5em);
     transition: all .3s ease-in-out;
   }
-}
-
-:host {
-  display: block;
-  overflow-x: hidden;
 }
 
 ul {

@@ -1,20 +1,21 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
 import { PageHeadingComponent } from '../../page-heading/page-heading.component';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../../icon/icon.component';
-import { AccountService } from '../../../services/account.service';
-import { Gift, NewGift, User } from '../../../types';
+import { Gift } from '../../../types';
 import { PopUpComponent } from '../../pop-up/pop-up.component';
 import { GiftFormComponent } from "../../forms/gift-form/gift-form.component";
+import { FillerComponent } from "../../ui/filler/filler.component";
 
 @Component({
   selector: 'app-gift-details-modal',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, GiftFormComponent, IconComponent],
+  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, GiftFormComponent, IconComponent, FillerComponent],
   templateUrl: './gift-details-modal.component.html',
   styleUrl: './gift-details-modal.component.css'
 })
-export class GiftDetailsModalComponent {
+export class GiftDetailsModalComponent implements OnInit {
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
   @Input() gift?: Gift;
   @Input() type?: string;
   @Input() buttonType!: 'claim' | 'unclaim' | 'claimed' | 'edit';
@@ -46,4 +47,40 @@ export class GiftDetailsModalComponent {
     { name: 'wrapped', icon: 'featured_seasonal_and_gifts' },
     { name: 'under tree', icon: 'park'},
   ]
+
+
+  ngOnInit(): void {
+    const modal = this.el.nativeElement.querySelector('.backdrop');
+    let initialTouchY = 0;
+
+    // Listen for touchstart to capture the initial Y position
+    this.renderer.listen(modal, 'touchstart', (event: TouchEvent) => {
+      initialTouchY = event.touches[0].clientY;
+    });
+
+    // Add wheel event listener to prevent scroll overflow
+    this.renderer.listen(modal, 'wheel', (event: WheelEvent) => {
+      const scrollTop = modal.scrollTop;
+      const scrollHeight = modal.scrollHeight;
+      const offsetHeight = modal.offsetHeight;
+      const scrollBottom = scrollHeight - offsetHeight - scrollTop;
+
+      if ((scrollTop === 0 && event.deltaY < 0) || (scrollBottom <= 0 && event.deltaY > 0)) {
+        event.preventDefault();
+      }
+    });
+
+    // Add touchmove listener for mobile devices
+    this.renderer.listen(modal, 'touchmove', (event: TouchEvent) => {
+      const scrollTop = modal.scrollTop;
+      const scrollHeight = modal.scrollHeight;
+      const offsetHeight = modal.offsetHeight;
+      const scrollBottom = scrollHeight - offsetHeight - scrollTop;
+
+      if ((scrollTop === 0 && event.touches[0].clientY > initialTouchY) || (scrollBottom <= 0 && event.touches[0].clientY < initialTouchY)) {
+        console.log(scrollTop, scrollBottom, event.touches[0].clientY)
+        event.preventDefault();
+      }
+    });
+  }
 }
