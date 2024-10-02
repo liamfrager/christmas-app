@@ -116,7 +116,7 @@
   align-items: center;
   background-color: #d6454144;
   border: 1px solid #d64541;
-  border-radius: 10px;
+  border-radius: .5em;
   padding: 1em;
   p {
     margin: 0;
