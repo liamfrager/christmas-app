@@ -20,6 +20,7 @@ import { authGuard } from './guards/auth.guard';
 import { rootRedirectGuard } from './guards/root-redirect.guard';
 import { loginRedirectGuard } from './guards/login-redirect.guard';
 import { DownloadComponent } from './routes/download/download.component';
+import { ProfileComponent } from './routes/profile/profile.component';
 
 export const routes: Routes = [
   { path: '',
@@ -55,6 +56,10 @@ export const routes: Routes = [
   { path: 'secret-santa',
     canActivate: [authGuard],
     component: SecretSantaComponent,
+  },
+  { path: 'profile',
+    canActivate: [authGuard],
+    component: ProfileComponent,
   },
   { path: 'settings',
     canActivate: [authGuard],

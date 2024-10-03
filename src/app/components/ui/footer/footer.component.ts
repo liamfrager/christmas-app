@@ -44,7 +44,7 @@ export class FooterComponent implements OnInit {
       icon: 'crop_square',
     },
     {
-      route: '/settings',
+      route: '/profile',
       pfp: this.accountService.currentUser.pfp,
     },
   ];

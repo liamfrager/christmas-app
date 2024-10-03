@@ -1,0 +1,8 @@
+.pfp {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #26251d;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+}
