@@ -1,8 +1,53 @@
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .pfp {
-  width: 80px;
-  height: 80px;
-  border: 1px solid #26251d;
-  border-radius: 50%;
-  margin-right: 8px;
-  cursor: pointer;
+    position: relative;
+    display: inline-block;
+    margin-top: 1em;
+    img {
+        display: block;
+        width: 80px;
+        height: 80px;
+        border: 1px solid #26251d;
+        border-radius: 50%;
+        margin-right: 8px;
+        cursor: pointer;
+    }
+    .mood {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: cornsilk;
+        border-radius: 50%;
+        width: 2em;
+        height: 2em;
+        text-align: center;
+        text-justify: center;
+    }
+}
+
+.friend-request {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #4daf7c;
+    font-size: .8em;
+    text-justify: center;
+    background-color: #4daf7c44;
+    border: 1px solid #4daf7c;
+    border-radius: .5em;
+    padding: .5em;
+    p {
+        margin: .5em;
+    }
+    .btn-wrap {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
 }

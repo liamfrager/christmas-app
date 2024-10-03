@@ -1,4 +1,50 @@
-<app-page-heading headingText="Profile"></app-page-heading>
-<app-user-display [user]="currentUser" [onClick]="null"></app-user-display>
-<button (click)="editProfile()"><app-icon icon="edit" size="20px"></app-icon>Edit Profile</button>
-<button (click)="goToSettings()"><app-icon icon="settings" size="20px"></app-icon>Settings</button>
+<!-- <app-page-heading headingText="Profile"></app-page-heading> -->
+<ng-container *ngIf="user">
+  <ng-container *ngIf="!isEditing; else edit">
+    <div class="user-info">
+      <div class="pfp">
+        <img src="user.pfp" alt="profile picture">
+        <span *ngIf="user.mood" class="mood">{{user.mood}}</span>
+      </div>
+      <h2>{{user.displayName}}</h2>
+    </div>
+    <p *ngIf="user.bio" class="bio"><strong>Bio:</strong> {{user.bio}}</p>
+    <button (click)="viewFriends()"><app-icon icon="group" size="20px"></app-icon>View Friends</button>
+    <button *ngIf="friendStatus === 'friends'" (click)="viewList()"><app-icon icon="featured_seasonal_and_gifts" size="20px"></app-icon>View List</button>
+    <!-- Friend buttons -->
+    <ng-container *ngIf="user.id !== currentUserID; else currentUserButtons">
+      <button *ngIf="friendStatus === undefined; else friendRequest" (click)="sendFriendRequest()"><app-icon icon="person_add" size="20px"></app-icon>Add Friend</button>
+      <ng-template #friendRequest>
+        <div *ngIf="friendStatus === 'incoming'; else outgoing" class="friend-request">
+          <p>{{user.displayName}} wants to be your friend.</p>
+          <div class="btn-wrap">
+            <button (click)="acceptFriendRequest()"><app-icon icon="check" size="20px"></app-icon>Accept</button>
+            <button (click)="removeFriend()"><app-icon icon="close" size="20px"></app-icon>Reject</button>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #outgoing>
+        <button *ngIf="friendStatus === 'outgoing'; else unfriend" (click)="removeFriend()"><app-icon icon="person" size="20px"></app-icon>Pending...</button>
+      </ng-template>
+      <ng-template #unfriend>
+        <app-pop-up
+          buttonText="Remove Friend"
+          buttonIcon="person_remove"
+          [title]="'Are you sure you want to unfriend ' + user.displayName + '?'"
+          body="This will remove their gifts from your shopping list."
+          confirmText="Remove Friend"
+          (onConfirm)="removeFriend()"
+        >
+        </app-pop-up>
+      </ng-template>
+    </ng-container>
+    <!-- User settings buttons -->
+    <ng-template #currentUserButtons>
+      <button (click)="editProfile()"><app-icon icon="edit" size="20px"></app-icon>Edit Profile</button>
+      <button (click)="goToSettings()"><app-icon icon="settings" size="20px"></app-icon>Settings</button>
+    </ng-template>
+  </ng-container>
+  <ng-template #edit>
+
+  </ng-template>
+</ng-container>

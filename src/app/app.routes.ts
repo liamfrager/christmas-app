@@ -43,7 +43,6 @@ export const routes: Routes = [
     children: [
       { path: '', component: FriendsComponent },
       { path: 'add-friend', component: AddFriendComponent },
-      { path: 'list', component: FriendsListComponent },
     ],
   },
   { path: 'shopping-list',
@@ -59,7 +58,16 @@ export const routes: Routes = [
   },
   { path: 'profile',
     canActivate: [authGuard],
-    component: ProfileComponent,
+    children: [
+      { path: '', component: ProfileComponent },
+      { path: ':id',
+        children: [
+          { path: '', component: ProfileComponent },
+          { path: 'friends', component: FriendsComponent },
+          { path: 'wish-list', component: WishListComponent },
+        ],
+      }
+    ],
   },
   { path: 'settings',
     canActivate: [authGuard],

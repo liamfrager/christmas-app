@@ -15,14 +15,13 @@ export class UserDisplayComponent {
   constructor(private router: Router) {};
   @Input({required: true}) user!: User;
   @Input() iconActions?: Map<string, () => void> = new Map();
-  @Input() onClick: (() => void) | null = this.goToList;
+  @Input() onClick: (() => void) | null = this.goToProfile;
 
   /**
-   * Reroutes the webpage to the displayed user's wish-list.
-   * @param user - A User object representing the user whose wish-list the webpage will be rerouted to.
+   * Reroutes the webpage to the displayed user's profile.
    */
-  goToList() {
-    this.router.navigate(['/friends/list'], {queryParams: {id: this.user.id}});
+  goToProfile() {
+    this.router.navigate([`/profile/${this.user.id}`]);
   }
   
   /**

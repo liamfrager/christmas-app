@@ -23,19 +23,17 @@ export class FriendsListComponent implements OnInit {
     private router: Router,
   ) {}
   listInfo!: List;
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(async params => {
-      const userID = params['id'];
-      const owner = await this.friendsService.getFriend(userID);
-      if (owner && owner.status === 'friends') { // If user is a friend.
-        const listInfo = await this.giftListService.getWishListInfo(userID);
-        if (listInfo) {
-          this.listInfo = listInfo;
-        }
-      } else { // If user is not friends.
-        this.router.navigate(['/friends'])
+  async ngOnInit() {
+    let userID = this.route.snapshot.paramMap.get('id');
+    const owner = await this.friendsService.getFriend(userID!);
+    if (owner && owner.status === 'friends') { // If user is a friend.
+      const listInfo = await this.giftListService.getWishListInfo(userID!);
+      if (listInfo) {
+        this.listInfo = listInfo;
       }
-    });
+    } else { // If user is not friends.
+      this.router.navigate(['/friends'])
+    }
   }
 
   onRemoveFriend() {

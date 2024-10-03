@@ -1,4 +1,7 @@
-<button (click)="popUp.showModal()">{{buttonText}}</button>
+<button (click)="popUp.showModal()">
+  <app-icon [icon]="buttonIcon" size="20px"></app-icon>
+  {{buttonText}}
+</button>
 <dialog #popUp>
   <h3>{{title}}</h3>
   <p>{{body}}</p>

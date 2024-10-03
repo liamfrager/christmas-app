@@ -3,8 +3,9 @@ import { ListDisplayComponent } from '../../components/list-components/list-disp
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
 import { GiftListService } from '../../services/gift-list.service';
 import { AccountService } from '../../services/account.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { List } from '../../types';
+import { FriendsService } from '../../services/friends.service';
 
 @Component({
   selector: 'app-wish-list',
@@ -14,9 +15,15 @@ import { List } from '../../types';
   styleUrl: './wish-list.component.css'
 })
 export class WishListComponent implements OnInit {
-  constructor(private accountService: AccountService, private giftListService: GiftListService, private router: Router) {};
+  constructor(
+    private accountService: AccountService,
+    private friendsService: FriendsService,
+    private giftListService: GiftListService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {};
   listInfo!: List;
-  headingButtons = ['filter_list', 'forms_add_on'];
+  headingButtons: string[] = [];
   onHeadingIconClick(e: any) {
     switch (e) {
       case 'filter_list':
@@ -31,13 +38,22 @@ export class WishListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const id = this.accountService.currentUserID;
-    if (id) {
-      const listInfo = await this.giftListService.getWishListInfo(id);
-      if (listInfo) {
-        this.listInfo = listInfo;
+    let userID: string | undefined | null = this.route.snapshot.paramMap.get('id');
+    if (userID) {
+      if (userID === this.accountService.currentUserID)
+        this.router.navigate(['/wish-list']);
+      const friend = await this.friendsService.getFriend(userID);
+      if (friend!.status !== 'friends') {
+        this.listInfo = { type: 'not-friends', owner: friend } as List;
+        return;
       }
+    } else {
+      userID = this.accountService.currentUserID;
+      this.headingButtons = ['filter_list', 'forms_add_on'];
     }
+    const listInfo = await this.giftListService.getWishListInfo(userID!);
+    if (listInfo)
+      this.listInfo = listInfo;
   }
 
 }

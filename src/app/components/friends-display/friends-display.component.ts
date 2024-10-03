@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UserDisplayComponent } from '../user-display/user-display.component';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
@@ -15,9 +15,10 @@ import { Friend, User } from '../../types';
 })
 export class FriendsDisplayComponent implements OnInit {
   constructor(private friendsService: FriendsService, private router: Router) { }
+  @Input({required: true}) userID?: string;
   friends?: Array<Friend>;
 
   async ngOnInit() {
-    this.friends = await this.friendsService.getFriends()
+    this.friends = await this.friendsService.getFriends(this.userID);
   }
 }

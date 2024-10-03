@@ -101,7 +101,7 @@ export class AddFriendComponent implements OnInit {
       ...this.friendsStatuses,
       [user.id]: 'outgoing'
     };
-    this.friendsService.sendFriendrequest(user);
+    this.friendsService.sendFriendRequest(user);
   }
 
   /**
