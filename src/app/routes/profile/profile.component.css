@@ -51,3 +51,13 @@
         width: 100%;
     }
 }
+
+dialog {
+    min-width: 70vw;
+    overflow-y: auto;
+}
+.dialog-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

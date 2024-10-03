@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
 import { AccountService } from '../../services/account.service';
 import { UserDisplayComponent } from "../../components/user-display/user-display.component";
@@ -8,11 +8,12 @@ import { User } from '../../types';
 import { CommonModule } from '@angular/common';
 import { FriendsService } from '../../services/friends.service';
 import { PopUpComponent } from "../../components/pop-up/pop-up.component";
+import { FriendsDisplayComponent } from "../../components/friends-display/friends-display.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, IconComponent, PopUpComponent],
+  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, IconComponent, PopUpComponent, FriendsDisplayComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -48,7 +49,19 @@ export class ProfileComponent {
   }
 
   viewFriends() {
-    this.router.navigate([`/profile/${this.user!.id}/friends`]);
+    if (this.user?.id === this.currentUserID) {
+      this.router.navigate([`/friends`]);
+    } else {
+      const dialog = document.getElementsByTagName('dialog')[0];
+      dialog.showModal();
+      document.getElementsByTagName('body')[0].style.setProperty('overflow', 'hidden');
+    }
+  }
+
+  hideFriends() {
+    const dialog = document.getElementsByTagName('dialog')[0];
+    dialog.close();
+    document.getElementsByTagName('body')[0].style.removeProperty('overflow');
   }
 
   viewList() {

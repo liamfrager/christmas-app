@@ -63,7 +63,6 @@ export const routes: Routes = [
       { path: ':id',
         children: [
           { path: '', component: ProfileComponent },
-          { path: 'friends', component: FriendsComponent },
           { path: 'wish-list', component: WishListComponent },
         ],
       }

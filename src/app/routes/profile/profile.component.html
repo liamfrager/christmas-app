@@ -9,9 +9,18 @@
       <h2>{{user.displayName}}</h2>
     </div>
     <p *ngIf="user.bio" class="bio"><strong>Bio:</strong> {{user.bio}}</p>
+    <!-- Wish list -->
+    <button *ngIf="friendStatus === 'friends' || user.id === currentUserID" (click)="viewList()"><app-icon icon="featured_seasonal_and_gifts" size="20px"></app-icon>View List</button>
+    <!-- Friends list -->
     <button (click)="viewFriends()"><app-icon icon="group" size="20px"></app-icon>View Friends</button>
-    <button *ngIf="friendStatus === 'friends'" (click)="viewList()"><app-icon icon="featured_seasonal_and_gifts" size="20px"></app-icon>View List</button>
-    <!-- Friend buttons -->
+    <dialog #friendsPopUp>
+      <div class="dialog-heading">
+        <h3>{{user.displayName}}'s Friends</h3>
+        <app-icon icon="close" (iconClicked)="hideFriends()"></app-icon>
+      </div>
+      <app-friends-display *ngIf="friendsPopUp.open" [userID]="user.id"></app-friends-display>
+    </dialog>
+    <!-- Friend requests -->
     <ng-container *ngIf="user.id !== currentUserID; else currentUserButtons">
       <button *ngIf="friendStatus === undefined; else friendRequest" (click)="sendFriendRequest()"><app-icon icon="person_add" size="20px"></app-icon>Add Friend</button>
       <ng-template #friendRequest>
