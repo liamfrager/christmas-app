@@ -8,15 +8,16 @@
         <div class="mood">
           <ngx-emoji [emoji]="user.mood ? user.mood : ':grinning:'" (click)="selectMood()"></ngx-emoji>
           <ng-container *ngIf="showMoodSelector">
-            <emoji-mart
-              title="Pick your mood..."
-              [showPreview]="false"
-              [enableSearch]="false"
-              [exclude]="['recent']"
-              [isNative]="true"
-              (emojiSelect)="updateMood($event)"
-              >
-            </emoji-mart>
+            <div class="emoji-bg" (click)="handleEmojiEvent($event)">
+              <emoji-mart
+                [showPreview]="false"
+                [enableSearch]="false"
+                [exclude]="['recent']"
+                [isNative]="true"
+                (emojiSelect)="updateMood($event)"
+                >
+              </emoji-mart>
+            </div>
           </ng-container>
         </div>
       </div>
@@ -63,7 +64,7 @@
     </ng-container>
     <!-- User settings buttons -->
     <ng-template #currentUserButtons>
-      <button (click)="editProfile()"><app-icon icon="edit" size="20px"></app-icon>Edit Profile</button>
+      <button (click)="isEditing = true"><app-icon icon="edit" size="20px"></app-icon>Edit Profile</button>
       <button (click)="goToSettings()"><app-icon icon="settings" size="20px"></app-icon>Settings</button>
     </ng-template>
   </ng-container>

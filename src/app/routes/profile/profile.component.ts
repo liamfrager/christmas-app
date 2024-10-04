@@ -50,16 +50,22 @@ export class ProfileComponent {
     }
   }
 
+  handleEmojiEvent(mouseEvent: MouseEvent) {
+    if (!document.querySelector('emoji-mart')?.contains(mouseEvent.target as Node))
+      this.showMoodSelector = !this.showMoodSelector;
+  }
+
   selectMood() {
     if (this.user?.id === this.currentUserID)
-      this.showMoodSelector = true;
+      this.showMoodSelector = !this.showMoodSelector;
   }
 
   updateMood(event: any) {
     this.showMoodSelector = false;
     const emoji: string = event.emoji.colons;
     this.user!.mood = emoji;
-    this.accountService.setMood(emoji);
+    this.accountService.updateProfile({mood: emoji});
+    localStorage.setItem('mood', emoji);
   }
 
   viewFriends() {
@@ -82,12 +88,17 @@ export class ProfileComponent {
     this.router.navigate([`/profile/${this.user!.id}/wish-list`]);
   }
 
-  editProfile() {
-    this.isEditing = true;
-  }
-
   onProfileEdited(form: NgForm) {
-    console.log(form);
+    if (form.form.dirty) {
+      const displayName = form.form.value.name;
+      const bio = form.form.value.bio;
+      this.accountService.updateProfile({
+        displayName: displayName,
+        bio: bio,
+      });
+      localStorage.setItem('displayName', displayName);
+      localStorage.setItem('bio', bio);
+    }
     this.isEditing = false;
   }
 

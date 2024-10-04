@@ -20,7 +20,7 @@ export class AccountService {
     if (currentUser) {
       return {
         id: currentUser.uid,
-        displayName: currentUser.displayName,
+        displayName: localStorage.getItem('displayName') ? localStorage.getItem('displayName') : currentUser.displayName,
         email: currentUser.email,
         pfp: currentUser.photoURL,
         mood: localStorage.getItem('mood'),
@@ -55,13 +55,10 @@ export class AccountService {
     return userData as User;
   }
 
-  async setMood(emojiString: string) {
+  async updateProfile(updates: any) {
     await runTransaction(this.firebaseService.db, async (transaction) => {
       const docRef = doc(this.firebaseService.db, 'users', this.currentUserID!);
-      transaction.update(docRef, {
-        mood: emojiString
-      });
-      localStorage.setItem('mood', emojiString);
+      transaction.update(docRef, updates);
     });
   }
 }

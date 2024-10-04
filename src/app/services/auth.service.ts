@@ -53,10 +53,13 @@ export class AuthService {
       this.router.navigate(['/wish-list']);
       localStorage.setItem('isLoggedIn', 'true');
       const currentUser: User | undefined = await this.accountService.getUserInfo(this.accountService.currentUserID!);
-      if (currentUser?.mood)
-        localStorage.setItem('mood', currentUser.mood);
-      if (currentUser?.bio)
-        localStorage.setItem('bio', currentUser.bio);
+      if (currentUser) {
+        localStorage.setItem('displayName', currentUser.displayName);
+        if (currentUser.mood)
+          localStorage.setItem('mood', currentUser.mood);
+        if (currentUser.bio)
+          localStorage.setItem('bio', currentUser.bio);
+      }
     })
     .catch((error) => {
       console.error('Error setting persistence', error);
