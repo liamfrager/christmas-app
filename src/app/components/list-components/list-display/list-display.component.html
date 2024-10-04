@@ -41,18 +41,18 @@
         </ul>
         <hr>
       </div>
-      <!-- Gift details slide-over -->
-      <app-gift-details-modal
-        [gift]="giftInModal"
-        [type]="list.type"
-        [buttonType]="modalButtonType"
-        [isShown]="isModalOpen"
-        (onButtonClick)="onModalButtonClick($event)"
-        (onStatusUpdated)="updateStatus($event)"
-        (onModalClose)="hideModal()"
-        >
-      </app-gift-details-modal>
     </div>
+    <!-- Gift details slide-over -->
+    <app-gift-details-modal
+      [gift]="giftInModal"
+      [type]="list.type"
+      [buttonType]="modalButtonType"
+      [isShown]="isModalOpen"
+      (onButtonClick)="onModalButtonClick($event)"
+      (onStatusUpdated)="updateStatus($event)"
+      (onModalClose)="hideModal()"
+      >
+    </app-gift-details-modal>
     <!-- If no gifts -->
     <ng-template #noGifts>
       <p>{{noGiftsMessage}}</p>

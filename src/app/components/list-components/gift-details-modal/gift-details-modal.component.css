@@ -9,7 +9,7 @@
 }
 
 .backdrop {
-  position: fixed;
+  position: absolute;
   inset: 0;
   align-items: center;
   background: cornsilk;
@@ -23,8 +23,7 @@
 .modal {
   display: flex;
   flex-direction: column;
-  margin-top: calc(5em + 1.55em + 1.55em); /* header height + header box-shadow + padding */
-  padding: 1.5em;
+  padding: 0 1.5em;
 }
 
 @media (min-width: 800px) {
