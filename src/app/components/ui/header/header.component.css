@@ -1,5 +1,4 @@
 :host {
-  font-size: 2em;
   text-align: center;
   background-color: #d64541;
   color: white;
@@ -7,9 +6,9 @@
   z-index: 1;
   top: 0;
   width: 100vw;
-  margin-bottom: 1.55em;
+  margin-bottom: 1.05em;
   box-shadow:
     0 0 0 .05em #26251d,
-    0 0 0 1.5em white,
-    0 0 0 1.55em #26251d;
+    0 0 0 1.2em white,
+    0 0 0 1.25em #26251d;
 }
