@@ -30,26 +30,17 @@ export const routes: Routes = [
     canActivate: [loginRedirectGuard],
     component: LoginComponent,
   },
-  { path: 'wish-list',
+  { path: 'wish-list', // NEED TO LAZY LOAD BY MODULE >>> MAKE MODULES FOR EACH TAB
     canActivate: [authGuard],
-    children: [
-      { path: '', component: WishListComponent },
-      { path: 'add-gift', component: AddWishGiftComponent },
-    ],
+    loadChildren: () => import('./routes/wish-list/wish-list.module').then(m => m.WishListModule),
   },
   { path: 'friends',
     canActivate: [authGuard],
-    children: [
-      { path: '', component: FriendsComponent },
-      { path: 'add-friend', component: AddFriendComponent },
-    ],
+    loadChildren: () => import('./routes/friends/friends.module').then(m => m.FriendsModule),
   },
   { path: 'shopping-list',
     canActivate: [authGuard],
-    children: [
-      { path: '', component: ShoppingListComponent },
-      { path: 'add-gift', component: AddShoppingGiftComponent },
-    ],
+    loadChildren: () => import('./routes/shopping-list/shopping-list.module').then(m => m.ShoppingListModule),
   },
   { path: 'secret-santa',
     canActivate: [authGuard],
@@ -62,7 +53,7 @@ export const routes: Routes = [
       { path: ':id',
         children: [
           { path: '', component: ProfileComponent },
-          { path: 'wish-list', component: WishListComponent },
+          { path: 'wish-list', loadChildren: () => import('./routes/wish-list/wish-list.module').then(m => m.WishListModule) },
         ],
       }
     ],
