@@ -44,3 +44,7 @@ export type List = {
         },
     }
 }
+
+export type Settings = {
+    showHeader: boolean,
+}

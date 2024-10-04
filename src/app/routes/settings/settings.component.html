@@ -1,2 +1,13 @@
 <app-page-heading headingText="Settings"></app-page-heading>
-<button (click)="logoutUser()">Logout</button>
+<div class="content">
+  <ng-container *ngIf="settings; else loadingSettings">
+    <form #giftForm="ngForm">
+      <input type="checkbox" name="showHeader" [(ngModel)]="settings.showHeader" id="showHeader" [checked]="settings.showHeader" (ngModelChange)="onSettingsChange('showHeader', $event)">
+      <label for="showHeader">Show Header</label>
+    </form>
+  </ng-container>
+  <ng-template #loadingSettings>
+    <p>Loading settings...</p>
+  </ng-template>
+  <button (click)="logoutUser()">Logout</button>
+</div>

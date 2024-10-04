@@ -7,7 +7,6 @@ import { AddWishGiftComponent } from './routes/wish-list/add-gift/add-wish-gift.
 // Friends
 import { FriendsComponent } from './routes/friends/friends.component';
 import { AddFriendComponent } from './routes/friends/add-friend/add-friend.component';
-import { FriendsListComponent } from './routes/friends/list/list.component';
 // Shopping List
 import { ShoppingListComponent } from './routes/shopping-list/shopping-list.component';
 import { AddShoppingGiftComponent } from './routes/shopping-list/add-gift/add-shopping-gift.component';
