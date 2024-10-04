@@ -1,15 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { doc, setDoc, getDoc, runTransaction } from "firebase/firestore";
 import { signOut, User as FirebaseUser} from "firebase/auth";
 import { FirebaseService } from './firebase.service';
 import { User } from '../types';
+import { FriendsService } from './friends.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private firebaseService: FirebaseService, private injector: Injector) {}
+  private get friendsService(): FriendsService {
+    return this.injector.get(FriendsService);
+  }
   
   get currentUserID(): string | undefined {
     return this.firebaseService.auth.currentUser?.uid;
@@ -59,6 +63,14 @@ export class AccountService {
     await runTransaction(this.firebaseService.db, async (transaction) => {
       const docRef = doc(this.firebaseService.db, 'users', this.currentUserID!);
       transaction.update(docRef, updates);
+      if (updates.displayName !== this.currentUser.displayName) {
+        console.log('updating display name');
+        const friends = await this.friendsService.getFriends();
+        friends.forEach(friend => {
+          const friendRef = doc(this.firebaseService.db, 'lists', friend.id, 'friends-list', this.currentUserID!);
+          transaction.update(friendRef, updates);
+        })
+      }
     });
   }
 }

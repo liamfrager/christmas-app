@@ -1,4 +1,3 @@
-<!-- <app-page-heading headingText="Profile"></app-page-heading> -->
 <ng-container *ngIf="user">
   <ng-container *ngIf="!isEditing; else edit">
     <div class="user-info">
@@ -69,6 +68,7 @@
     </ng-template>
   </ng-container>
   <ng-template #edit>
+    <app-page-heading headingText="Edit Profile"></app-page-heading>
     <app-profile-form
       [user]="user"
       (onFormSubmit)="onProfileEdited($event)"

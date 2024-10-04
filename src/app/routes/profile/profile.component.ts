@@ -95,9 +95,10 @@ export class ProfileComponent {
       this.accountService.updateProfile({
         displayName: displayName,
         bio: bio,
-      });
-      localStorage.setItem('displayName', displayName);
-      localStorage.setItem('bio', bio);
+      }).then(() => {
+        localStorage.setItem('displayName', displayName);
+        localStorage.setItem('bio', bio);
+      })
     }
     this.isEditing = false;
   }
