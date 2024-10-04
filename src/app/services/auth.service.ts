@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { Router } from '@angular/router';
-import { Auth, browserLocalPersistence, GoogleAuthProvider, setPersistence, signInWithPopup, signOut } from 'firebase/auth';
+import { browserLocalPersistence, GoogleAuthProvider, setPersistence, signInWithPopup, signOut } from 'firebase/auth';
 import { User as FirebaseUser } from "firebase/auth";
 import { AccountService } from './account.service';
 import { User } from '../types';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -49,9 +48,19 @@ export class AuthService {
 
   loginUser() {
     setPersistence(this.firebaseService.auth, browserLocalPersistence)
-    .then(() => {
+    .then(async () => {
       this.router.navigate(['/wish-list']);
       localStorage.setItem('isLoggedIn', 'true');
+      const currentUser: User | undefined = await this.accountService.getUserInfo(this.accountService.currentUserID!);
+      if (currentUser) {
+        localStorage.setItem('displayName', currentUser.displayName);
+        if (currentUser.mood)
+          localStorage.setItem('mood', currentUser.mood);
+        if (currentUser.bio)
+          localStorage.setItem('bio', currentUser.bio);
+      }
+      const settings = await this.accountService.getSettings();
+      localStorage.setItem('settings', JSON.stringify(settings));
     })
     .catch((error) => {
       console.error('Error setting persistence', error);

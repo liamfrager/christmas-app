@@ -44,11 +44,13 @@ export class FriendsService {
   }
 
   /**
-   * Fetches the friends of the current user.
+   * Fetches the friends of a given user.
+   * @param id - The id of the user whose friends you want to fetch. Will return the current user's friends if `null`.
    * @returns A promise that resolves to an array of Friend objects.
    */
-  async getFriends(): Promise<Friend[]> {
-    const friendsQ = query(collection(this.db, "lists", this.currentUserID!, "friends-list"), where('status', '==', 'friends'));
+  async getFriends(id?: string): Promise<Friend[]> {
+    const userID = id ? id : this.currentUserID!;
+    const friendsQ = query(collection(this.db, "lists", userID, "friends-list"), where('status', '==', 'friends'));
     const friends = await getDocs(friendsQ);
     if (friends.docs.length == 0) {
       return [];
@@ -80,7 +82,7 @@ export class FriendsService {
    * Sends a friend request to a given user.
    * @param newFriend - The User to send the friend request to.
    */
-  async sendFriendrequest(newFriend: User) {
+  async sendFriendRequest(newFriend: User) {
     try {
       await runTransaction(this.db, async (transaction) => {
         const newFriendRef = doc(collection(this.db, "lists", this.currentUserID!, "friends-list"), newFriend.id);

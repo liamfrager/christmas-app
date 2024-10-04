@@ -25,7 +25,9 @@ export interface User extends DocumentData {
     email: string,
     pfp: string,
     friends?: string[],
-    groups?: string[]
+    groups?: string[],
+    bio?: string,
+    mood?: string,
 }
 
 export interface Friend extends User {
@@ -33,7 +35,7 @@ export interface Friend extends User {
 }
 
 export type List = {
-    type: 'wish' | 'shopping' | 'error',
+    type: 'wish' | 'shopping' | 'error' | 'not-friends',
     owner: User,
     giftsByUser?: {
         [userID: string]: {
@@ -41,4 +43,8 @@ export type List = {
             user: User,
         },
     }
+}
+
+export type Settings = {
+    showHeader: boolean,
 }

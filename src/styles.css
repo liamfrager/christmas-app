@@ -100,3 +100,10 @@ button.btn-red {
     color: white;
   }
 }
+
+.content {
+  overflow-y: auto; /* Allow vertical scrolling */
+  flex: 1; /* Takes remaining space */
+  margin: 0;
+  padding: 0 1em;
+}

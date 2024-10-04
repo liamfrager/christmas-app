@@ -1,27 +1,29 @@
 <div>
     <app-page-heading headingText="Add Friend"></app-page-heading>
-    <form (ngSubmit)="onFormSubmit(searchUserForm)" #searchUserForm="ngForm">
+    <div class="content">
+        <form (ngSubmit)="onFormSubmit(searchUserForm)" #searchUserForm="ngForm">
+            <div>
+                <span class="material-symbols-outlined">search</span>
+                <input id="searchedUser" type="text" placeholder="Search" name="searchQuery" ngModel>
+            </div>
+            <button type="submit">Search</button>
+        </form>
+        <ng-container *ngIf="searchResults">
+            <app-user-display *ngFor="let user of searchResults"
+                [user]="user"
+                [iconActions]="getSearchIconActions(user)"
+                [onClick]="null"
+            >
+            </app-user-display>
+        </ng-container>
         <div>
-            <span class="material-symbols-outlined">search</span>
-            <input id="searchedUser" type="text" placeholder="Search" name="searchQuery" ngModel>
+            <app-page-heading headingText="Friend Requests"></app-page-heading>
+            <app-user-display *ngFor="let friendRequest of incomingFriendRequests"
+                [user]="friendRequest"
+                [iconActions]="getFriendRequestIconActions(friendRequest)"
+                [onClick]="null"
+            >
+            </app-user-display>
         </div>
-        <button type="submit">Search</button>
-    </form>
-    <ng-container *ngIf="searchResults">
-        <app-user-display *ngFor="let user of searchResults"
-            [user]="user"
-            [iconActions]="getSearchIconActions(user)"
-            [onClick]="null"
-        >
-        </app-user-display>
-    </ng-container>
-</div>
-<div>
-    <app-page-heading headingText="Friend Requests"></app-page-heading>
-    <app-user-display *ngFor="let friendRequest of incomingFriendRequests"
-        [user]="friendRequest"
-        [iconActions]="getFriendRequestIconActions(friendRequest)"
-        [onClick]="null"
-    >
-    </app-user-display>
+    </div>
 </div>

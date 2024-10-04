@@ -1,5 +1,16 @@
 <div *ngIf="list; else loadingGifts" class="list">
-  <ng-container *ngIf="list.type !== 'error'; else errorLoadingGifts">
+  <!-- If not friends with user -->
+  <ng-container *ngIf="list.type === 'not-friends'; else error">
+    <p>You are not friends with {{list.owner.displayName}}. You cannot view their list until you are friends.</p>
+  </ng-container>
+  <!-- If gifts failed to load -->
+  <ng-template #error>
+    <ng-container *ngIf="list.type === 'error'; else listDisplay">
+      <p>Something went wrong. The list could not be loaded.</p>
+    </ng-container>
+  </ng-template>
+  <!-- List display -->
+  <ng-template #listDisplay>
     <!-- Display list owner -->
      <app-user-display *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser"
       [user]="list.owner"
@@ -46,10 +57,6 @@
     <ng-template #noGifts>
       <p>{{noGiftsMessage}}</p>
     </ng-template>
-  </ng-container>
-  <!-- If gifts failed to load -->
-  <ng-template #errorLoadingGifts>
-    <p>Something went wrong. The list could not be loaded.</p>
   </ng-template>
 </div>
 <!-- Loading gifts -->
