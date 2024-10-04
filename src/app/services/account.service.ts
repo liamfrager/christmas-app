@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, runTransaction } from "firebase/firestore";
 import { signOut, User as FirebaseUser} from "firebase/auth";
 import { FirebaseService } from './firebase.service';
 import { User } from '../types';
@@ -23,6 +23,8 @@ export class AccountService {
         displayName: currentUser.displayName,
         email: currentUser.email,
         pfp: currentUser.photoURL,
+        mood: localStorage.getItem('mood'),
+        bio: localStorage.getItem('bio'),
       } as User;
     } else {
       throw Error('`currentUser` is not logged in');
@@ -40,12 +42,6 @@ export class AccountService {
     }
   };
 
-  // async isNewUser(user: FirebaseUser): Promise<boolean> {
-  //   const docRef = doc(this.firebaseService.db, 'users', user.uid)
-  //   const res = await getDoc(docRef);
-  //   return res.data() ? false : true;
-  // }
-
   createNewUser(user: FirebaseUser): User {
     const docRef = doc(this.firebaseService.db, 'users', user.uid)
     const userData = {
@@ -57,5 +53,15 @@ export class AccountService {
     }
     setDoc(docRef, userData);
     return userData as User;
+  }
+
+  async setMood(emojiString: string) {
+    await runTransaction(this.firebaseService.db, async (transaction) => {
+      const docRef = doc(this.firebaseService.db, 'users', this.currentUserID!);
+      transaction.update(docRef, {
+        mood: emojiString
+      });
+      localStorage.setItem('mood', emojiString);
+    });
   }
 }

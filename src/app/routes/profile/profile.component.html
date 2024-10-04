@@ -4,7 +4,21 @@
     <div class="user-info">
       <div class="pfp">
         <img src="user.pfp" alt="profile picture">
-        <span *ngIf="user.mood" class="mood">{{user.mood}}</span>
+        <!-- Mood -->
+        <div class="mood">
+          <ngx-emoji [emoji]="user.mood ? user.mood : ':grinning:'" (click)="selectMood()"></ngx-emoji>
+          <ng-container *ngIf="showMoodSelector">
+            <emoji-mart
+              title="Pick your mood..."
+              [showPreview]="false"
+              [enableSearch]="false"
+              [exclude]="['recent']"
+              [isNative]="true"
+              (emojiSelect)="updateMood($event)"
+              >
+            </emoji-mart>
+          </ng-container>
+        </div>
       </div>
       <h2>{{user.displayName}}</h2>
     </div>
@@ -54,6 +68,10 @@
     </ng-template>
   </ng-container>
   <ng-template #edit>
-
+    <app-profile-form
+      [user]="user"
+      (onFormSubmit)="onProfileEdited($event)"
+      >
+    </app-profile-form>
   </ng-template>
 </ng-container>

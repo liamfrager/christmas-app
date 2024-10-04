@@ -9,11 +9,15 @@ import { CommonModule } from '@angular/common';
 import { FriendsService } from '../../services/friends.service';
 import { PopUpComponent } from "../../components/pop-up/pop-up.component";
 import { FriendsDisplayComponent } from "../../components/friends-display/friends-display.component";
+import { ProfileFormComponent } from "../../components/forms/profile-form/profile-form.component";
+import { NgForm } from '@angular/forms';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, IconComponent, PopUpComponent, FriendsDisplayComponent],
+  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, IconComponent, PopUpComponent, FriendsDisplayComponent, ProfileFormComponent, PickerComponent, EmojiComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -28,6 +32,7 @@ export class ProfileComponent {
   user?: User;
   friendStatus?: 'incoming' | 'outgoing' | 'friends';
   isEditing: boolean = false;
+  showMoodSelector: boolean = false;
 
   async ngOnInit() {
     const userID = this.route.snapshot.paramMap.get('id');
@@ -36,16 +41,25 @@ export class ProfileComponent {
         this.router.navigate(['/profile']);
       } else {
         const friend = await this.friendsService.getFriend(userID);
-        if (friend) {
-          this.user = friend;
+        if (friend)
           this.friendStatus = friend.status;
-        } else {
-          this.user = await this.accountService.getUserInfo(userID);
-        }
+        this.user = await this.accountService.getUserInfo(userID);
       }
     } else {
       this.user = this.accountService.currentUser;
     }
+  }
+
+  selectMood() {
+    if (this.user?.id === this.currentUserID)
+      this.showMoodSelector = true;
+  }
+
+  updateMood(event: any) {
+    this.showMoodSelector = false;
+    const emoji: string = event.emoji.colons;
+    this.user!.mood = emoji;
+    this.accountService.setMood(emoji);
   }
 
   viewFriends() {
@@ -70,6 +84,11 @@ export class ProfileComponent {
 
   editProfile() {
     this.isEditing = true;
+  }
+
+  onProfileEdited(form: NgForm) {
+    console.log(form);
+    this.isEditing = false;
   }
 
   goToSettings() {

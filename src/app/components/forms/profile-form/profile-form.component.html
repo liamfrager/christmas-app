@@ -1,0 +1,22 @@
+<form (ngSubmit)="onSubmit(profileForm)" #profileForm="ngForm">
+  <input 
+    type="text"
+    name="display-name"
+    id="display-name"
+    placeholder="Name"
+    required [(ngModel)]="user.displayName"
+  ><br>
+  <textarea
+    name="bio"
+    id="bio"
+    placeholder="Bio"
+    [(ngModel)]="user.bio"
+  ></textarea>
+  <input
+    type="submit"
+    name="submit"
+    id="submit"
+    value="Save"
+    [disabled]="profileForm.invalid"
+  >
+</form>

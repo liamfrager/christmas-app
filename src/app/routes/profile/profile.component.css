@@ -24,10 +24,10 @@
         right: 0;
         background-color: cornsilk;
         border-radius: 50%;
-        width: 2em;
-        height: 2em;
+        width: 1.5em;
+        height: 1.5em;
         text-align: center;
-        text-justify: center;
+        cursor: pointer;
     }
 }
 
