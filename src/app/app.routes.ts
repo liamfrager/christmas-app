@@ -1,15 +1,4 @@
 import { Routes } from '@angular/router';
-// Login
-import { LoginComponent } from './routes/login/login.component';
-// Wish List
-import { WishListComponent } from './routes/wish-list/wish-list.component';
-import { AddWishGiftComponent } from './routes/wish-list/add-gift/add-wish-gift.component';
-// Friends
-import { FriendsComponent } from './routes/friends/friends.component';
-import { AddFriendComponent } from './routes/friends/add-friend/add-friend.component';
-// Shopping List
-import { ShoppingListComponent } from './routes/shopping-list/shopping-list.component';
-import { AddShoppingGiftComponent } from './routes/shopping-list/add-gift/add-shopping-gift.component';
 // Secret Santa
 import { SecretSantaComponent } from './routes/secret-santa/secret-santa.component';
 // Settings
@@ -28,44 +17,27 @@ export const routes: Routes = [
   },
   { path: 'login',
     canActivate: [loginRedirectGuard],
-    component: LoginComponent,
+    loadChildren: () => import('./routes/login/login.module').then(m => m.LoginModule)
   },
   { path: 'wish-list',
     canActivate: [authGuard],
-    children: [
-      { path: '', component: WishListComponent },
-      { path: 'add-gift', component: AddWishGiftComponent },
-    ],
+    loadChildren: () => import('./routes/wish-list/wish-list.module').then(m => m.WishListModule),
   },
   { path: 'friends',
     canActivate: [authGuard],
-    children: [
-      { path: '', component: FriendsComponent },
-      { path: 'add-friend', component: AddFriendComponent },
-    ],
+    loadChildren: () => import('./routes/friends/friends.module').then(m => m.FriendsModule),
   },
   { path: 'shopping-list',
     canActivate: [authGuard],
-    children: [
-      { path: '', component: ShoppingListComponent },
-      { path: 'add-gift', component: AddShoppingGiftComponent },
-    ],
+    loadChildren: () => import('./routes/shopping-list/shopping-list.module').then(m => m.ShoppingListModule),
   },
   { path: 'secret-santa',
     canActivate: [authGuard],
-    component: SecretSantaComponent,
+    loadChildren: () => import('./routes/secret-santa/secret-santa.module').then(m => m.SecretSantaModule),
   },
   { path: 'profile',
     canActivate: [authGuard],
-    children: [
-      { path: '', component: ProfileComponent },
-      { path: ':id',
-        children: [
-          { path: '', component: ProfileComponent },
-          { path: 'wish-list', component: WishListComponent },
-        ],
-      }
-    ],
+    loadChildren: () => import('./routes/profile/profile.module').then(m => m.ProfileModule),
   },
   { path: 'settings',
     canActivate: [authGuard],
