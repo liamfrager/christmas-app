@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FirebaseService } from './services/firebase.service';
 import { FillerComponent } from "./components/ui/filler/filler.component";
 import { Settings } from './types';
+import { SettingsService } from './services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +16,8 @@ import { Settings } from './types';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  constructor(public firebaseService: FirebaseService) {}
+  constructor(public firebaseService: FirebaseService, private settingsService: SettingsService) {}
   title = 'christmas-app';
   isLoggedIn = localStorage.getItem('isLoggedIn');
-  settings = JSON.parse(localStorage.getItem('settings')!) as Settings;
+  settings = this.settingsService.settings;
 }

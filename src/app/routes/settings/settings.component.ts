@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
 import { Settings } from '../../types';
-import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -13,20 +13,15 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
   constructor(
     private authService: AuthService,
-    private accountService: AccountService,
+    private settingsService: SettingsService,
   ) {}
-  settings!: Settings;
-
-  async ngOnInit() {
-    const userSettings = await this.accountService.getSettings();
-    this.settings = {...this.accountService.defaultSettings, ...userSettings}
-  }
+  settings: Settings = this.settingsService.settings;
 
   onSettingsChange(setting: string, value: any) {
-    this.accountService.updateSettings({[setting]: value});
+    this.settingsService.updateSettings({[setting]: value});
   }
 
   logoutUser() {
