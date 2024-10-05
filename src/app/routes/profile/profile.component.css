@@ -22,15 +22,12 @@
         height: 80px;
         border: 1px solid #26251d;
         border-radius: 50%;
-        margin-right: 8px;
         cursor: pointer;
     }
     .mood {
         position: absolute;
         top: 0;
         right: 0;
-        background-color: cornsilk;
-        border-radius: 50%;
         width: 1.5em;
         height: 1.5em;
         text-align: center;
@@ -75,4 +72,8 @@ dialog {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.bio {
+    margin: 1em 0 1.5em 0;
 }
