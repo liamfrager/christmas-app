@@ -1,8 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
-import { doc, setDoc, getDoc, runTransaction, updateDoc } from "firebase/firestore";
-import { signOut, User as FirebaseUser} from "firebase/auth";
+import { doc, setDoc, getDoc, runTransaction, where, getDocs, query, collection } from "firebase/firestore";
+import { User as FirebaseUser} from "firebase/auth";
 import { FirebaseService } from './firebase.service';
-import { Settings, User } from '../types';
+import { Gift, User } from '../types';
 import { FriendsService } from './friends.service';
 
 
@@ -74,7 +74,21 @@ export class AccountService {
     });
   }
 
-  deleteAccount() {
-    console.log('delete account')
+  async deleteAccount() {
+    await runTransaction(this.firebaseService.db, async (transaction) => {
+      const userRef = doc(this.firebaseService.db, 'users', this.currentUserID!);
+      transaction.delete(userRef);
+      const settingsRef = doc(this.firebaseService.db, 'settings', this.currentUserID!);
+      transaction.delete(settingsRef);
+      const claimedGifts = await getDocs(query(collection(this.firebaseService.db, 'lists', this.currentUserID!, 'wish-list'), where('isClaimedByID', '!=', null)));
+      claimedGifts.docs.forEach(snap => {
+        const gift = snap.data() as Gift;
+        console.log(gift)
+        const claimedRef = doc(this.firebaseService.db, 'lists', gift.isClaimedByID!, 'shopping-list', gift.id);
+        transaction.update(claimedRef, {isDeleted: true});
+      })
+      const listsRef = doc(this.firebaseService.db, 'lists', this.currentUserID!);
+      transaction.delete(listsRef);
+    });
   }
 }
