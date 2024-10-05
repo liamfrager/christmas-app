@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FirebaseService } from './services/firebase.service';
 import { FillerComponent } from "./components/ui/filler/filler.component";
 import { SettingsService } from './services/settings.service';
+import { Settings } from './types';
 
 @Component({
   selector: 'app-root',
@@ -15,21 +16,24 @@ import { SettingsService } from './services/settings.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  constructor(public firebaseService: FirebaseService, private settingsService: SettingsService, private renderer: Renderer2) {}
+  constructor(public firebaseService: FirebaseService, public settingsService: SettingsService, private renderer: Renderer2) {}
   title = 'christmas-app';
   isLoggedIn = localStorage.getItem('isLoggedIn');
-  settings = this.settingsService.settings;
+  settings!: Settings;
 
   ngOnInit() {
-    console.log('changing color')
-    const themeMetaTag = document.querySelector('meta[name="theme-color"]');
-    if (themeMetaTag) {
-      if (this.settings.showHeader){
-        this.renderer.setAttribute(themeMetaTag, 'content', '#d64541');
-      } else {
-        this.renderer.setAttribute(themeMetaTag, 'content', 'cornsilk');
+    this.settingsService.settings$.subscribe(
+      (settings) => {
+        this.settings = settings;
+        const themeMetaTag = document.querySelector('meta[name="theme-color"]');
+        if (themeMetaTag) {
+          if (settings.showHeader){
+            this.renderer.setAttribute(themeMetaTag, 'content', '#d64541');
+          } else {
+            this.renderer.setAttribute(themeMetaTag, 'content', 'cornsilk');
+          }
+        }
       }
-    }
-
+    );
   }
 }

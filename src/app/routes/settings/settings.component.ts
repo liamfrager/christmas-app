@@ -17,12 +17,11 @@ import { IconComponent } from "../../components/icon/icon.component";
 export class SettingsComponent {
   constructor(
     private authService: AuthService,
-    private settingsService: SettingsService,
+    public settingsService: SettingsService,
   ) {}
-  settings: Settings = this.settingsService.settings;
 
-  onSettingsChange(form: NgForm) {
-    this.settingsService.updateSettings(form.form.value);
+  onSettingsChange(name: string, value: any) {
+    this.settingsService.updateSettings({[name]: value});
   }
 
   logoutUser() {

@@ -3,6 +3,7 @@ import { AccountService } from './account.service';
 import { Settings } from '../types';
 import { FirebaseService } from './firebase.service';
 import { doc, DocumentReference, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,46 +14,39 @@ export class SettingsService {
     private accountService: AccountService
   ) {}
 
-  private _defaultSettings: Settings = {
+  private defaultSettings: Settings = {
     showHeader: true,
   }
 
+  private settingsSubject = new BehaviorSubject<Settings>(this.defaultSettings);
+  settings$ = this.settingsSubject.asObservable();
+
   async loadSettings() {
     const settings = await this.fetchSettings();
-    localStorage.setItem('settings', JSON.stringify(settings));
+    this.settingsSubject.next(settings);
   }
 
-  private get _localSettings(): Settings {
-    return JSON.parse(localStorage.getItem('settings')!) as Settings;
-  }
-
-  public get settings(): Settings {
-    if (this._localSettings)
-      return this._localSettings;
-    this.loadSettings();
-    return this._defaultSettings;
-  }
-
-  async fetchSettings(): Promise<Settings> {
+  private async fetchSettings(): Promise<Settings> {
     const settingsRef = doc(this.firebaseService.db, 'settings', this.accountService.currentUserID!);
     const settingsSnap = await getDoc(settingsRef);
     const userSettings = settingsSnap.data() as Settings;
     if (userSettings) {
-      return {...this._defaultSettings, ...userSettings};
+      return {...this.defaultSettings, ...userSettings};
     }
     setDoc(settingsRef, {});
-    return this._defaultSettings;
+    return this.defaultSettings;
   }
 
   async updateSettings(updates: any) {
     const settingsRef = doc(this.firebaseService.db, 'settings', this.accountService.currentUserID!);
     updateDoc(settingsRef, updates);
-    localStorage.setItem('settings', JSON.stringify({...this._localSettings, ...updates}));
+    const newSettings = {...this.settingsSubject.value, ...updates};
+    this.settingsSubject.next(newSettings);
   }
 
   async restoreDefault() {
     const settingsRef = doc(this.firebaseService.db, 'settings', this.accountService.currentUserID!);
-    setDoc(settingsRef, this._defaultSettings);
-    localStorage.setItem('settings', JSON.stringify(this._localSettings));
+    setDoc(settingsRef, this.defaultSettings);
+    this.settingsSubject.next(this.defaultSettings);
   }
 }
