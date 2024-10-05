@@ -73,4 +73,8 @@ export class AccountService {
       }
     });
   }
+
+  deleteAccount() {
+    console.log('delete account')
+  }
 }

@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { SettingsService } from '../../services/settings.service';
 import { IconComponent } from "../../components/icon/icon.component";
+import { AccountService } from '../../services/account.service';
+import { PopUpComponent } from "../../components/pop-up/pop-up.component";
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageHeadingComponent, IconComponent],
+  imports: [CommonModule, FormsModule, PageHeadingComponent, IconComponent, PopUpComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
 })
@@ -18,6 +20,7 @@ export class SettingsComponent {
   constructor(
     private authService: AuthService,
     public settingsService: SettingsService,
+    private accountService: AccountService
   ) {}
 
   onSettingsChange(name: string, value: any) {
@@ -26,5 +29,9 @@ export class SettingsComponent {
 
   logoutUser() {
     this.authService.logoutUser();
+  }
+
+  deleteAccount() {
+    this.accountService.deleteAccount();
   }
 }
