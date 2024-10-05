@@ -1,36 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
 import { Settings } from '../../types';
-import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
+import { SettingsService } from '../../services/settings.service';
+import { IconComponent } from "../../components/icon/icon.component";
 
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageHeadingComponent],
+  imports: [CommonModule, FormsModule, PageHeadingComponent, IconComponent],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
   constructor(
     private authService: AuthService,
-    private accountService: AccountService,
+    public settingsService: SettingsService,
   ) {}
-  settings!: Settings;
 
-  async ngOnInit() {
-    const userSettings = await this.accountService.getSettings();
-    this.settings = {...this.accountService.defaultSettings, ...userSettings}
-  }
-
-  onSettingsChange(setting: string, value: any) {
-    this.accountService.updateSettings({[setting]: value});
+  onSettingsChange(name: string, value: any) {
+    this.settingsService.updateSettings({[name]: value});
   }
 
   logoutUser() {
     this.authService.logoutUser();
   }
-
 }

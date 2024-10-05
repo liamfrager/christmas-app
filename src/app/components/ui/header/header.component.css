@@ -7,9 +7,9 @@
   z-index: 1;
   top: 0;
   width: 100vw;
-  margin-bottom: 1.55em;
+  margin-bottom: .93em;
   box-shadow:
-    0 0 0 .05em #26251d,
-    0 0 0 1.5em white,
-    0 0 0 1.55em #26251d;
+    0 0 0 .03em #26251d,
+    0 0 0 .9em white,
+    0 0 0 .93em #26251d;
 }

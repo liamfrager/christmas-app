@@ -5,12 +5,18 @@ import { browserLocalPersistence, GoogleAuthProvider, setPersistence, signInWith
 import { User as FirebaseUser } from "firebase/auth";
 import { AccountService } from './account.service';
 import { User } from '../types';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private firebaseService: FirebaseService, private accountService: AccountService, private router: Router) {}
+  constructor(
+    private firebaseService: FirebaseService,
+    private accountService: AccountService,
+    private settingsService: SettingsService,
+    private router: Router
+  ) {}
 
   // Function to login with Google.
   loginWithGoogle(): void {
@@ -59,8 +65,7 @@ export class AuthService {
         if (currentUser.bio)
           localStorage.setItem('bio', currentUser.bio);
       }
-      const settings = await this.accountService.getSettings();
-      localStorage.setItem('settings', JSON.stringify(settings));
+      this.settingsService.loadSettings();
     })
     .catch((error) => {
       console.error('Error setting persistence', error);

@@ -25,30 +25,30 @@
       </div>
       <p *ngIf="user.bio" class="bio"><strong>Bio:</strong> {{user.bio}}</p>
       <!-- Wish list -->
-      <button *ngIf="friendStatus === 'friends' || user.id === currentUserID" (click)="viewList()"><app-icon icon="featured_seasonal_and_gifts" size="20px"></app-icon>View List</button>
+      <button *ngIf="friendStatus === 'friends' || user.id === currentUserID" (click)="viewList()"><app-icon icon="featured_seasonal_and_gifts" [hover]="false" size="20px"></app-icon>View List</button>
       <!-- Friends list -->
-      <button (click)="viewFriends()"><app-icon icon="group" size="20px"></app-icon>View Friends</button>
+      <button (click)="viewFriends()"><app-icon icon="group" [hover]="false" size="20px"></app-icon>View Friends</button>
       <dialog #friendsPopUp>
         <div class="dialog-heading">
           <h3>{{user.displayName}}'s Friends</h3>
-          <app-icon icon="close" (iconClicked)="hideFriends()"></app-icon>
+          <app-icon icon="close" (iconClicked)="hideFriends()" [hover]="false" size="20px"></app-icon>
         </div>
         <app-friends-display *ngIf="friendsPopUp.open" [userID]="user.id"></app-friends-display>
       </dialog>
       <!-- Friend requests -->
       <ng-container *ngIf="user.id !== currentUserID; else currentUserButtons">
-        <button *ngIf="friendStatus === undefined; else friendRequest" (click)="sendFriendRequest()"><app-icon icon="person_add" size="20px"></app-icon>Add Friend</button>
+        <button *ngIf="friendStatus === undefined; else friendRequest" (click)="sendFriendRequest()"><app-icon icon="person_add" [hover]="false" size="20px"></app-icon>Add Friend</button>
         <ng-template #friendRequest>
           <div *ngIf="friendStatus === 'incoming'; else outgoing" class="friend-request">
             <p>{{user.displayName}} wants to be your friend.</p>
             <div class="btn-wrap">
-              <button (click)="acceptFriendRequest()"><app-icon icon="check" size="20px"></app-icon>Accept</button>
-              <button (click)="removeFriend()"><app-icon icon="close" size="20px"></app-icon>Reject</button>
+              <button (click)="acceptFriendRequest()"><app-icon icon="check" [hover]="false" size="20px"></app-icon>Accept</button>
+              <button (click)="removeFriend()"><app-icon icon="close" [hover]="false" size="20px"></app-icon>Reject</button>
             </div>
           </div>
         </ng-template>
         <ng-template #outgoing>
-          <button *ngIf="friendStatus === 'outgoing'; else unfriend" (click)="removeFriend()"><app-icon icon="person" size="20px"></app-icon>Pending...</button>
+          <button *ngIf="friendStatus === 'outgoing'; else unfriend" (click)="removeFriend()"><app-icon icon="person" [hover]="false" size="20px"></app-icon>Pending...</button>
         </ng-template>
         <ng-template #unfriend>
           <app-pop-up
@@ -64,8 +64,8 @@
       </ng-container>
       <!-- User settings buttons -->
       <ng-template #currentUserButtons>
-        <button (click)="isEditing = true"><app-icon icon="edit" size="20px"></app-icon>Edit Profile</button>
-        <button (click)="goToSettings()"><app-icon icon="settings" size="20px"></app-icon>Settings</button>
+        <button (click)="isEditing = true"><app-icon icon="edit" [hover]="false" size="20px"></app-icon>Edit Profile</button>
+        <button (click)="goToSettings()"><app-icon icon="settings" [hover]="false" size="20px"></app-icon>Settings</button>
       </ng-template>
     </ng-container>
     <ng-template #edit>

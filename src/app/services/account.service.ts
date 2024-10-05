@@ -73,26 +73,4 @@ export class AccountService {
       }
     });
   }
-
-  defaultSettings: Settings = {
-    showHeader : true,
-  }
-
-  async getSettings(): Promise<Settings> {
-    const settingsRef = doc(this.firebaseService.db, 'settings', this.currentUserID!);
-    const settingsSnap = await getDoc(settingsRef);
-    const settings = settingsSnap.data() as Settings;
-    if (!settings) {
-      await setDoc(settingsRef, this.defaultSettings);
-      return this.defaultSettings;
-    }
-    return settings;
-  }
-
-  async updateSettings(updates: any) {
-    const settingsRef = doc(this.firebaseService.db, 'settings', this.currentUserID!);
-    updateDoc(settingsRef, updates);
-    const settings = JSON.parse(localStorage.getItem('settings')!) as Settings;
-    localStorage.setItem('settings', JSON.stringify({...settings, ...updates}));
-  }
 }
