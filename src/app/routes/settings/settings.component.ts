@@ -33,5 +33,6 @@ export class SettingsComponent {
 
   deleteAccount() {
     this.accountService.deleteAccount();
+    this.authService.logoutUser(true);
   }
 }

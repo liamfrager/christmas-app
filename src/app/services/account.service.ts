@@ -4,6 +4,7 @@ import { User as FirebaseUser} from "firebase/auth";
 import { FirebaseService } from './firebase.service';
 import { Gift, User } from '../types';
 import { FriendsService } from './friends.service';
+import { AuthService } from './auth.service';
 
 
 @Injectable({
