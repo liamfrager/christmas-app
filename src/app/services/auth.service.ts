@@ -72,9 +72,13 @@ export class AuthService {
     });
   }
 
-  logoutUser(): void {
+  logoutUser(accountDeleted: boolean = false): void {
     signOut(this.firebaseService.auth).then(() => {
       localStorage.removeItem('isLoggedIn');
+      if (accountDeleted) {
+        this.router.navigate(['/login'], {queryParams: {accDel: true}});
+        return;
+      }
       this.router.navigate(['/login']);
     }).catch((error) => {
       console.error('Could not logout');

@@ -23,5 +23,17 @@
     <p>Loading settings...</p>
   </ng-template>
   <hr>
-  <button (click)="logoutUser()">Logout</button>
+  <div class="btn-wrap">
+    <app-pop-up
+      buttonText="Delete Account"
+      buttonIcon="delete_forever"
+      title="Are you sure you want to delete your account?"
+      body="This will delete all your data. Your account cannot be recovered."
+      confirmText="Delete Account"
+      (onConfirm)="deleteAccount()"
+      class="btn-red"
+      >
+    </app-pop-up>
+    <button (click)="logoutUser()"><app-icon icon="logout" [hover]="false" size="20px"></app-icon>Logout</button>
+  </div>
 </div>

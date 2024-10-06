@@ -91,7 +91,7 @@ input:disabled {
     }
 }
 
-button.btn-red {
+button.btn-red, app-pop-up.btn-red button:first-of-type {
   background-color: white;
   color: #d64541;
   border: 1px solid #d64541;
@@ -99,6 +99,12 @@ button.btn-red {
     background-color: #d64541;
     color: white;
   }
+}
+
+.btn-wrap {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 .content {

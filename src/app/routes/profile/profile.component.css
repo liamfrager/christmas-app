@@ -57,11 +57,6 @@
     p {
         margin: .5em;
     }
-    .btn-wrap {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-    }
 }
 
 dialog {
