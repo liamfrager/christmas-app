@@ -14,7 +14,7 @@ import { NewGift } from '../../../types';
   styleUrl: './add-wish-gift.component.css'
 })
 export class AddWishGiftComponent {
-  constructor(private router: Router, private giftListService: GiftListService) {}
+  constructor(public router: Router, private giftListService: GiftListService) {}
 
   async onSubmit(gift: NewGift) {
     await this.giftListService.addGiftToWishList(gift);

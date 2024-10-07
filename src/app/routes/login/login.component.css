@@ -4,3 +4,20 @@
   flex-direction: column;
   overflow: hidden;
 }
+
+.error {
+  color: #d64541;
+  font-size: .8em;
+  display: flex;
+  align-items: center;
+  background-color: #d6454144;
+  border: 1px solid #d64541;
+  border-radius: .5em;
+  padding: 1em;
+  margin: 1em;
+  p {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+  }
+}

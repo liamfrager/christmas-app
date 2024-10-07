@@ -1,13 +1,39 @@
-<app-page-heading headingText="Settings"></app-page-heading>
+<app-page-heading headingText="Settings" (onBackButton)="router.navigate(['/profile'])"></app-page-heading>
 <div class="content">
-  <ng-container *ngIf="settings; else loadingSettings">
-    <form #giftForm="ngForm">
-      <input type="checkbox" name="showHeader" [(ngModel)]="settings.showHeader" id="showHeader" [checked]="settings.showHeader" (ngModelChange)="onSettingsChange('showHeader', $event)">
-      <label for="showHeader">Show Header</label>
+  <ng-container *ngIf="settingsService.settings$ | async as settings; else loadingSettings">
+    <form #settingsForm="ngForm">
+      <label for="showHeader">
+        <input #showHeader
+          type="checkbox"
+          name="showHeader"
+          id="showHeader"
+          [(ngModel)]="settings.showHeader"
+          [checked]="settings.showHeader"
+          (change)="onSettingsChange(showHeader.name, showHeader.checked)"
+          >
+        <app-icon *ngIf="showHeader.checked" icon="check_box"></app-icon>
+        <app-icon *ngIf="!showHeader.checked" icon="check_box_outline_blank"></app-icon>
+        Show Header
+      </label>
+      <br>
+      <!-- <input type="submit" value="Save Changes"> -->
     </form>
   </ng-container>
   <ng-template #loadingSettings>
     <p>Loading settings...</p>
   </ng-template>
-  <button (click)="logoutUser()">Logout</button>
+  <hr>
+  <div class="btn-wrap">
+    <app-pop-up
+      buttonText="Delete Account"
+      buttonIcon="delete_forever"
+      title="Are you sure you want to delete your account?"
+      body="This will delete all your data. Your account cannot be recovered."
+      confirmText="Delete Account"
+      (onConfirm)="deleteAccount()"
+      class="btn-red"
+      >
+    </app-pop-up>
+    <button (click)="logoutUser()"><app-icon icon="logout" [hover]="false" size="20px"></app-icon>Logout</button>
+  </div>
 </div>

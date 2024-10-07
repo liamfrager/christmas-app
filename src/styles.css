@@ -37,11 +37,11 @@ h2 {
 }
 h1 {
   font-size: 2em;
-  margin: .5em 0px;
+  margin: .5em 0;
 }
 h2 {
-  font-size: 40px;
-  margin: 0 0 10px 0;
+  font-size: 2.5em;
+  margin: .2em 0;
 }
 
 hr {
@@ -61,7 +61,7 @@ button, input[type="submit"] {
     border: 1px solid black;
     border-radius: .5em;
     padding: .5em;
-    margin: 0 0 10px 0;
+    margin: .8em 0;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -92,7 +92,7 @@ input:disabled {
     }
 }
 
-button.btn-red {
+button.btn-red, app-pop-up.btn-red button:first-of-type {
   background-color: white;
   color: #d64541;
   border: 1px solid #d64541;
@@ -100,6 +100,12 @@ button.btn-red {
     background-color: #d64541;
     color: white;
   }
+}
+
+.btn-wrap {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 .content {

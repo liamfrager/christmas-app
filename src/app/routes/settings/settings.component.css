@@ -4,3 +4,20 @@
   flex-direction: column;
   overflow: hidden;
 }
+
+form {
+  margin-top: 1em;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+label {
+  display: flex;
+  flex: row;
+  align-items: center;
+  app-icon {
+    margin-right: .5em;
+  }
+}
