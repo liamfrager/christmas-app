@@ -24,7 +24,6 @@ export class GiftDetailsModalComponent implements OnInit {
   @Output() onButtonClick = new EventEmitter();
   @Output() onStatusUpdated = new EventEmitter();
 
-  headingButtons = ['close'];
   currentStatus = this.gift?.status;
   editingGift: boolean = false;
   public get buttonText() : string {

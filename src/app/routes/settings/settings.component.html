@@ -1,4 +1,4 @@
-<app-page-heading headingText="Settings"></app-page-heading>
+<app-page-heading headingText="Settings" (onBackButton)="router.navigate(['/profile'])"></app-page-heading>
 <div class="content">
   <ng-container *ngIf="settingsService.settings$ | async as settings; else loadingSettings">
     <form #settingsForm="ngForm">

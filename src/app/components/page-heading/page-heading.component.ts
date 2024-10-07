@@ -14,6 +14,6 @@ export class PageHeadingComponent {
   constructor(public router: Router) {};
   @Input({required: true}) headingText!: string;
   @Input() buttons!: string[];
-  @Input() backButtonNav?: string = undefined;
+  @Output() onBackButton =  new EventEmitter();
   @Output() onIconClick = new EventEmitter();
 }

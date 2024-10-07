@@ -1,5 +1,5 @@
 <div>
-    <app-page-heading headingText="Add Friend"></app-page-heading>
+    <app-page-heading headingText="Add Friend" (onBackButton)="router.navigate(['/friends'])"></app-page-heading>
     <div class="content">
         <form (ngSubmit)="onFormSubmit(searchUserForm)" #searchUserForm="ngForm">
             <div>

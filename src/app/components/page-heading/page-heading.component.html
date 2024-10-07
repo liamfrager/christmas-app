@@ -1,7 +1,7 @@
 <div class="heading-text">
-  <app-icon *ngIf="backButtonNav"
+  <app-icon *ngIf="onBackButton.observed"
     icon="arrow_back_ios"
-    (iconClicked)="router.navigate([backButtonNav])"
+    (iconClicked)="onBackButton.emit(true)"
     >
   </app-icon>
   <h2>{{headingText}}</h2>
