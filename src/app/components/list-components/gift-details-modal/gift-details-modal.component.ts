@@ -39,6 +39,16 @@ export class GiftDetailsModalComponent implements OnInit {
     }
   }
 
+  getIcon() {
+    const icons = {
+      'claim': 'add_shopping_cart',
+      'unclaim': 'remove_shopping_cart',
+      'claimed': '',
+      'edit': 'edit',
+    }
+    return icons[this.buttonType];
+  }
+
   statuses = [
     { name: 'claimed', icon: 'check' },
     { name: 'purchased', icon: 'paid' },
