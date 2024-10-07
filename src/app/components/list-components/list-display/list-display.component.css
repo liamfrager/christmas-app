@@ -1,12 +1,3 @@
-:host {
-  display: block;
-  overflow-x: hidden;
-}
-
-.list {
-  height: auto;
-}
-
 .gift {
   margin: 0;
   background: green;

@@ -36,6 +36,7 @@ h2 {
   font-family: "Tangerine";
 }
 h1 {
+  font-size: 2em;
   margin: .5em 0;
 }
 h2 {
@@ -112,4 +113,6 @@ button.btn-red, app-pop-up.btn-red button:first-of-type {
   flex: 1; /* Takes remaining space */
   margin: 0;
   padding: 0 1em;
+  display: flex;
+  flex-direction: column;
 }
