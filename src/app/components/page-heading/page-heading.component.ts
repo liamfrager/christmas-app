@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Optional, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-page-heading',
@@ -11,8 +11,9 @@ import { Router } from '@angular/router';
   styleUrl: './page-heading.component.css'
 })
 export class PageHeadingComponent {
-  constructor(private router: Router) {};
+  constructor(public router: Router) {};
   @Input({required: true}) headingText!: string;
   @Input() buttons!: string[];
+  @Input() backButtonNav?: string = undefined;
   @Output() onIconClick = new EventEmitter();
 }
