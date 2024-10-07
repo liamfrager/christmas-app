@@ -31,7 +31,7 @@
       <dialog #friendsPopUp>
         <div class="dialog-heading">
           <h3>{{user.displayName}}'s Friends</h3>
-          <app-icon icon="close" (iconClicked)="hideFriends()" [hover]="false" size="20px"></app-icon>
+          <app-icon icon="close" (iconClicked)="hideFriends()" size="20px"></app-icon>
         </div>
         <app-friends-display *ngIf="friendsPopUp.open" [userID]="user.id"></app-friends-display>
       </dialog>
