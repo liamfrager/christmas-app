@@ -5,7 +5,7 @@ import { UserDisplayComponent } from "../../components/user-display/user-display
 import { IconComponent } from "../../components/icon/icon.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../types';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FriendsService } from '../../services/friends.service';
 import { PopUpComponent } from "../../components/pop-up/pop-up.component";
 import { FriendsDisplayComponent } from "../../components/friends-display/friends-display.component";
@@ -26,16 +26,19 @@ export class ProfileComponent {
     private accountService: AccountService,
     private friendsService: FriendsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public location: Location,
   ) {};
   currentUserID = this.accountService.currentUserID;
   user?: User;
   friendStatus?: 'incoming' | 'outgoing' | 'friends';
   isEditing: boolean = false;
   showMoodSelector: boolean = false;
+  showBackButton: boolean = true;
 
   async ngOnInit() {
     const userID = this.route.snapshot.paramMap.get('id');
+    this.showBackButton = !!userID;
     if (userID) {
       if (userID === this.currentUserID) {
         this.router.navigate(['/profile']);

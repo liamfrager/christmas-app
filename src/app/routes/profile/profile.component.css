@@ -10,12 +10,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
+    padding: 1em 0 0 0;
+}
+
+.back-button {
+    position: absolute;
+    top: 1em;
+    left: 0;
 }
 
 .pfp {
     position: relative;
     display: inline-block;
-    margin-top: 1em;
     img {
         display: block;
         width: 80px;
@@ -70,5 +77,5 @@ dialog {
 }
 
 .bio {
-    margin: 1em 0 1.5em 0;
+    margin: 1em 0;
 }
