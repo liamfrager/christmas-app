@@ -13,7 +13,7 @@ import { GiftListService } from '../../../services/gift-list.service';
   styleUrl: './add-shopping-gift.component.css'
 })
 export class AddShoppingGiftComponent {
-  constructor (private router: Router, private giftListService: GiftListService) {}
+  constructor (public router: Router, private giftListService: GiftListService) {}
   
   async onSubmit(gift: NewGift) {
     await this.giftListService.createGiftInShoppingList(gift, gift.isWishedByUser as Friend);

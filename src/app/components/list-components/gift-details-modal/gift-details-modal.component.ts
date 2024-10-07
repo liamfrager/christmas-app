@@ -24,7 +24,6 @@ export class GiftDetailsModalComponent implements OnInit {
   @Output() onButtonClick = new EventEmitter();
   @Output() onStatusUpdated = new EventEmitter();
 
-  headingButtons = ['close'];
   currentStatus = this.gift?.status;
   editingGift: boolean = false;
   public get buttonText() : string {
@@ -38,6 +37,16 @@ export class GiftDetailsModalComponent implements OnInit {
       this.editingGift = false;
       this.onButtonClick.emit(event);
     }
+  }
+
+  getIcon() {
+    const icons = {
+      'claim': 'add_shopping_cart',
+      'unclaim': 'remove_shopping_cart',
+      'claimed': '',
+      'edit': 'edit',
+    }
+    return icons[this.buttonType];
   }
 
   statuses = [

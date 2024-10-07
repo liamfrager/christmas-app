@@ -8,6 +8,7 @@ import { SettingsService } from '../../services/settings.service';
 import { IconComponent } from "../../components/icon/icon.component";
 import { AccountService } from '../../services/account.service';
 import { PopUpComponent } from "../../components/pop-up/pop-up.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -20,7 +21,8 @@ export class SettingsComponent {
   constructor(
     private authService: AuthService,
     public settingsService: SettingsService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    public router: Router
   ) {}
 
   onSettingsChange(name: string, value: any) {

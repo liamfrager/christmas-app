@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { Friend, User } from '../../../types';
 import { FriendsService } from '../../../services/friends.service';
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-friend',
@@ -17,7 +18,12 @@ import { PageHeadingComponent } from "../../../components/page-heading/page-head
   styleUrl: './add-friend.component.css'
 })
 export class AddFriendComponent implements OnInit {
-  constructor(private firebaseService: FirebaseService, private accountService: AccountService, private friendsService: FriendsService) {}
+  constructor(
+    private firebaseService: FirebaseService,
+    private accountService: AccountService,
+    private friendsService: FriendsService,
+    public router: Router
+  ) {}
   db = this.firebaseService.db;
   searchResults: Array<User> | null | undefined;
   friendsStatuses: Record<string, string> = {};

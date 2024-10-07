@@ -7,14 +7,13 @@
       </span>
       <app-page-heading
         [headingText]="gift.name"
-        [buttons]="headingButtons"
-        (onIconClick)="onModalClose.emit(true);"
+        (onBackButton)="onModalClose.emit(true);"
         >
       </app-page-heading>
       <p>{{gift.details}}</p>
       <a class="link-btn" [href]="gift.url">
         <button class="link-btn">
-          <app-icon class="pad-r" icon="link" [hover]="null"></app-icon>Link to gift
+          <app-icon icon="link" [hover]="null" size="20px"></app-icon>Link to gift
         </button>
       </a>
       <!-- Shopping list status bar -->
@@ -36,15 +35,17 @@
       <div class="bottom-button-wrap">
         <span *ngIf="buttonText === 'This gift has already been claimed.'; else modalButton">{{buttonText}}</span>
         <ng-template #modalButton>
-          <button class="bottom-button" (click)="buttonClick(buttonType)">{{buttonText}}</button>
+          <button class="bottom-button" (click)="buttonClick(buttonType)"><app-icon [icon]="getIcon()" [hover]="null" size="20px"></app-icon>{{buttonText}}</button>
         </ng-template>
       </div>
     </ng-container>
     <ng-template #editForm>
-      <app-page-heading headingText="Edit Gift"></app-page-heading>
+      <app-page-heading headingText="Edit Gift" (onBackButton)="editingGift = false"></app-page-heading>
       <app-gift-form [type]="gift.isCustom ? 'shopping' : 'wish'" [gift]="gift" (onFormSubmit)="buttonClick($event)"></app-gift-form>
       <app-pop-up
+        class="btn-red"
         buttonText="Delete Gift"
+        buttonIcon="delete_forever"
         title="Are you sure you want to delete this gift?"
         body="This cannot be undone."
         confirmText="Delete"

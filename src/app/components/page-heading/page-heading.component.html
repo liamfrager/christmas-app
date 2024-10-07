@@ -1,4 +1,11 @@
-<h2>{{headingText}}</h2>
+<div class="heading-text">
+  <app-icon *ngIf="onBackButton.observed"
+    icon="arrow_back_ios"
+    (iconClicked)="onBackButton.emit(true)"
+    >
+  </app-icon>
+  <h2>{{headingText}}</h2>
+</div>
 <span *ngIf="buttons">
   <app-icon *ngFor="let icon of buttons"
     [icon]="icon"
