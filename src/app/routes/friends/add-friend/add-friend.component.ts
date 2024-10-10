@@ -59,7 +59,9 @@ export class AddFriendComponent implements OnInit {
    * @param form - The form object.
    */
   async onFormSubmit(form: NgForm) {
-    if (form.form.value.searchQuery.length > 0) {
+    if (form.form.value.searchQuery === null) {
+      this.searchResults = null;
+    } else {
       this.searchQuery = form.form.value.searchQuery;
       this.searchResults = await this.searchUsers(this.searchQuery!)
     }

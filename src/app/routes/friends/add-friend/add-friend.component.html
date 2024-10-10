@@ -1,28 +1,31 @@
-<div>
-    <app-page-heading headingText="Add Friend" (onBackButton)="router.navigate(['/friends'])"></app-page-heading>
-    <div class="content">
-        <form (ngSubmit)="onFormSubmit(searchUserForm)" #searchUserForm="ngForm">
-            <div class="input">
-                <span class="material-symbols-outlined">search</span>
-                <input id="searchedUser" type="text" placeholder="Search" name="searchQuery" [(ngModel)]="searchQuery">
-            </div>
-            <button type="submit">Search</button>
-        </form>
-        <ng-container *ngIf="searchResults">
-            <!-- TODO: Fix friend request display to link to profile.-->
-            <app-user-display *ngFor="let user of searchResults"
+<app-page-heading headingText="Add Friend" (onBackButton)="router.navigate(['/friends'])"></app-page-heading>
+<div class="content">
+    <form (ngSubmit)="onFormSubmit(searchUserForm)" #searchUserForm="ngForm" class="sticky">
+        <div class="input">
+            <span class="material-symbols-outlined">search</span>
+            <input id="searchedUser" type="text" placeholder="Search" name="searchQuery" [(ngModel)]="searchQuery">
+        </div>
+        <!-- <button type="submit">Search</button> -->
+    </form>
+    <hr>
+    <div class="content" *ngIf="searchResults">
+        <!-- TODO: Fix friend request display to link to profile.-->
+        <ng-container *ngFor="let user of searchResults">
+            <app-user-display
                 [user]="user"
             >
             </app-user-display>
+            <hr>
         </ng-container>
-        <div>
-            <app-page-heading headingText="Friend Requests"></app-page-heading>
-            <app-user-display *ngFor="let friendRequest of incomingFriendRequests"
+    </div>
+    <ng-container *ngIf="!searchResults">
+        <app-page-heading headingText="Friend Requests"></app-page-heading>
+        <div *ngFor="let friendRequest of incomingFriendRequests">
+            <app-user-display
                 [user]="friendRequest"
-                [iconActions]="getFriendRequestIconActions(friendRequest)"
-                [onClick]="null"
             >
             </app-user-display>
+            <hr>
         </div>
-    </div>
+    </ng-container>
 </div>
