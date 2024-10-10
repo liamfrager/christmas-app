@@ -9,6 +9,7 @@ import { Friend, User } from '../../../types';
 import { FriendsService } from '../../../services/friends.service';
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
 import { Router } from '@angular/router';
+import { CookieService } from '../../../services/cookie.service';
 
 @Component({
   selector: 'app-add-friend',
@@ -22,17 +23,19 @@ export class AddFriendComponent implements OnInit {
     private firebaseService: FirebaseService,
     private accountService: AccountService,
     private friendsService: FriendsService,
+    private cookieService: CookieService,
     public router: Router
   ) {}
   db = this.firebaseService.db;
   get searchQuery() : string | null {
-    return localStorage.getItem('searchQuery');
+    const cookie = this.cookieService.getCookie('searchQuery');
+    return cookie;
   }
   set searchQuery(value) {
     if (value)
-      localStorage.setItem('searchQuery', value);
+      this.cookieService.setCookie('searchQuery', value);
     else
-      localStorage.removeItem('searchQuery');
+      this.cookieService.deleteCookie('searchQuery');
   }
   searchResults: Array<User> | null | undefined;
   friendsStatuses: Record<string, string> = {};
