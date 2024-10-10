@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
 export class UserDisplayComponent {
   constructor(private router: Router) {};
   @Input({required: true}) user!: User;
-  @Input() iconActions?: Map<string, () => void> = new Map();
   @Input() onClick: (() => void) | null = this.goToProfile;
 
   /**

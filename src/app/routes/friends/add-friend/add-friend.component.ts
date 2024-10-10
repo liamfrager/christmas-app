@@ -9,6 +9,7 @@ import { Friend, User } from '../../../types';
 import { FriendsService } from '../../../services/friends.service';
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
 import { Router } from '@angular/router';
+import { CookieService } from '../../../services/cookie.service';
 
 @Component({
   selector: 'app-add-friend',
@@ -22,9 +23,20 @@ export class AddFriendComponent implements OnInit {
     private firebaseService: FirebaseService,
     private accountService: AccountService,
     private friendsService: FriendsService,
+    private cookieService: CookieService,
     public router: Router
   ) {}
   db = this.firebaseService.db;
+  get searchQuery() : string | null {
+    const cookie = this.cookieService.getCookie('searchQuery');
+    return cookie;
+  }
+  set searchQuery(value) {
+    if (value)
+      this.cookieService.setCookie('searchQuery', value);
+    else
+      this.cookieService.deleteCookie('searchQuery');
+  }
   searchResults: Array<User> | null | undefined;
   friendsStatuses: Record<string, string> = {};
   incomingFriendRequests: Array<Friend> = [];
@@ -38,6 +50,8 @@ export class AddFriendComponent implements OnInit {
         return obj as Record<string, string> ;
       }, {});
     }
+    if (this.searchQuery)
+      this.searchResults = await this.searchUsers(this.searchQuery);
   }
   
   /**
@@ -45,9 +59,11 @@ export class AddFriendComponent implements OnInit {
    * @param form - The form object.
    */
   async onFormSubmit(form: NgForm) {
-    if (form.form.value.searchQuery.length > 0) {
-      const searchQuery: string = form.form.value.searchQuery
-      this.searchResults = await this.searchUsers(searchQuery)
+    if (form.form.value.searchQuery === null) {
+      this.searchResults = null;
+    } else {
+      this.searchQuery = form.form.value.searchQuery;
+      this.searchResults = await this.searchUsers(this.searchQuery!)
     }
   }
 
@@ -57,8 +73,8 @@ export class AddFriendComponent implements OnInit {
    * @returns A promise that gives an array of users when resolved.
    */
   async searchUsers(searchTerm: string): Promise<Array<User>> {
-      const searchQuery = searchTerm.replace(/\s+/g, '').toLowerCase();
-      const q = query(collection(this.db, "users"), where('searchName', '>=', searchQuery), where('searchName', '<=', searchQuery + '\uf8ff'));
+      const modifiedSearchQuery = searchTerm.replace(/\s+/g, '').toLowerCase();
+      const q = query(collection(this.db, "users"), where('searchName', '>=', modifiedSearchQuery), where('searchName', '<=', modifiedSearchQuery + '\uf8ff'));
       const docRef = await getDocs(q);
       let results: Array<User> = [];
       docRef.forEach(async snap => {
@@ -67,35 +83,6 @@ export class AddFriendComponent implements OnInit {
         }
       });
       return results;
-  }
-
-  /**
-   * Returns icons and functions to be used in app-user-display.iconActions.
-   * @param user - A User object representing the result of a search query.
-   * @returns A map of icon names and anonymous functions to be executed when said icons are clicked.
-   */
-  getSearchIconActions(user: User): Map<string, () => void> {
-    let iconActions = new Map<string, () => void>();
-    const status = this.friendsStatuses[user.id];
-    const icon = (status === 'friends' || status === 'outgoing') ? 'check': 'person_add';
-    iconActions.set(icon, () => this.onSendFriendRequest(user));
-    return iconActions;
-  }
-
-  /**
-   * Returns icons and functions to be used in app-user-display.iconActions.
-   * @param friendRequest - A Friend object representing the sender of an incoming friend request.
-   * @returns A map of icon names and anonymous functions to be executed when said icons are clicked.
-   */
-  getFriendRequestIconActions(friendRequest: Friend): Map<string, () => void> {
-    let iconActions = new Map<string, () => void>();
-    if (friendRequest.status === 'friends') {
-      iconActions.set('check', () => {});
-      return iconActions;
-    }
-    iconActions.set('close', () => this.onRejectFriendRequest(friendRequest));
-    iconActions.set('person_add', () => this.onAcceptFriendRequest(friendRequest));
-    return iconActions;
   }
 
   /**

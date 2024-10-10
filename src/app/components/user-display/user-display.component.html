@@ -3,11 +3,4 @@
         <img [src]="user.pfp" [alt]="user.displayName + ' profile picture'">
         <span>{{user.displayName}}</span>
     </div>
-    <div class="icons-display">
-        <app-icon *ngFor="let icon of iconActions | keyvalue"
-            [icon]="icon.key"
-            (iconClicked)="icon.value()"
-        >
-        </app-icon>
-    </div>
 </div>

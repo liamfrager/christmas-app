@@ -5,7 +5,7 @@
 <dialog #popUp>
   <h3>{{title}}</h3>
   <p>{{body}}</p>
-  <div class="buttonContainer">
+  <div class="btn-wrap">
     <button (click)="this.onConfirm.emit(true); popUp.close()" class="btn-red">{{confirmText}}</button>
     <button (click)="popUp.close()">Cancel</button>
   </div>
