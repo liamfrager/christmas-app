@@ -3,48 +3,36 @@ import { FriendsDisplayComponent } from '../../components/friends-display/friend
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../services/account.service';
+import { CommonModule } from '@angular/common';
 import { FriendsService } from '../../services/friends.service';
-import { Friend } from '../../types';
+import { User } from '../../types';
 
 @Component({
   selector: 'app-friends',
   standalone: true,
-  imports: [FriendsDisplayComponent, PageHeadingComponent],
+  imports: [CommonModule, FriendsDisplayComponent, PageHeadingComponent],
   templateUrl: './friends.component.html',
   styleUrl: './friends.component.css'
 })
 export class FriendsComponent implements OnInit {
   constructor(
-    private router: Router,
+    public router: Router,
     private route: ActivatedRoute,
     private accountService: AccountService,
   ) {};
-  userID?: string;
-  headingButtons = ['filter_list', 'person_add'];
+  IDParam: string | undefined | null;
+  user?: User;
 
-  onHeadingIconClick(e: any) {
-    switch (e) {
-      case 'filter_list':
-        // TODO: add sorting capabilities
-        console.log('filter')
-        break;
-      case 'person_add':
-        this.router.navigate(['/friends/add-friend']);
-        break;
-      default:
-        break;
-    }
-  }
-
-  ngOnInit() {
-    const userID = this.route.snapshot.paramMap.get('id');
-    if (userID) {
-      if (userID === this.accountService.currentUserID) {
+  async ngOnInit() {
+    let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');
+    this.IDParam = IDParam;
+    if (IDParam) {
+      if (IDParam === this.accountService.currentUserID)
         this.router.navigate(['/friends']);
-      }
-      this.userID = userID;
+      else
+        this.user = await this.accountService.getUserInfo(IDParam);
     } else {
-      this.userID = this.accountService.currentUserID;
+      this.user = this.accountService.currentUser;
     }
   }
 }

@@ -37,7 +37,7 @@ export class GiftFormComponent {
     this.urlVal = this.gift ? this.gift.url : '';
     this.detailsVal = this.gift ? this.gift.details : '';
     if (this.type === 'shopping') {
-      this.friends = await this.friendsService.getFriends()
+      this.friends = await this.friendsService.getFriends(this.accountService.currentUserID!)
     }
   }
 

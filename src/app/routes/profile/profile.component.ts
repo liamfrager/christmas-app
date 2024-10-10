@@ -72,13 +72,7 @@ export class ProfileComponent {
   }
 
   viewFriends() {
-    if (this.user?.id === this.currentUserID) {
-      this.router.navigate([`/friends`]);
-    } else {
-      const dialog = document.getElementsByTagName('dialog')[0];
-      dialog.showModal();
-      document.getElementsByTagName('body')[0].style.setProperty('overflow', 'hidden');
-    }
+    this.router.navigate([`/profile/${this.user!.id}/friends`]);
   }
 
   hideFriends() {

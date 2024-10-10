@@ -66,7 +66,7 @@ export class AccountService {
       transaction.update(docRef, updates);
       if (updates.displayName !== this.currentUser.displayName) {
         console.log('updating display name');
-        const friends = await this.friendsService.getFriends();
+        const friends = await this.friendsService.getFriends(this.currentUserID!);
         friends.forEach(friend => {
           const friendRef = doc(this.firebaseService.db, 'lists', friend.id, 'friends-list', this.currentUserID!);
           transaction.update(friendRef, updates);

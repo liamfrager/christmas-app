@@ -115,6 +115,7 @@ button.btn-red, app-pop-up.btn-red button:first-of-type {
 
 .content {
   overflow-y: auto; /* Allow vertical scrolling */
+  overflow-x: hidden;
   flex: 1; /* Takes remaining space */
   margin: 0;
   padding: 0 1em;

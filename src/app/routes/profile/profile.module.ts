@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile.component';
+import { WishListComponent } from '../wish-list/wish-list.component';
+import { FriendsComponent } from '../friends/friends.component';
 
 
 
@@ -14,7 +16,8 @@ import { ProfileComponent } from './profile.component';
       { path: ':id',
         children: [
           { path: '', component: ProfileComponent },
-          { path: 'wish-list', loadChildren: () => import('../wish-list/wish-list.module').then(m => m.WishListModule) },
+          { path: 'wish-list', component: WishListComponent },
+          { path: 'friends', component: FriendsComponent },
         ],
       }
     ])

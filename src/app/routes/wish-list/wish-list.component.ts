@@ -24,20 +24,7 @@ export class WishListComponent implements OnInit {
     public router: Router
   ) {};
   listInfo!: List;
-  headingButtons: string[] = [];
   IDParam: string | undefined | null;
-  onHeadingIconClick(e: any) {
-    switch (e) {
-      case 'filter_list':
-        console.log('filter');
-        break;
-      case 'forms_add_on':
-        this.router.navigate(['/wish-list/add-gift']);
-        break;
-      default:
-        break;
-    }
-  }
 
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');
@@ -52,7 +39,6 @@ export class WishListComponent implements OnInit {
       }
     } else {
       IDParam = this.accountService.currentUserID;
-      this.headingButtons = ['filter_list', 'forms_add_on'];
     }
     const listInfo = await this.giftListService.getWishListInfo(IDParam!);
     if (listInfo)

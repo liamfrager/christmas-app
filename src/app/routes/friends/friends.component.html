@@ -1,9 +1,18 @@
-<app-page-heading
-    headingText="Friends"
-    [buttons]="headingButtons"
-    (onIconClick)="onHeadingIconClick($event)"
-    >
-</app-page-heading>
-<div class="content">
-    <app-friends-display [userID]="userID"></app-friends-display>
+<ng-container *ngIf="IDParam; else noBackButton">
+    <app-page-heading
+        [headingText]="user ? user.displayName + '\'s Friends' : 'Friends'"
+        (onBackButton)="router.navigate(['/profile/' + IDParam])"
+        >
+    </app-page-heading>
+</ng-container>
+<ng-template #noBackButton>
+    <app-page-heading
+        headingText="Friends"
+        [buttons]="['person_add']"
+        (onIconClick)="router.navigate(['/friends/add-friend'])"
+        >
+    </app-page-heading>
+</ng-template>
+<div class="content" *ngIf="user">
+    <app-friends-display [userID]="user.id"></app-friends-display>
 </div>
