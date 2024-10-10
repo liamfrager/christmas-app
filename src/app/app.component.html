@@ -3,6 +3,5 @@
   <router-outlet />
 </main>
 <ng-container *ngIf="firebaseService.auth.currentUser">
-  <app-filler size="footer"></app-filler>
   <app-footer></app-footer>
 </ng-container>
