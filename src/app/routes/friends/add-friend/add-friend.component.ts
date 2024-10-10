@@ -86,35 +86,6 @@ export class AddFriendComponent implements OnInit {
   }
 
   /**
-   * Returns icons and functions to be used in app-user-display.iconActions.
-   * @param user - A User object representing the result of a search query.
-   * @returns A map of icon names and anonymous functions to be executed when said icons are clicked.
-   */
-  getSearchIconActions(user: User): Map<string, () => void> {
-    let iconActions = new Map<string, () => void>();
-    const status = this.friendsStatuses[user.id];
-    const icon = (status === 'friends' || status === 'outgoing') ? 'check': 'person_add';
-    iconActions.set(icon, () => this.onSendFriendRequest(user));
-    return iconActions;
-  }
-
-  /**
-   * Returns icons and functions to be used in app-user-display.iconActions.
-   * @param friendRequest - A Friend object representing the sender of an incoming friend request.
-   * @returns A map of icon names and anonymous functions to be executed when said icons are clicked.
-   */
-  getFriendRequestIconActions(friendRequest: Friend): Map<string, () => void> {
-    let iconActions = new Map<string, () => void>();
-    if (friendRequest.status === 'friends') {
-      iconActions.set('check', () => {});
-      return iconActions;
-    }
-    iconActions.set('close', () => this.onRejectFriendRequest(friendRequest));
-    iconActions.set('person_add', () => this.onAcceptFriendRequest(friendRequest));
-    return iconActions;
-  }
-
-  /**
    * Handles when a friend request is sent.
    * @param user - A User object representing the intended recipient of the friend request.
    */

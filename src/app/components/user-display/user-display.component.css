@@ -1,4 +1,4 @@
-.user-display, .user-info, .icons-display {
+.user-display, .user-info {
     display: flex;
     flex-direction: row;
     align-items: center;
