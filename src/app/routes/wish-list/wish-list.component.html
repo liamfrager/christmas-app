@@ -1,8 +1,6 @@
 <ng-container *ngIf="IDParam ; else noBackButton">
     <app-page-heading
         headingText="Wish List"
-        [buttons]="headingButtons"
-        (onIconClick)="onHeadingIconClick($event)"
         (onBackButton)="router.navigate(['/profile/' + IDParam])"
         >
     </app-page-heading>
@@ -10,8 +8,8 @@
 <ng-template #noBackButton>
     <app-page-heading
         headingText="Wish List"
-        [buttons]="headingButtons"
-        (onIconClick)="onHeadingIconClick($event)"
+        [buttons]="['forms_add_on']"
+        (onIconClick)="router.navigate(['/wish-list/add-gift'])"
         >
     </app-page-heading>
 </ng-template>

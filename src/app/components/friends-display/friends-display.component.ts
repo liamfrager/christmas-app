@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UserDisplayComponent } from '../user-display/user-display.component';
-import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { FriendsService } from '../../services/friends.service';
 import { Friend, User } from '../../types';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-friends-display',
@@ -14,11 +13,20 @@ import { Friend, User } from '../../types';
   styleUrl: './friends-display.component.css'
 })
 export class FriendsDisplayComponent implements OnInit {
-  constructor(private friendsService: FriendsService, private router: Router) { }
+  constructor(
+    private friendsService: FriendsService,
+    private accountService: AccountService,
+  ) {}
   @Input({required: true}) userID?: string;
+  user?: User;
   friends?: Array<Friend>;
+  noFriendsMessage?: string;
 
   async ngOnInit() {
-    this.friends = await this.friendsService.getFriends(this.userID);
+    if (this.userID) {
+      this.user = await this.accountService.getUserInfo(this.userID);
+      this.friends = await this.friendsService.getFriends(this.userID);
+    }
+    this.noFriendsMessage = `There is nobody in ${this.userID === this.accountService.currentUserID ? 'your' : this.user?.displayName + "'s"} friends list.`;
   }
 }
