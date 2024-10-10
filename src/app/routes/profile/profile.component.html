@@ -2,6 +2,14 @@
   <ng-container *ngIf="user">
     <ng-container *ngIf="!isEditing; else edit">
       <div class="user-info">
+        <!-- Back Button -->
+        <app-icon *ngIf="showBackButton"
+          class="back-button"
+          icon="arrow_back_ios"
+          (iconClicked)="location.back()"
+          >
+        </app-icon>
+        <!-- User Info -->
         <div class="pfp">
           <img [src]="user.pfp" alt="profile picture">
           <!-- Mood -->
@@ -23,7 +31,8 @@
         </div>
         <h2>{{user.displayName}}</h2>
       </div>
-      <p *ngIf="user.bio" class="bio"><strong>Bio:</strong> {{user.bio}}</p>
+      <p *ngIf="user.bio" class="bio">{{user.bio}}</p>
+      <hr>
       <!-- Wish list -->
       <button *ngIf="friendStatus === 'friends' || user.id === currentUserID" (click)="viewList()"><app-icon icon="featured_seasonal_and_gifts" [hover]="false" size="20px"></app-icon>View List</button>
       <!-- Friends list -->
@@ -69,7 +78,7 @@
       </ng-template>
     </ng-container>
     <ng-template #edit>
-      <app-page-heading headingText="Edit Profile"></app-page-heading>
+      <app-page-heading headingText="Edit Profile" (onBackButton)="isEditing = false"></app-page-heading>
       <app-profile-form
         [user]="user"
         (onFormSubmit)="onProfileEdited($event)"

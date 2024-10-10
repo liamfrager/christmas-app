@@ -7,9 +7,17 @@
 }
 
 main {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    width: 100%;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+}
+
+.margin-small {
+  margin-bottom: 60px;
+}
+
+.margin-big {
+  margin-bottom: 84px;
 }

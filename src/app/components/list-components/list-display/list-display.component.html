@@ -12,14 +12,14 @@
   <!-- List display -->
   <ng-template #listDisplay>
     <!-- Display list owner -->
-     <app-user-display *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser"
+    <app-user-display *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser"
       [user]="list.owner"
       [onClick]="null"
       >
     </app-user-display>
     <!-- Display gifts -->
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
-      <div *ngFor="let giftByUser of list.giftsByUser | keyvalue">
+      <ng-container *ngFor="let giftByUser of list.giftsByUser | keyvalue">
         <!-- If is shopping-list -->
         <ng-container *ngIf="list.type === 'shopping'">
           <app-user-display
@@ -40,7 +40,7 @@
           </li>
         </ul>
         <hr>
-      </div>
+      </ng-container>
     </div>
     <!-- Gift details slide-over -->
     <app-gift-details-modal

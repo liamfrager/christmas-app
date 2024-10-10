@@ -1,10 +1,12 @@
 <div [ngClass]="{'show': isShown, 'hide': !isShown}" class="backdrop">
   <div *ngIf="gift" class="modal">
     <ng-container *ngIf="!editingGift; else editForm">
-      <span *ngIf="gift.isDeleted" class="error">
-        <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
-        <p>{{'This gift has been deleted by ' + this.gift.isWishedByUser.displayName + '. It is no longer on their wish list.'}}</p>
-      </span>
+      <div class="content">
+        <span *ngIf="gift.isDeleted" class="error">
+          <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
+          <p>{{'This gift has been deleted by ' + this.gift.isWishedByUser.displayName + '. It is no longer on their wish list.'}}</p>
+        </span>
+      </div>
       <app-page-heading
         [headingText]="gift.name"
         (onBackButton)="onModalClose.emit(true);"
@@ -14,29 +16,33 @@
         <p>{{gift.details}}</p>
         <a class="link-btn" [href]="gift.url">
           <button class="link-btn">
-            <app-icon class="pad-r" icon="link" [hover]="null"></app-icon>Link to gift
+            <app-icon icon="link" [hover]="null" size="20px"></app-icon>Link to gift
           </button>
         </a>
+        <hr>
         <!-- Shopping list status bar -->
-        <div *ngIf="type === 'shopping'" class="status-display">
-          <h4 class="track-gift">Track your gift:</h4>
-          <div class="line">
-            <div *ngFor="let status of statuses" class="node" [style]="status.name === gift.status ? 'color: green' : ''">
-              <app-icon
-                [icon]="status.icon"
-                [hover]="false"
-                (iconClicked)="onStatusUpdated.emit(status.name)"
-                [title]="status.name | titlecase"
-                >
-              </app-icon>
+        <ng-container *ngIf="type === 'shopping'">
+          <div class="status-display">
+            <h4 class="track-gift">Track your gift:</h4>
+            <div class="line">
+              <div *ngFor="let status of statuses" class="node" [style]="status.name === gift.status ? 'color: green' : ''">
+                <app-icon
+                  [icon]="status.icon"
+                  [hover]="false"
+                  (iconClicked)="onStatusUpdated.emit(status.name)"
+                  [title]="status.name | titlecase"
+                  >
+                </app-icon>
+              </div>
             </div>
           </div>
-        </div>
+          <hr>
+        </ng-container>
         <!-- Bottom button (edit/claim/unclaim) -->
         <div class="bottom-button-wrap">
           <span *ngIf="buttonText === 'This gift has already been claimed.'; else modalButton">{{buttonText}}</span>
           <ng-template #modalButton>
-            <button class="bottom-button" (click)="buttonClick(buttonType)">{{buttonText}}</button>
+            <button class="bottom-button" (click)="buttonClick(buttonType)"><app-icon [icon]="getIcon()" [hover]="false" size="20px"></app-icon>{{buttonText}}</button>
           </ng-template>
         </div>
       </div>

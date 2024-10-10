@@ -67,9 +67,6 @@ export class ListDisplayComponent implements OnChanges {
    */
   hideModal() {
     this.isModalOpen = false;
-    setTimeout(() => {
-      this.giftInModal = undefined;
-    }, 300); // Wait for the animation to complete (0.3s)
   }
 
   /**

@@ -40,20 +40,21 @@ export class WishListComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.IDParam = this.route.snapshot.paramMap.get('id');
-    if (this.IDParam) {
-      if (this.IDParam === this.accountService.currentUserID)
+    let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');
+    this.IDParam = IDParam;
+    if (IDParam) {
+      if (IDParam === this.accountService.currentUserID)
         this.router.navigate(['/wish-list']);
-      const friend = await this.friendsService.getFriend(this.IDParam);
+      const friend = await this.friendsService.getFriend(IDParam);
       if (friend!.status !== 'friends') {
         this.listInfo = { type: 'not-friends', owner: friend } as List;
         return;
       }
     } else {
-      this.IDParam = this.accountService.currentUserID;
+      IDParam = this.accountService.currentUserID;
       this.headingButtons = ['filter_list', 'forms_add_on'];
     }
-    const listInfo = await this.giftListService.getWishListInfo(this.IDParam!);
+    const listInfo = await this.giftListService.getWishListInfo(IDParam!);
     if (listInfo)
       this.listInfo = listInfo;
   }
