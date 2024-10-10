@@ -2,17 +2,16 @@
     <app-page-heading headingText="Add Friend" (onBackButton)="router.navigate(['/friends'])"></app-page-heading>
     <div class="content">
         <form (ngSubmit)="onFormSubmit(searchUserForm)" #searchUserForm="ngForm">
-            <div>
+            <div class="input">
                 <span class="material-symbols-outlined">search</span>
-                <input id="searchedUser" type="text" placeholder="Search" name="searchQuery" ngModel>
+                <input id="searchedUser" type="text" placeholder="Search" name="searchQuery" [(ngModel)]="searchQuery">
             </div>
             <button type="submit">Search</button>
         </form>
         <ng-container *ngIf="searchResults">
+            <!-- TODO: Fix friend request display to link to profile.-->
             <app-user-display *ngFor="let user of searchResults"
                 [user]="user"
-                [iconActions]="getSearchIconActions(user)"
-                [onClick]="null"
             >
             </app-user-display>
         </ng-container>

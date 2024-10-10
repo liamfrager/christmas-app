@@ -25,6 +25,15 @@ export class AddFriendComponent implements OnInit {
     public router: Router
   ) {}
   db = this.firebaseService.db;
+  get searchQuery() : string | null {
+    return localStorage.getItem('searchQuery');
+  }
+  set searchQuery(value) {
+    if (value)
+      localStorage.setItem('searchQuery', value);
+    else
+      localStorage.removeItem('searchQuery');
+  }
   searchResults: Array<User> | null | undefined;
   friendsStatuses: Record<string, string> = {};
   incomingFriendRequests: Array<Friend> = [];
@@ -38,6 +47,8 @@ export class AddFriendComponent implements OnInit {
         return obj as Record<string, string> ;
       }, {});
     }
+    if (this.searchQuery)
+      this.searchResults = await this.searchUsers(this.searchQuery);
   }
   
   /**
@@ -46,8 +57,8 @@ export class AddFriendComponent implements OnInit {
    */
   async onFormSubmit(form: NgForm) {
     if (form.form.value.searchQuery.length > 0) {
-      const searchQuery: string = form.form.value.searchQuery
-      this.searchResults = await this.searchUsers(searchQuery)
+      this.searchQuery = form.form.value.searchQuery;
+      this.searchResults = await this.searchUsers(this.searchQuery!)
     }
   }
 
@@ -57,8 +68,8 @@ export class AddFriendComponent implements OnInit {
    * @returns A promise that gives an array of users when resolved.
    */
   async searchUsers(searchTerm: string): Promise<Array<User>> {
-      const searchQuery = searchTerm.replace(/\s+/g, '').toLowerCase();
-      const q = query(collection(this.db, "users"), where('searchName', '>=', searchQuery), where('searchName', '<=', searchQuery + '\uf8ff'));
+      const modifiedSearchQuery = searchTerm.replace(/\s+/g, '').toLowerCase();
+      const q = query(collection(this.db, "users"), where('searchName', '>=', modifiedSearchQuery), where('searchName', '<=', modifiedSearchQuery + '\uf8ff'));
       const docRef = await getDocs(q);
       let results: Array<User> = [];
       docRef.forEach(async snap => {
