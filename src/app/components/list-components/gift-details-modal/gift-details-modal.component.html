@@ -49,16 +49,18 @@
     </ng-container>
     <ng-template #editForm>
       <app-page-heading headingText="Edit Gift" (onBackButton)="editingGift = false"></app-page-heading>
-      <app-gift-form [type]="gift.isCustom ? 'shopping' : 'wish'" [gift]="gift" (onFormSubmit)="buttonClick($event)"></app-gift-form>
-      <app-pop-up
-        class="btn-red"
-        buttonText="Delete Gift"
-        buttonIcon="delete_forever"
-        title="Are you sure you want to delete this gift?"
-        body="This cannot be undone."
-        confirmText="Delete"
-        (onConfirm)="buttonClick('delete')"
-      ></app-pop-up>
+      <div class="content">
+        <app-gift-form [type]="gift.isCustom ? 'shopping' : 'wish'" [gift]="gift" (onFormSubmit)="buttonClick($event)"></app-gift-form>
+        <app-pop-up
+          class="btn-red"
+          buttonText="Delete Gift"
+          buttonIcon="delete_forever"
+          title="Are you sure you want to delete this gift?"
+          body="This cannot be undone."
+          confirmText="Delete"
+          (onConfirm)="buttonClick('delete')"
+        ></app-pop-up>
+      </div>
     </ng-template>
   </div>
   <app-filler size="footer"></app-filler>
