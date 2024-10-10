@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   title = 'christmas-app';
   isLoggedIn = localStorage.getItem('isLoggedIn');
   settings!: Settings;
+  isPWA = window.matchMedia('(display-mode: standalone)').matches;
 
   ngOnInit() {
     this.settingsService.settings$.subscribe(
