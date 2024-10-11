@@ -18,10 +18,7 @@ export class RefreshService {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
       const originalMethod = descriptor.value;
       const originalNgOnInit = target.ngOnInit;
-      target.ngOnInit = function (...args: any[]) {
-        if (originalNgOnInit) {
-          originalNgOnInit.apply(this, args);
-        }
+      target.ngOnInit = async function (...args: any[]) {
         let callbacks = [() => {
           return Promise.resolve(originalMethod.apply(this, args));
         }]
@@ -30,12 +27,15 @@ export class RefreshService {
           callbacks = [...callbacks, ...RefreshService.callbackMap.get(index)!];
         }
         RefreshService.callbackMap.set(index, callbacks);
+        if (originalNgOnInit) {
+          await originalNgOnInit.apply(this, args);
+        }
         originalMethod.apply(this, args);
       };
       const originalNgOnDestroy = target.ngOnDestroy;
-      target.ngOnDestroy = function (...args: any[]) {
+      target.ngOnDestroy = async function (...args: any[]) {
         if (originalNgOnDestroy) {
-          originalNgOnDestroy.apply(this, args);
+          await originalNgOnDestroy.apply(this, args);
         }
         RefreshService.clearCallbacks(this);
       };
