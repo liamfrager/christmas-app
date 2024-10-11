@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, deleteField, doc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
+import { collection, deleteField, doc, DocumentData, getDocs, orderBy, query, QuerySnapshot, runTransaction } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
 import { Gift, List, NewGift, Gifts, Friend, User } from '../types';
@@ -15,13 +15,13 @@ export class GiftListService {
   /**
    * Fetches the wish-list of a given user.
    * @param userID - The user ID of the user whose wish-list is being fetched.
-   * @returns A promise that resolves to a List object containing the data for the current user's shopping-list.
+   * @returns A promise that resolves to a List object containing the data for the given user's wish-list.
    */
   async getWishListInfo(userID: string): Promise<List | undefined> {
     const wishQuerySnapshot = await getDocs(collection(this.db, 'lists', userID, 'wish-list'));
     let user = await this.accountService.getUserInfo(userID);
     if (user) {
-      // create list
+      // Create list
       let list: List = {
         type: 'wish',
         owner: user,
@@ -33,13 +33,13 @@ export class GiftListService {
           }
         } : undefined
       }
-      // add all gifts to list
+      // Add all gifts to list
       wishQuerySnapshot.forEach((doc) => {
         list.giftsByUser![userID].gifts.set(doc.data()['id'], doc.data() as Gift);
       });
       return list;
     }
-    return undefined
+    return undefined;
   }
 
   /**
@@ -48,9 +48,9 @@ export class GiftListService {
    */
   async getShoppingListInfo(): Promise<List | undefined> {
     if (this.accountService.currentUserID) {
-      // get all gifts from shopping-list
+      // Get all gifts from shopping-list
       const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', this.accountService.currentUserID, 'shopping-list'), orderBy('isWishedByUser')));
-      // convert DocumentData to List
+      // Convert DocumentData to List
       const owner = await this.accountService.getUserInfo(this.accountService.currentUserID)
       let list: List = {
         type: 'shopping',
@@ -61,9 +61,9 @@ export class GiftListService {
       for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {
         const gift = shoppingQuerySnapshot.docs[i].data() as Gift;
         const userID = gift.isWishedByID;
-        if (!list.giftsByUser![userID] && gift.isWishedByUser) { // if first gift in array wished by a user
+        if (!list.giftsByUser![userID] && gift.isWishedByUser) { // If first gift in array wished by a user
           list.giftsByUser![userID] = {
-            user: gift.isWishedByUser, // add user info to List
+            user: gift.isWishedByUser, // Add user info to List
             gifts: new Map() as Gifts,
           }
         }
@@ -71,7 +71,7 @@ export class GiftListService {
       }
       return list;
     }
-    return undefined
+    return undefined;
   }
 
   /**
