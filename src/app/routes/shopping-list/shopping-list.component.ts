@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ListDisplayComponent } from '../../components/list-components/list-display/list-display.component';
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
 import { Router } from '@angular/router';
 import { GiftListService } from '../../services/gift-list.service';
-import { List, User } from '../../types';
+import { List } from '../../types';
 import { CommonModule } from '@angular/common';
 import { RefreshService } from '../../services/refresh.service';
 

@@ -31,13 +31,14 @@ export class WishListComponent implements OnInit {
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');
     this.IDParam = IDParam;
-    if (IDParam) {
-      if (IDParam === this.accountService.currentUserID)
-        this.router.navigate(['/wish-list']);
-      this.user = await this.friendsService.getFriend(IDParam);
-      if (this.user!.status !== 'friends') {
-        this.listInfo = { type: 'not-friends', owner: this.user } as List;
-        return;
+    if (this.IDParam) {
+      if (this.IDParam !== this.accountService.currentUserID) {
+        this.user = await this.friendsService.getFriend(this.IDParam);
+        if (this.user!.status !== 'friends') {
+          this.listInfo = { type: 'not-friends', owner: this.user } as List;
+        }
+      } else {
+        this.user = this.accountService.currentUser;
       }
     } else {
       this.user = this.accountService.currentUser;
