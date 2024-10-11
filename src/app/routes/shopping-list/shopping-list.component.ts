@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { GiftListService } from '../../services/gift-list.service';
 import { List, User } from '../../types';
 import { CommonModule } from '@angular/common';
+import { RefreshService } from '../../services/refresh.service';
 
 @Component({
   selector: 'app-shopping-list',
@@ -13,24 +14,13 @@ import { CommonModule } from '@angular/common';
   templateUrl: './shopping-list.component.html',
   styleUrl: './shopping-list.component.css'
 })
-export class ShoppingListComponent implements OnInit {
-  constructor(private giftListService: GiftListService, private router: Router) {};
+export class ShoppingListComponent {
+  constructor(private giftListService: GiftListService, public router: Router) {};
 
   listInfo!: List;
-  headingButtons = ['forms_add_on'];
 
-  onHeadingIconClick(e: any) {
-    switch (e) {
-      case 'forms_add_on':
-        this.router.navigate(['/shopping-list/add-gift'])
-        break;
-    
-      default:
-        break;
-    }
-  }
-
-  async ngOnInit() {
+  @RefreshService.onRefresh()
+  async loadShoppingList() {
     try {
       const listInfo = await this.giftListService.getShoppingListInfo();
       if (listInfo) {

@@ -7,6 +7,7 @@ import { FirebaseService } from './services/firebase.service';
 import { FillerComponent } from "./components/ui/filler/filler.component";
 import { SettingsService } from './services/settings.service';
 import { Settings } from './types';
+import { RefreshService } from './services/refresh.service';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit {
   constructor(public firebaseService: FirebaseService, public settingsService: SettingsService, private renderer: Renderer2) {}
   title = 'christmas-app';
   isLoggedIn = localStorage.getItem('isLoggedIn');
+  isLoading: boolean = false;
   settings!: Settings;
   isPWA = window.matchMedia('(display-mode: standalone)').matches;
 
@@ -36,5 +38,30 @@ export class AppComponent implements OnInit {
         }
       }
     );
+    if (RefreshService.isPWA) {
+      const togglePointerEventsOn = 'button, input[type="submit"], .btn, app-icon, app-gift-display, app-user-display, .node'
+      document.addEventListener('touchstart', (event) => {
+        RefreshService.swipeStartY = event.touches[0].clientY;
+        // Disable pointer events on buttons to avoid hover highlights
+        const buttons: NodeListOf<HTMLElement> = document.querySelectorAll(togglePointerEventsOn);
+        buttons.forEach(button => button.style.pointerEvents = 'none');
+      });
+      document.addEventListener('touchend', (event) => {
+        // Re-enable pointer events on buttons
+        const buttons: NodeListOf<HTMLElement> = document.querySelectorAll(togglePointerEventsOn);
+        buttons.forEach(button => button.style.pointerEvents = 'auto');
+
+        if (window.scrollY < 0) {
+          const currentY = event.changedTouches[0].clientY;
+          const swipeDistance = currentY - RefreshService.swipeStartY;
+          if (swipeDistance > 100) {
+            this.isLoading = true;
+            RefreshService.triggerRefresh().then(() => {
+              this.isLoading = false; // Hide spinner
+            });
+          }
+        }
+      });
+    }
   }
 }

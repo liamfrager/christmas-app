@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FriendsService } from '../../services/friends.service';
 import { Friend, User } from '../../types';
 import { AccountService } from '../../services/account.service';
+import { RefreshService } from '../../services/refresh.service';
 
 @Component({
   selector: 'app-friends-display',
@@ -25,8 +26,13 @@ export class FriendsDisplayComponent implements OnInit {
   async ngOnInit() {
     if (this.userID) {
       this.user = await this.accountService.getUserInfo(this.userID);
-      this.friends = await this.friendsService.getFriends(this.userID);
     }
     this.noFriendsMessage = `There is nobody in ${this.userID === this.accountService.currentUserID ? 'your' : this.user?.displayName + "'s"} friends list.`;
+  }
+
+  @RefreshService.onRefresh()
+  async loadFriends() {
+    if (this.userID)
+      this.friends = await this.friendsService.getFriends(this.userID);
   }
 }

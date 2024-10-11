@@ -10,6 +10,7 @@ import { FriendsService } from '../../../services/friends.service';
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
 import { Router } from '@angular/router';
 import { CookieService } from '../../../services/cookie.service';
+import { RefreshService } from '../../../services/refresh.service';
 
 @Component({
   selector: 'app-add-friend',
@@ -42,6 +43,12 @@ export class AddFriendComponent implements OnInit {
   incomingFriendRequests: Array<Friend> = [];
 
   async ngOnInit(): Promise<void> {
+    if (this.searchQuery)
+      this.searchResults = await this.searchUsers(this.searchQuery);
+  }
+
+  @RefreshService.onRefresh()
+  async loadFriendData() {
     this.incomingFriendRequests = await this.friendsService.getFriendRequests();
     const friends = await this.friendsService.getAllFriendsAndRequests()
     if (friends.length > 0) {
@@ -50,8 +57,6 @@ export class AddFriendComponent implements OnInit {
         return obj as Record<string, string> ;
       }, {});
     }
-    if (this.searchQuery)
-      this.searchResults = await this.searchUsers(this.searchQuery);
   }
   
   /**

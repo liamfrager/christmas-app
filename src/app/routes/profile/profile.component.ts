@@ -13,6 +13,7 @@ import { ProfileFormComponent } from "../../components/forms/profile-form/profil
 import { NgForm } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { RefreshService } from '../../services/refresh.service';
 
 @Component({
   selector: 'app-profile',
@@ -51,6 +52,13 @@ export class ProfileComponent {
     } else {
       this.user = this.accountService.currentUser;
     }
+  }
+
+  @RefreshService.onRefresh()
+  async onRefresh() {
+    const userID = this.route.snapshot.paramMap.get('id');
+    if (userID)
+      this.user = await this.accountService.getUserInfo(userID);
   }
 
   handleEmojiEvent(mouseEvent: MouseEvent) {
