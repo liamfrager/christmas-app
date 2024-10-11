@@ -1,4 +1,5 @@
-<app-header *ngIf="settings.showHeader"></app-header>
+<div *ngIf="isLoading && !settings.showHeader" class="spinner"></div>
+<app-header *ngIf="settings.showHeader" [isLoading]="isLoading"></app-header>
 <main [ngClass]="isPWA ? 'margin-big' : 'margin-small'">
   <router-outlet />
 </main>

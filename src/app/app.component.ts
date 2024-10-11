@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
   constructor(public firebaseService: FirebaseService, public settingsService: SettingsService, private renderer: Renderer2) {}
   title = 'christmas-app';
   isLoggedIn = localStorage.getItem('isLoggedIn');
+  isLoading: boolean = false;
   settings!: Settings;
   isPWA = window.matchMedia('(display-mode: standalone)').matches;
 
@@ -54,7 +55,10 @@ export class AppComponent implements OnInit {
           const currentY = event.changedTouches[0].clientY;
           const swipeDistance = currentY - RefreshService.swipeStartY;
           if (swipeDistance > 100) {
-            RefreshService.triggerRefresh();
+            this.isLoading = true;
+            RefreshService.triggerRefresh().then(() => {
+              this.isLoading = false; // Hide spinner
+            });
           }
         }
       });
