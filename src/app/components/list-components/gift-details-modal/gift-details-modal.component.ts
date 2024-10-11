@@ -87,7 +87,6 @@ export class GiftDetailsModalComponent implements OnInit {
       const scrollBottom = scrollHeight - offsetHeight - scrollTop;
 
       if ((scrollTop === 0 && event.touches[0].clientY > initialTouchY) || (scrollBottom <= 0 && event.touches[0].clientY < initialTouchY)) {
-        console.log(scrollTop, scrollBottom, event.touches[0].clientY)
         event.preventDefault();
       }
     });

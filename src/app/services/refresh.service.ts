@@ -16,7 +16,6 @@ export class RefreshService {
    */
   public static onRefresh() {
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-      console.log('target', target)
       const originalMethod = descriptor.value;
       const originalNgOnInit = target.ngOnInit;
       target.ngOnInit = function (...args: any[]) {
@@ -38,7 +37,6 @@ export class RefreshService {
         if (originalNgOnDestroy) {
           originalNgOnDestroy.apply(this, args);
         }
-        console.log('calling target onDestroy', target)
         RefreshService.clearCallbacks(this);
       };
     };
@@ -48,7 +46,7 @@ export class RefreshService {
    * Calls all methods of currently instantiated components decorated with the `@RefreshService.onRefresh()` decorator.
    */
   public static triggerRefresh() {
-    console.log(RefreshService.callbackMap)
+    console.log('trigger refresh', RefreshService.callbackMap);
     for (let key of RefreshService.callbackMap.keys()) {
       const callbacks = this.callbackMap.get(key);
       callbacks && callbacks.forEach((callback) => callback());
