@@ -1,7 +1,7 @@
 <app-page-heading
     headingText="Shopping List"
-    [buttons]="headingButtons"
-    (onIconClick)="onHeadingIconClick($event)"
+    [buttons]="['forms_add_on']"
+    (onIconClick)="router.navigate(['/shopping-list/add-gift'])"
     >
 </app-page-heading>
 <div class="content">
