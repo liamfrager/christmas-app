@@ -1,6 +1,6 @@
 <footer [ngClass]="{'footer': true, 'footer-padding': isPWA}">
     <a (click)="selectMenu(item.route)" *ngFor="let item of menu_items; let i = index;" class="link">
         <span *ngIf="i < menu_items.length - 1" [ngClass]="{'material-symbols-outlined menu_item': true, 'selected': i === selectedIndex}">{{item.icon}}</span>
-        <img *ngIf="i === menu_items.length - 1" [src]="item.pfp" alt="profile" class="pfp">
+        <img *ngIf="i === menu_items.length - 1" [src]="item.pfp" alt="profile" [ngClass]="{'pfp': true, 'selected': i === selectedIndex}">
     </a>
 </footer>
