@@ -7,6 +7,7 @@ import { FirebaseService } from './services/firebase.service';
 import { FillerComponent } from "./components/ui/filler/filler.component";
 import { SettingsService } from './services/settings.service';
 import { Settings } from './types';
+import { RefreshService } from './services/refresh.service';
 
 @Component({
   selector: 'app-root',
@@ -36,5 +37,23 @@ export class AppComponent implements OnInit {
         }
       }
     );
+    if (RefreshService.isPWA) {
+      document.addEventListener('touchstart', (event) => {
+        RefreshService.swipeStartY = event.touches[0].clientY;
+      });
+      document.addEventListener('touchmove', (event) => {
+        const currentY = event.touches[0].clientY;
+        const swipeDistance = currentY - RefreshService.swipeStartY;
+      });
+      document.addEventListener('touchend', (event) => {
+        if (window.scrollY <= 0) {
+          const currentY = event.changedTouches[0].clientY;
+          const swipeDistance = currentY - RefreshService.swipeStartY;
+          if (swipeDistance > 100) {
+            RefreshService.triggerRefresh();
+          }
+        }
+      });
+    }
   }
 }
