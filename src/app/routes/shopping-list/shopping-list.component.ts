@@ -12,17 +12,12 @@ import { RefreshService } from '../../services/refresh.service';
   standalone: true,
   imports: [ListDisplayComponent, PageHeadingComponent, CommonModule],
   templateUrl: './shopping-list.component.html',
-  styleUrl: './shopping-list.component.css',
-  providers: [RefreshService],
+  styleUrl: './shopping-list.component.css'
 })
-export class ShoppingListComponent implements OnInit {
-  constructor(private giftListService: GiftListService, public router: Router, private refreshService: RefreshService,) {};
+export class ShoppingListComponent {
+  constructor(private giftListService: GiftListService, public router: Router) {};
 
   listInfo!: List;
-
-  ngOnInit() {
-    this.loadShoppingList();
-  }
 
   @RefreshService.onRefresh()
   async loadShoppingList() {

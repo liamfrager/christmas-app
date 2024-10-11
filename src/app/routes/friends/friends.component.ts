@@ -4,8 +4,8 @@ import { PageHeadingComponent } from '../../components/page-heading/page-heading
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../services/account.service';
 import { CommonModule } from '@angular/common';
-import { FriendsService } from '../../services/friends.service';
 import { User } from '../../types';
+import { RefreshService } from '../../services/refresh.service';
 
 @Component({
   selector: 'app-friends',
@@ -26,11 +26,14 @@ export class FriendsComponent implements OnInit {
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');
     this.IDParam = IDParam;
-    if (IDParam) {
-      if (IDParam === this.accountService.currentUserID)
-        this.router.navigate(['/friends']);
-      else
-        this.user = await this.accountService.getUserInfo(IDParam);
+    if (IDParam && IDParam === this.accountService.currentUserID)
+      this.router.navigate(['/friends']);
+  }
+
+  @RefreshService.onRefresh()
+  async onRefresh() {
+    if (this.IDParam) {
+      this.user = await this.accountService.getUserInfo(this.IDParam);
     } else {
       this.user = this.accountService.currentUser;
     }
