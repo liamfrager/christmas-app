@@ -4,7 +4,6 @@ import { User as FirebaseUser} from "firebase/auth";
 import { FirebaseService } from './firebase.service';
 import { Gift, User, UserProfile } from '../types';
 import { FriendsService } from './friends.service';
-import { AuthService } from './auth.service';
 
 
 @Injectable({
@@ -42,9 +41,20 @@ export class AccountService {
     if (id) {
       const docRef = doc(this.firebaseService.db, 'users', id)
       const docSnap = await getDoc(docRef)
-      if (extend)
-        return docSnap.data() as UserProfile;
-      return docSnap.data() as User;
+      const data = docSnap.data() as UserProfile;
+      if (data) {
+        if (extend)
+          return data;
+        else
+          return {
+            id: data.id,
+            displayName: data.displayName,
+            searchName: data.searchName,
+            email: data.email,
+            pfp: data.pfp,
+          } as User;
+      }
+      return undefined;
     } else {
       console.error(`Could not get user info. ID is '${id}'.`);
       return undefined;
