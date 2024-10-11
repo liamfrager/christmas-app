@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ImageFetchService } from '../../services/image-fetch.service';
 import { RefreshService } from '../../services/refresh.service';
 
@@ -10,10 +10,15 @@ import { RefreshService } from '../../services/refresh.service';
   templateUrl: './image-preview.component.html',
   styleUrl: './image-preview.component.css'
 })
-export class ImagePreviewComponent {
+export class ImagePreviewComponent implements OnChanges{
   constructor(private imageFetchService: ImageFetchService) {}
   @Input({required: true}) url: string | undefined = undefined;
   imageUrl: string | null = null;
+
+  ngOnChanges() {
+    this.imageUrl = null;
+    this.reloadImage();
+  }
 
   @RefreshService.onRefresh()
   reloadImage() {
