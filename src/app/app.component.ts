@@ -38,15 +38,12 @@ export class AppComponent implements OnInit {
       }
     );
     if (RefreshService.isPWA) {
+      const scrollableElement = document.querySelector('.content');
       document.addEventListener('touchstart', (event) => {
         RefreshService.swipeStartY = event.touches[0].clientY;
       });
-      document.addEventListener('touchmove', (event) => {
-        const currentY = event.touches[0].clientY;
-        const swipeDistance = currentY - RefreshService.swipeStartY;
-      });
       document.addEventListener('touchend', (event) => {
-        if (window.scrollY <= 0) {
+        if (scrollableElement && scrollableElement.scrollTop <= 0) {
           const currentY = event.changedTouches[0].clientY;
           const swipeDistance = currentY - RefreshService.swipeStartY;
           if (swipeDistance > 100) {
