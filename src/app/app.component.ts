@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/ui/header/header.component';
 import { FooterComponent } from './components/ui/footer/footer.component';
@@ -42,6 +42,8 @@ export class AppComponent implements OnInit {
       const togglePointerEventsOn = 'button, input[type="submit"], .btn, app-icon, app-gift-display, app-user-display, .node'
       document.addEventListener('touchstart', (event) => {
         RefreshService.swipeStartY = event.touches[0].clientY;
+      });
+      document.addEventListener('touchmove', (event) => {
         // Disable pointer events on buttons to avoid hover highlights
         const buttons: NodeListOf<HTMLElement> = document.querySelectorAll(togglePointerEventsOn);
         buttons.forEach(button => button.style.pointerEvents = 'none');

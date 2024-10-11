@@ -6,11 +6,12 @@ import { Gift } from '../../../types';
 import { PopUpComponent } from '../../pop-up/pop-up.component';
 import { GiftFormComponent } from "../../forms/gift-form/gift-form.component";
 import { FillerComponent } from "../../ui/filler/filler.component";
+import { ImagePreviewComponent } from "../../image-preview/image-preview.component";
 
 @Component({
   selector: 'app-gift-details-modal',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, GiftFormComponent, IconComponent, FillerComponent],
+  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, GiftFormComponent, IconComponent, FillerComponent, ImagePreviewComponent],
   templateUrl: './gift-details-modal.component.html',
   styleUrl: './gift-details-modal.component.css'
 })

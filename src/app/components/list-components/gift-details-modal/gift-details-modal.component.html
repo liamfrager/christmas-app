@@ -14,11 +14,14 @@
       </app-page-heading>
       <div class="content">
         <p>{{gift.details}}</p>
-        <a class="link-btn" [href]="gift.url" target="_blank">
-          <button class="link-btn">
-            <app-icon icon="link" [hover]="null" size="20px"></app-icon>Link to gift
-          </button>
-        </a>
+        <ng-container *ngIf="gift.url">
+          <app-image-preview [url]="gift.url"></app-image-preview>
+          <a class="link-btn" [href]="gift.url" target="_blank">
+            <button class="link-btn">
+              <app-icon icon="link" [hover]="null" size="20px"></app-icon>Link to gift
+            </button>
+          </a>
+        </ng-container>
         <hr>
         <!-- Shopping list status bar -->
         <ng-container *ngIf="type === 'shopping'">
@@ -50,7 +53,11 @@
     <ng-template #editForm>
       <app-page-heading headingText="Edit Gift" (onBackButton)="editingGift = false"></app-page-heading>
       <div class="content">
-        <app-gift-form [type]="gift.isCustom ? 'shopping' : 'wish'" [gift]="gift" (onFormSubmit)="buttonClick($event)"></app-gift-form>
+        <app-gift-form
+          [type]="gift.isCustom ? 'shopping' : 'wish'"
+          [gift]="gift"
+          (onFormSubmit)="buttonClick($event)"
+        ></app-gift-form>
         <app-pop-up
           class="btn-red"
           buttonText="Delete Gift"

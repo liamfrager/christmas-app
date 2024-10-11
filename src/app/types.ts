@@ -22,9 +22,11 @@ export type Gifts = Map<string, Gift>
 export interface User extends DocumentData {
     id: string,
     displayName: string,
+    searchName: string,
     email: string,
     pfp: string,
-    friends?: string[],
+}
+export interface UserProfile extends User {
     groups?: string[],
     bio?: string,
     mood?: string,

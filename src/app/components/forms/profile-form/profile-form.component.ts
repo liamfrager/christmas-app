@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { User } from '../../../types';
+import { UserProfile } from '../../../types';
 import { AccountService } from '../../../services/account.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
@@ -16,7 +16,7 @@ onEmojiClick($event: Event) {
 throw new Error('Method not implemented.');
 }
   constructor(private accountService: AccountService) {};
-  @Input() user!: User;
+  @Input() user!: UserProfile;
   @Output() onFormSubmit =  new EventEmitter();
 
   ngOnInit() {

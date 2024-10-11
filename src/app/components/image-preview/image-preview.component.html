@@ -1,0 +1,4 @@
+<div *ngIf="imageUrl">
+  <img [src]="imageUrl" alt="Image Preview" *ngIf="imageUrl" />
+  <p *ngIf="!imageUrl">{{ imageUrl }}</p>
+</div>

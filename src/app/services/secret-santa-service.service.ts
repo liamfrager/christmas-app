@@ -13,8 +13,6 @@ export class SecretSantaServiceService {
   async getGroupInfo(groupID: string) {
     //const currentUserID = this.accountService.currentUser.id;
     const groupSnapshot = await getDoc(doc(this.db, 'groups', groupID));
-    console.log(groupSnapshot)
-    console.log(groupSnapshot.data())
   }
 
   async createSecretSanta(giftingMap: Map<string, string>, year: number, name: string) {

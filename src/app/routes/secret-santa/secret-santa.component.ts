@@ -29,19 +29,22 @@ export class SecretSantaComponent implements OnInit {
 
   constructor(private secretSantaService: SecretSantaServiceService, private accountService: AccountService) {}
 
-  ngOnInit() {
-    const userGroups = this.accountService.currentUser.groups;
-    if (userGroups) {
-      userGroups.forEach(groupID => {
-        this.secretSantaService.getGroupInfo(groupID).then(data => {
-          console.log(data);
+  async ngOnInit() {
+    const userProfile = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);
+    if (userProfile) {
+      const userGroups: string[] = userProfile.groups;
+      if (userGroups) {
+        userGroups.forEach(groupID => {
+          this.secretSantaService.getGroupInfo(groupID).then(data => {
+            console.log(data);
+          })
         })
+      }
+      this.secretSantaService.getGroupInfo("rS2ooxxv4L4AuxbKje5V").then(data => {
+        console.log(data);
       })
+      console.log(this.accountService.currentUser)
     }
-    this.secretSantaService.getGroupInfo("rS2ooxxv4L4AuxbKje5V").then(data => {
-      console.log(data);
-    })
-    console.log(this.accountService.currentUser)
   }
 
   /**

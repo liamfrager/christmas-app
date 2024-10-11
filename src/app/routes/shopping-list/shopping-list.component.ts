@@ -21,18 +21,9 @@ export class ShoppingListComponent {
 
   @RefreshService.onRefresh()
   async loadShoppingList() {
-    try {
-      const listInfo = await this.giftListService.getShoppingListInfo();
-      if (listInfo) {
-        this.listInfo = listInfo;
-      }
-    } catch (error) {
-      console.error('Error loading shopping list info:', error);
-      this.listInfo = {
-        type: 'error',
-        owner: {} as User,
-        giftsByUser: {},
-      }
+    const listInfo = await this.giftListService.getShoppingListInfo();
+    if (listInfo) {
+      this.listInfo = listInfo;
     }
   }
 }

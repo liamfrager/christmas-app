@@ -1,10 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
 import { AccountService } from '../../services/account.service';
 import { UserDisplayComponent } from "../../components/user-display/user-display.component";
 import { IconComponent } from "../../components/icon/icon.component";
 import { ActivatedRoute, Router } from '@angular/router';
-import { User } from '../../types';
+import { UserProfile } from '../../types';
 import { CommonModule, Location } from '@angular/common';
 import { FriendsService } from '../../services/friends.service';
 import { PopUpComponent } from "../../components/pop-up/pop-up.component";
@@ -31,7 +31,7 @@ export class ProfileComponent {
     public location: Location,
   ) {};
   currentUserID = this.accountService.currentUserID;
-  user?: User;
+  user?: UserProfile;
   friendStatus?: 'incoming' | 'outgoing' | 'friends';
   isEditing: boolean = false;
   showMoodSelector: boolean = false;
@@ -47,10 +47,10 @@ export class ProfileComponent {
         const friend = await this.friendsService.getFriend(userID);
         if (friend)
           this.friendStatus = friend.status;
-        this.user = await this.accountService.getUserInfo(userID);
+        this.user = await this.accountService.getUserInfo(userID, true);
       }
     } else {
-      this.user = this.accountService.currentUser;
+      this.user = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);
     }
   }
 
@@ -58,7 +58,7 @@ export class ProfileComponent {
   async onRefresh() {
     const userID = this.route.snapshot.paramMap.get('id');
     if (userID)
-      this.user = await this.accountService.getUserInfo(userID);
+      this.user = await this.accountService.getUserInfo(userID, true);
   }
 
   handleEmojiEvent(mouseEvent: MouseEvent) {
