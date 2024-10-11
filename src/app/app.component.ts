@@ -38,12 +38,19 @@ export class AppComponent implements OnInit {
       }
     );
     if (RefreshService.isPWA) {
-      const scrollableElement = document.querySelector('.content');
+      const togglePointerEventsOn = 'button, input[type="submit"], .btn, app-icon, app-gift-display, app-user-display, .node'
       document.addEventListener('touchstart', (event) => {
         RefreshService.swipeStartY = event.touches[0].clientY;
+        // Disable pointer events on buttons to avoid hover highlights
+        const buttons: NodeListOf<HTMLElement> = document.querySelectorAll(togglePointerEventsOn);
+        buttons.forEach(button => button.style.pointerEvents = 'none');
       });
       document.addEventListener('touchend', (event) => {
-        if (scrollableElement && scrollableElement.scrollTop <= 0) {
+        // Re-enable pointer events on buttons
+        const buttons: NodeListOf<HTMLElement> = document.querySelectorAll(togglePointerEventsOn);
+        buttons.forEach(button => button.style.pointerEvents = 'auto');
+
+        if (window.scrollY < 0) {
           const currentY = event.changedTouches[0].clientY;
           const swipeDistance = currentY - RefreshService.swipeStartY;
           if (swipeDistance > 100) {
