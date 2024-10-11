@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class RefreshService {
   public static isPWA = window.matchMedia('(display-mode: standalone)').matches;
   public static swipeStartY: number = 0;
-  private static callbackMap = new Map<any, (() => void)[]>();
+  private static callbackMap = new Map<any, (() => Promise<void>)[]>();
 
   /**
    * Decorator for functions that will be called whenever a user swipes down at the top of the page to refresh.
@@ -23,7 +23,7 @@ export class RefreshService {
           originalNgOnInit.apply(this, args);
         }
         let callbacks = [() => {
-          originalMethod.apply(this, args);
+          return Promise.resolve(originalMethod.apply(this, args));
         }]
         const index = this;
         if (RefreshService.callbackMap.has(index)) {
@@ -45,12 +45,18 @@ export class RefreshService {
   /**
    * Calls all methods of currently instantiated components decorated with the `@RefreshService.onRefresh()` decorator.
    */
-  public static triggerRefresh() {
+  public static async triggerRefresh() {
     console.log('trigger refresh', RefreshService.callbackMap);
+    const promises: Promise<void>[] = [];
     for (let key of RefreshService.callbackMap.keys()) {
       const callbacks = this.callbackMap.get(key);
-      callbacks && callbacks.forEach((callback) => callback());
+      callbacks && callbacks.forEach((callback) => {
+        const result = callback();
+        console.log('is promise', result instanceof Promise)
+        promises.push(result instanceof Promise ? result : Promise.resolve())
+      });
     }
+    await Promise.all(promises);
   }
 
   public static clearCallbacks(key: any) {
