@@ -18,7 +18,7 @@ export class FriendsComponent implements OnInit {
   constructor(
     public router: Router,
     private route: ActivatedRoute,
-    private accountService: AccountService,
+    public accountService: AccountService,
   ) {};
   IDParam: string | undefined | null;
   user?: User;
@@ -26,8 +26,6 @@ export class FriendsComponent implements OnInit {
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');
     this.IDParam = IDParam;
-    if (IDParam && IDParam === this.accountService.currentUserID)
-      this.router.navigate(['/friends']);
   }
 
   @RefreshService.onRefresh()

@@ -1,6 +1,6 @@
 <ng-container *ngIf="IDParam; else noBackButton">
     <app-page-heading
-        [headingText]="user ? user.displayName + '\'s Friends' : 'Friends'"
+        [headingText]="user && user.id !== accountService.currentUserID ? user.displayName + '\'s Friends' : 'Friends'"
         (onBackButton)="router.navigate(['/profile/' + IDParam])"
         >
     </app-page-heading>
