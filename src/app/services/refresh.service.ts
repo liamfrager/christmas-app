@@ -46,13 +46,11 @@ export class RefreshService {
    * Calls all methods of currently instantiated components decorated with the `@RefreshService.onRefresh()` decorator.
    */
   public static async triggerRefresh() {
-    console.log('trigger refresh', RefreshService.callbackMap);
     const promises: Promise<void>[] = [];
     for (let key of RefreshService.callbackMap.keys()) {
       const callbacks = this.callbackMap.get(key);
       callbacks && callbacks.forEach((callback) => {
         const result = callback();
-        console.log('is promise', result instanceof Promise)
         promises.push(result instanceof Promise ? result : Promise.resolve())
       });
     }

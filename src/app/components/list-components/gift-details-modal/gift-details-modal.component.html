@@ -50,7 +50,11 @@
     <ng-template #editForm>
       <app-page-heading headingText="Edit Gift" (onBackButton)="editingGift = false"></app-page-heading>
       <div class="content">
-        <app-gift-form [type]="gift.isCustom ? 'shopping' : 'wish'" [gift]="gift" (onFormSubmit)="buttonClick($event)"></app-gift-form>
+        <app-gift-form
+          [type]="gift.isCustom ? 'shopping' : 'wish'"
+          [gift]="gift"
+          (onFormSubmit)="buttonClick($event)"
+        ></app-gift-form>
         <app-pop-up
           class="btn-red"
           buttonText="Delete Gift"

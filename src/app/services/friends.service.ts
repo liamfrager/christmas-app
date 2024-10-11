@@ -96,7 +96,6 @@ export class FriendsService {
           status: 'incoming',
         });
       });
-      console.log("Friend request successfully sent.");
     } catch (e) {
       console.error("Error sending friend request: ", e);
     }
@@ -119,7 +118,6 @@ export class FriendsService {
           status: 'friends',
         });
       });
-      console.log("Friend successfully added.");
     } catch (e) {
       console.error("Error adding friend: ", e);
     }
@@ -154,7 +152,6 @@ export class FriendsService {
           });
         });
       });
-      console.log("Friend successfully removed.");
     } catch (e) {
       console.error("Error removing friend: ", e);
     }

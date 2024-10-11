@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { browserLocalPersistence, GoogleAuthProvider, setPersistence, signInWithPopup, signOut } from 'firebase/auth';
 import { User as FirebaseUser } from "firebase/auth";
 import { AccountService } from './account.service';
-import { User } from '../types';
+import { User, UserProfile } from '../types';
 import { SettingsService } from './settings.service';
 
 @Injectable({
@@ -57,7 +57,7 @@ export class AuthService {
     .then(async () => {
       this.router.navigate(['/wish-list']);
       localStorage.setItem('isLoggedIn', 'true');
-      const currentUser: User | undefined = await this.accountService.getUserInfo(this.accountService.currentUserID!);
+      const currentUser: UserProfile | undefined = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);
       if (currentUser) {
         localStorage.setItem('displayName', currentUser.displayName);
         if (currentUser.mood)

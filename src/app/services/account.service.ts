@@ -2,7 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { doc, setDoc, getDoc, runTransaction, where, getDocs, query, collection } from "firebase/firestore";
 import { User as FirebaseUser} from "firebase/auth";
 import { FirebaseService } from './firebase.service';
-import { Gift, User } from '../types';
+import { Gift, User, UserProfile } from '../types';
 import { FriendsService } from './friends.service';
 import { AuthService } from './auth.service';
 
@@ -23,9 +23,11 @@ export class AccountService {
   get currentUser(): User {
     const currentUser = this.firebaseService.auth.currentUser;
     if (currentUser) {
+      const displayName = localStorage.getItem('displayName') ? localStorage.getItem('displayName') : currentUser.displayName;
       return {
         id: currentUser.uid,
-        displayName: localStorage.getItem('displayName') ? localStorage.getItem('displayName') : currentUser.displayName,
+        displayName: displayName,
+        searchName: displayName!.replace(/\s+/g, '').toLowerCase(),
         email: currentUser.email,
         pfp: currentUser.photoURL,
         mood: localStorage.getItem('mood'),
@@ -36,10 +38,12 @@ export class AccountService {
     }
   };
 
-  async getUserInfo(id: string) : Promise<User | undefined> {
+  async getUserInfo(id: string, extend?: boolean) : Promise<User | UserProfile | undefined> {
     if (id) {
       const docRef = doc(this.firebaseService.db, 'users', id)
       const docSnap = await getDoc(docRef)
+      if (extend)
+        return docSnap.data() as UserProfile;
       return docSnap.data() as User;
     } else {
       console.error(`Could not get user info. ID is '${id}'.`);
@@ -65,7 +69,6 @@ export class AccountService {
       const docRef = doc(this.firebaseService.db, 'users', this.currentUserID!);
       transaction.update(docRef, updates);
       if (updates.displayName !== this.currentUser.displayName) {
-        console.log('updating display name');
         const friends = await this.friendsService.getFriends(this.currentUserID!);
         friends.forEach(friend => {
           const friendRef = doc(this.firebaseService.db, 'lists', friend.id, 'friends-list', this.currentUserID!);
@@ -84,7 +87,6 @@ export class AccountService {
       const claimedGifts = await getDocs(query(collection(this.firebaseService.db, 'lists', this.currentUserID!, 'wish-list'), where('isClaimedByID', '!=', null)));
       claimedGifts.docs.forEach(snap => {
         const gift = snap.data() as Gift;
-        console.log(gift)
         const claimedRef = doc(this.firebaseService.db, 'lists', gift.isClaimedByID!, 'shopping-list', gift.id);
         transaction.update(claimedRef, {isDeleted: true});
       })
