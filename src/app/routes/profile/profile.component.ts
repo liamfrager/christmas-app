@@ -35,20 +35,16 @@ export class ProfileComponent {
   friendStatus?: 'incoming' | 'outgoing' | 'friends';
   isEditing: boolean = false;
   showMoodSelector: boolean = false;
-  showBackButton: boolean = true;
+  userID: string | null = null;
 
   async ngOnInit() {
     const userID = this.route.snapshot.paramMap.get('id');
-    this.showBackButton = !!userID;
-    if (userID) {
-      if (userID === this.currentUserID) {
-        this.router.navigate(['/profile']);
-      } else {
-        const friend = await this.friendsService.getFriend(userID);
-        if (friend)
-          this.friendStatus = friend.status;
-        this.user = await this.accountService.getUserInfo(userID, true);
-      }
+    this.userID = userID;
+    if (userID && userID !== this.currentUserID) {
+      const friend = await this.friendsService.getFriend(userID);
+      if (friend)
+        this.friendStatus = friend.status;
+      this.user = await this.accountService.getUserInfo(userID, true);
     } else {
       this.user = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);
     }
@@ -56,9 +52,8 @@ export class ProfileComponent {
 
   @RefreshService.onRefresh()
   async onRefresh() {
-    const userID = this.route.snapshot.paramMap.get('id');
-    if (userID)
-      this.user = await this.accountService.getUserInfo(userID, true);
+    if (this.userID)
+      this.user = await this.accountService.getUserInfo(this.userID, true);
   }
 
   handleEmojiEvent(mouseEvent: MouseEvent) {

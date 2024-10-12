@@ -4,6 +4,7 @@ import { PageHeadingComponent } from "../../../components/page-heading/page-head
 import { Router } from '@angular/router';
 import { GiftListService } from '../../../services/gift-list.service';
 import { NewGift } from '../../../types';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -14,7 +15,11 @@ import { NewGift } from '../../../types';
   styleUrl: './add-wish-gift.component.css'
 })
 export class AddWishGiftComponent {
-  constructor(public router: Router, private giftListService: GiftListService) {}
+  constructor(
+    public router: Router,
+    public location: Location,
+    private giftListService: GiftListService,
+  ) {}
 
   async onSubmit(gift: NewGift) {
     await this.giftListService.addGiftToWishList(gift);

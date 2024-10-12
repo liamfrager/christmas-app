@@ -6,7 +6,7 @@ import { AccountService } from '../../services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Friend, List, User } from '../../types';
 import { FriendsService } from '../../services/friends.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { RefreshService } from '../../services/refresh.service';
 
 @Component({
@@ -18,11 +18,12 @@ import { RefreshService } from '../../services/refresh.service';
 })
 export class WishListComponent implements OnInit {
   constructor(
-    private accountService: AccountService,
+    public accountService: AccountService,
     private friendsService: FriendsService,
     private giftListService: GiftListService,
     private route: ActivatedRoute,
-    public router: Router
+    public router: Router,
+    public location: Location,
   ) {};
   listInfo!: List;
   IDParam: string | undefined | null;

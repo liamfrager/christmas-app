@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ListDisplayComponent } from '../../components/list-components/list-display/list-display.component';
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
-import { Router } from '@angular/router';
 import { GiftListService } from '../../services/gift-list.service';
 import { List } from '../../types';
 import { CommonModule } from '@angular/common';
 import { RefreshService } from '../../services/refresh.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-shopping-list',
@@ -15,7 +15,10 @@ import { RefreshService } from '../../services/refresh.service';
   styleUrl: './shopping-list.component.css'
 })
 export class ShoppingListComponent {
-  constructor(private giftListService: GiftListService, public router: Router) {};
+  constructor(
+    private giftListService: GiftListService,
+    public router: Router,
+  ) {};
 
   listInfo!: List;
 
