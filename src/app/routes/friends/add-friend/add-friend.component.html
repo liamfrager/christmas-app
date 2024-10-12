@@ -5,11 +5,9 @@
             <span class="material-symbols-outlined">search</span>
             <input id="searchedUser" type="text" placeholder="Search" name="searchQuery" [(ngModel)]="searchQuery">
         </div>
-        <!-- <button type="submit">Search</button> -->
     </form>
     <hr>
     <div class="content" *ngIf="searchResults">
-        <!-- TODO: Fix friend request display to link to profile.-->
         <ng-container *ngFor="let user of searchResults">
             <app-user-display
                 [user]="user"
