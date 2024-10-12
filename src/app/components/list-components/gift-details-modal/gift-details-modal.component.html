@@ -22,7 +22,7 @@
             </button>
           </a>
         </ng-container>
-        <hr>
+        <hr *ngIf="gift.details || gift.url">
         <!-- Shopping list status bar -->
         <ng-container *ngIf="type === 'shopping'">
           <div class="status-display">

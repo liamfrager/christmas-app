@@ -4,6 +4,7 @@ import { PageHeadingComponent } from "../../../components/page-heading/page-head
 import { Router } from '@angular/router';
 import { Friend, NewGift } from '../../../types';
 import { GiftListService } from '../../../services/gift-list.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-shopping-gift',
@@ -13,7 +14,11 @@ import { GiftListService } from '../../../services/gift-list.service';
   styleUrl: './add-shopping-gift.component.css'
 })
 export class AddShoppingGiftComponent {
-  constructor (public router: Router, private giftListService: GiftListService) {}
+  constructor (
+    public router: Router,
+    private giftListService: GiftListService,
+    public location: Location,
+  ) {}
   
   async onSubmit(gift: NewGift) {
     await this.giftListService.createGiftInShoppingList(gift, gift.isWishedByUser as Friend);

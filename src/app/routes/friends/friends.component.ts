@@ -3,7 +3,7 @@ import { FriendsDisplayComponent } from '../../components/friends-display/friend
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AccountService } from '../../services/account.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { User } from '../../types';
 import { RefreshService } from '../../services/refresh.service';
 
@@ -19,6 +19,7 @@ export class FriendsComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     public accountService: AccountService,
+    public location: Location,
   ) {};
   IDParam: string | undefined | null;
   user?: User;

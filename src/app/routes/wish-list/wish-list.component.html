@@ -1,7 +1,9 @@
 <ng-container *ngIf="IDParam ; else noBackButton">
     <app-page-heading
         headingText="Wish List"
-        (onBackButton)="router.navigate(['/profile/' + IDParam])"
+        [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on']: []"
+        (onIconClick)="router.navigate(['/wish-list/add-gift'])"
+        (onBackButton)="location.back()"
         >
     </app-page-heading>
 </ng-container>

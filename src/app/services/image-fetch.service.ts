@@ -7,7 +7,7 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ImageFetchService {
-  constructor(private http: HttpClient) {console.log('image fetch init', this.http)}
+  constructor(private http: HttpClient) {}
 
   getImageFromUrl(url: string): Observable<string | null> {
     return this.http.get(url, { responseType: 'text' }).pipe(

@@ -1,4 +1,4 @@
-<app-page-heading headingText="Add A New Gift" (onBackButton)="router.navigate(['/wish-list'])"></app-page-heading>
+<app-page-heading headingText="Add A New Gift" (onBackButton)="location.back()"></app-page-heading>
 <div class="content">
   <app-gift-form type="wish" (onFormSubmit)="onSubmit($event)"></app-gift-form>
 </div>

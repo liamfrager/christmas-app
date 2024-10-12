@@ -4,7 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
 import { collection, query, where, getDocs } from 'firebase/firestore'; 
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Friend, User } from '../../../types';
 import { FriendsService } from '../../../services/friends.service';
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
@@ -25,7 +25,8 @@ export class AddFriendComponent implements OnInit {
     private accountService: AccountService,
     private friendsService: FriendsService,
     private cookieService: CookieService,
-    public router: Router
+    public router: Router,
+    public location: Location,
   ) {}
   db = this.firebaseService.db;
   get searchQuery() : string | null {

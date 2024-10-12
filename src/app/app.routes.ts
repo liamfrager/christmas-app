@@ -1,14 +1,9 @@
 import { Routes } from '@angular/router';
-// Secret Santa
-import { SecretSantaComponent } from './routes/secret-santa/secret-santa.component';
-// Settings
-import { SettingsComponent } from './routes/settings/settings.component';
+import { DownloadComponent } from './routes/download/download.component';
 // Guards
 import { authGuard } from './guards/auth.guard';
 import { rootRedirectGuard } from './guards/root-redirect.guard';
 import { loginRedirectGuard } from './guards/login-redirect.guard';
-import { DownloadComponent } from './routes/download/download.component';
-import { ProfileComponent } from './routes/profile/profile.component';
 
 export const routes: Routes = [
   { path: '',
@@ -38,9 +33,5 @@ export const routes: Routes = [
   { path: 'profile',
     canActivate: [authGuard],
     loadChildren: () => import('./routes/profile/profile.module').then(m => m.ProfileModule),
-  },
-  { path: 'settings',
-    canActivate: [authGuard],
-    component: SettingsComponent,
   },
 ];

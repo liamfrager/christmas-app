@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile.component';
 import { WishListComponent } from '../wish-list/wish-list.component';
 import { FriendsComponent } from '../friends/friends.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 
@@ -13,6 +14,7 @@ import { FriendsComponent } from '../friends/friends.component';
     CommonModule,
     RouterModule.forChild([
       { path: '', component: ProfileComponent },
+      { path: 'settings', component: SettingsComponent },
       { path: ':id',
         children: [
           { path: '', component: ProfileComponent },
