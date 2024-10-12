@@ -104,7 +104,7 @@ export class ProfileComponent {
   }
 
   goToSettings() {
-    this.router.navigate(['/settings']);
+    this.router.navigate(['/profile/settings']);
   }
 
   sendFriendRequest() {
