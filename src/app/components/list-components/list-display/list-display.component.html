@@ -11,14 +11,14 @@
   </ng-template>
   <!-- List display -->
   <ng-template #listDisplay>
-    <!-- Display list owner -->
-    <app-user-display *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser"
-      [user]="list.owner"
-      [onClick]="null"
-      >
-    </app-user-display>
     <!-- Display gifts -->
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
+      <!-- Display list owner -->
+      <app-user-display *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser"
+        [user]="list.owner"
+        [onClick]="null"
+        >
+      </app-user-display>
       <ng-container *ngFor="let giftByUser of list.giftsByUser | keyvalue">
         <!-- If is shopping-list -->
         <ng-container *ngIf="list.type === 'shopping'">
