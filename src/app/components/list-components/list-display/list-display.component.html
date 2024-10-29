@@ -15,6 +15,7 @@
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
       <!-- Display list owner -->
       <app-user-display *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser"
+        class="sticky"
         [user]="list.owner"
         [onClick]="null"
         >

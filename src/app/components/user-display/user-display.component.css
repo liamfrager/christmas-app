@@ -4,6 +4,10 @@
     align-items: center;
 }
 
+:host {
+    background-color: cornsilk;
+}
+
 .user-display {
     justify-content: space-between;
     font-weight: bold;
