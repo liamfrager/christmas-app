@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { GiftDisplayComponent } from '../gift-display/gift-display.component';
 import { GiftListService } from '../../../services/gift-list.service';
 import { CommonModule } from '@angular/common';
@@ -19,6 +19,7 @@ import { UserDisplayComponent } from '../../user-display/user-display.component'
 export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};
   @Input({ required: true }) list?: List;
+  @Output() onGiftInModal = new EventEmitter();
   
   get isOwnedByCurrentUser(): boolean { return this.list?.owner.id === this.accountService.currentUserID };
   noGiftsMessage: string = 
@@ -47,6 +48,7 @@ export class ListDisplayComponent implements OnChanges {
   showInModal(gift: Gift) {
     this.isModalOpen = true;
     this.giftInModal = gift;
+    this.onGiftInModal.emit(this.giftInModal);
     // update modalButtonText
     this.modalButtonType = (() => {
       if (this.list?.type === 'wish') {
@@ -67,6 +69,7 @@ export class ListDisplayComponent implements OnChanges {
    */
   hideModal() {
     this.isModalOpen = false;
+    this.onGiftInModal.emit(null);
   }
 
   /**

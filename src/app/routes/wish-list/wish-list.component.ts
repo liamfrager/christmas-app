@@ -4,7 +4,7 @@ import { PageHeadingComponent } from '../../components/page-heading/page-heading
 import { GiftListService } from '../../services/gift-list.service';
 import { AccountService } from '../../services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Friend, List, User } from '../../types';
+import { Friend, Gift, List, User } from '../../types';
 import { FriendsService } from '../../services/friends.service';
 import { CommonModule, Location } from '@angular/common';
 import { RefreshService } from '../../services/refresh.service';
@@ -28,6 +28,7 @@ export class WishListComponent implements OnInit {
   listInfo!: List;
   IDParam: string | undefined | null;
   user?: User | Friend;
+  isModalOpen: boolean = false;
 
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');

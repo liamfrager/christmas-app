@@ -1,7 +1,7 @@
-<ng-container *ngIf="IDParam ; else noBackButton">
+<ng-container *ngIf="IDParam && !isModalOpen; else noBackButton">
     <app-page-heading
-        headingText="Wish List"
-        [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on']: []"
+        [headingText]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.displayName.split(' ')[0] + '\'s List' : 'Wish List'"
+        [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
         (onIconClick)="router.navigate(['/wish-list/add-gift'])"
         (onBackButton)="location.back()"
         >
@@ -9,12 +9,16 @@
 </ng-container>
 <ng-template #noBackButton>
     <app-page-heading
-        headingText="Wish List"
-        [buttons]="['forms_add_on']"
+        [headingText]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.displayName.split(' ')[0] + '\'s List' : 'Wish List'"
+        [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
         (onIconClick)="router.navigate(['/wish-list/add-gift'])"
         >
     </app-page-heading>
 </ng-template>
 <div class="list">
-    <app-list-display [list]="listInfo"></app-list-display>
+    <app-list-display
+    [list]="listInfo"
+    (onGiftInModal)="isModalOpen = $event"
+    >
+    </app-list-display>
 </div>
