@@ -48,7 +48,7 @@ export class ListDisplayComponent implements OnChanges {
   showInModal(gift: Gift) {
     this.isModalOpen = true;
     this.giftInModal = gift;
-    this.onGiftInModal.emit(this.giftInModal);
+    this.onGiftInModal.emit(true);
     // update modalButtonText
     this.modalButtonType = (() => {
       if (this.list?.type === 'wish') {
@@ -69,7 +69,7 @@ export class ListDisplayComponent implements OnChanges {
    */
   hideModal() {
     this.isModalOpen = false;
-    this.onGiftInModal.emit(null);
+    this.onGiftInModal.emit(false);
   }
 
   /**
