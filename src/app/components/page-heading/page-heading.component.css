@@ -1,17 +1,19 @@
 :host {
-    padding: 1em;
-    position: sticky;
-    top: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: cornsilk;
-    border-bottom: .5px solid #26251d44;
-    z-index: 100;
+  padding: 1em;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: cornsilk;
+  border-bottom: .5px solid #26251d44;
+  z-index: 100;
 }
+
 h2 {
-    margin: 0;
+  margin: 0;
 }
+
 app-icon {
   color: #26251d;
   padding: 0 0 0 .5em;

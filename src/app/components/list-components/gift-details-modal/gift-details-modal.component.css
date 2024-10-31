@@ -124,3 +124,7 @@
 .error app-icon .material-symbols-outlined {
   font-size: 2px;
 }
+
+app-page-heading {
+  padding-inline: 0;
+}
