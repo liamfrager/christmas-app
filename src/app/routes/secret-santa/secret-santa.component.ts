@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { SecretSantaServiceService } from '../../services/secret-santa-service.service';
 import { AccountService } from '../../services/account.service';
 import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
+import { User, Group } from '../../types';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 // array shuffle function I found on stack overflow
 function shuffle(array: any[]) {
@@ -21,13 +24,16 @@ function shuffle(array: any[]) {
 @Component({
   selector: 'app-secret-santa',
   standalone: true,
-  imports: [PageHeadingComponent],
+  imports: [PageHeadingComponent, CommonModule],
   templateUrl: './secret-santa.component.html',
   styleUrl: './secret-santa.component.css'
 })
 export class SecretSantaComponent implements OnInit {
 
-  constructor(private secretSantaService: SecretSantaServiceService, private accountService: AccountService) {}
+  noGroupsMessage = 'You have no groups'
+  groups: Group[] = []
+
+  constructor(private secretSantaService: SecretSantaServiceService, private accountService: AccountService, public router: Router) {}
 
   async ngOnInit() {
     const userProfile = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);
@@ -68,6 +74,10 @@ export class SecretSantaComponent implements OnInit {
       }
     }
     return new Map();
+  }
+
+  createGroup(members: User[], name: string, restrictionMap: Map<string, string>, pfp?: string,) {
+
   }
 
 

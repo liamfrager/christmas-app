@@ -50,3 +50,11 @@ export type List = {
 export type Settings = {
     showHeader: boolean,
 }
+
+export type Group = {
+    id: string,
+    name: string,
+    pfp: string,
+    users: string[],
+    gifteeID: string
+}

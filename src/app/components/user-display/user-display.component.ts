@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class UserDisplayComponent {
   constructor(private router: Router) {};
   @Input({required: true}) user!: User;
-  @Input() onClick: (() => void) | null = this.goToProfile;
+  @Input() onClick: ((user?: User) => void) | "default" | null = "default"
 
   /**
    * Reroutes the webpage to the displayed user's profile.
@@ -28,6 +28,7 @@ export class UserDisplayComponent {
    */
   doOnClick() {
     if (this.onClick === null) return;
-    this.onClick();
+    else if (this.onClick === "default") this.goToProfile();
+    else this.onClick(this.user);
   }
 }

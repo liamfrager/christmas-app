@@ -3,6 +3,7 @@
     <ng-container *ngFor="let friend of friends">
       <app-user-display
       [user]="friend"
+      [onClick]="clickAction"
       >
       </app-user-display>
       <hr>

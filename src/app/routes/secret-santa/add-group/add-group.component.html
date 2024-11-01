@@ -1,0 +1,10 @@
+<app-page-heading
+    [headingText]="'Create Group'"
+    (onBackButton)="location.back()"
+    >
+</app-page-heading>
+
+<app-friends-display [userID]="user?.id" [clickAction]="addToGroup()"></app-friends-display>
+<ul>
+    <li *ngFor="let name of newGroupDisplay">{{name}}</li>
+</ul>

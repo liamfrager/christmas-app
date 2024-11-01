@@ -19,6 +19,7 @@ export class FriendsDisplayComponent implements OnInit {
     private accountService: AccountService,
   ) {}
   @Input({required: true}) userID?: string;
+  @Input() clickAction : ((user?: User) => void)| "default" = "default";
   user?: User;
   friends?: Array<Friend>;
   noFriendsMessage?: string;
@@ -28,6 +29,7 @@ export class FriendsDisplayComponent implements OnInit {
       this.user = await this.accountService.getUserInfo(this.userID);
     }
     this.noFriendsMessage = `There is nobody in ${this.userID === this.accountService.currentUserID ? 'your' : this.user?.displayName + "'s"} friends list.`;
+    console.log(this.clickAction);
   }
 
   @RefreshService.onRefresh()
