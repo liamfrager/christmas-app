@@ -9,7 +9,7 @@ export const loginRedirectGuard: CanActivateFn = (route, state) => {
   return new Promise<boolean>((resolve) => {
     firebaseService.auth.onAuthStateChanged((user) => {
       if (user) {
-        router.navigate(['/wish-list']);
+        router.navigate(['/wish-lists']);
         resolve(false);
       } else {
         resolve(true);

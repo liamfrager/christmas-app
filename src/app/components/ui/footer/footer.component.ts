@@ -28,7 +28,7 @@ export class FooterComponent implements OnInit {
 
   menu_items = [
     {
-      route: '/wish-list',
+      route: '/wish-lists',
       icon: 'featured_seasonal_and_gifts',
     },
     {

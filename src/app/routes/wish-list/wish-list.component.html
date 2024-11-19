@@ -2,7 +2,7 @@
     <app-page-heading
         [headingText]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.displayName.split(' ')[0] + '\'s List' : 'Wish List'"
         [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
-        (onIconClick)="router.navigate(['/wish-list/add-gift'])"
+        (onIconClick)="router.navigate(['wish-lists', listInfo.id, 'add-gift'])"
         (onBackButton)="location.back()"
         >
     </app-page-heading>
@@ -11,7 +11,7 @@
     <app-page-heading
         [headingText]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.displayName.split(' ')[0] + '\'s List' : 'Wish List'"
         [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
-        (onIconClick)="router.navigate(['/wish-list/add-gift'])"
+        (onIconClick)="router.navigate(['wish-lists', listInfo.id, 'add-gift'])"
         >
     </app-page-heading>
 </ng-template>

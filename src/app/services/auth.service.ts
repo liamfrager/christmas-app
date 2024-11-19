@@ -55,7 +55,7 @@ export class AuthService {
   loginUser() {
     setPersistence(this.firebaseService.auth, browserLocalPersistence)
     .then(async () => {
-      this.router.navigate(['/wish-list']);
+      this.router.navigate(['/wish-lists']);
       localStorage.setItem('isLoggedIn', 'true');
       const currentUser: UserProfile | undefined = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);
       if (currentUser) {

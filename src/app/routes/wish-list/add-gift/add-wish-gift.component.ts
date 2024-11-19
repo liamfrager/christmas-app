@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { GiftFormComponent } from "../../../components/forms/gift-form/gift-form.component";
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GiftListService } from '../../../services/gift-list.service';
 import { NewGift } from '../../../types';
 import { Location } from '@angular/common';
@@ -19,10 +19,11 @@ export class AddWishGiftComponent {
     public router: Router,
     public location: Location,
     private giftListService: GiftListService,
+    private route: ActivatedRoute,
   ) {}
 
   async onSubmit(gift: NewGift) {
-    await this.giftListService.addGiftToWishList(gift);
-    this.router.navigate(['/wish-list']);
+    await this.giftListService.addGiftToWishList(gift, this.route.snapshot.paramMap.get('list-id')!);
+    this.router.navigate(['/wish-lists']);
   }
 }
