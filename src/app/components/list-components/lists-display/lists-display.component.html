@@ -1,0 +1,40 @@
+<div *ngIf="lists; else loadingLists" class="list">
+  <!-- If not friends with user -->
+  <ng-container *ngIf="lists.type === 'not-friends'; else listsDisplay">
+    <p>You are not friends with {{lists.owner.displayName}}. You cannot view their lists until you are friends.</p>
+  </ng-container>
+  <!-- Lists display -->
+  <ng-template #listsDisplay>
+    <!-- Display lists -->
+    <div *ngIf="lists.lists.length > 0; else noLists">
+      <!-- Display lists owner -->
+      <app-user-display *ngIf="!isOwnedByCurrentUser"
+        class="sticky"
+        [user]="lists.owner"
+        [onClick]="null"
+        >
+      </app-user-display>
+      <ul>
+        <li *ngFor="let list of lists.lists" (click)="goToList(list)">
+          <div class="list-display">
+            <app-icon
+            icon="radio_button_unchecked"
+            [hover]="null"
+            >
+            </app-icon>
+            <span class="list-name">{{list.name}}</span>
+          </div>
+        </li>
+      </ul>
+      <hr>
+    </div>
+    <!-- If no lists -->
+    <ng-template #noLists>
+      <p>{{noListsMessage}}</p>
+    </ng-template>
+  </ng-template>
+</div>
+<!-- Loading lists -->
+<ng-template #loadingLists>
+  <p>Loading lists...</p>
+</ng-template>
