@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { collection, deleteField, doc, DocumentData, getDocs, orderBy, query, QuerySnapshot, runTransaction } from 'firebase/firestore';
+import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction, setDoc } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
-import { Gift, List, NewGift, Gifts, Friend, User } from '../types';
+import { Gift, List, NewGift, Gifts, Friend, WishLists, User, NewList } from '../types';
 
 
 @Injectable({
@@ -13,19 +13,68 @@ export class GiftListService {
   db = this.firebaseService.db;
 
   /**
+   * Fetches all the wish-lists of a given user.
+   * @param userID - The user ID of the user whose wish-lists are being fetched.
+   * @returns A promise that resolves to a WishLists object containing the data for the given user's wish-lists.
+   */
+  async getAllWishLists(user: User): Promise<WishLists> {
+    const wishListsQuerySnapshot = await getDocs(collection(this.db, 'lists', user.id, 'wish-lists'));
+    const wishLists: WishLists = {
+      type: 'valid',
+      owner: user,
+      lists: wishListsQuerySnapshot.docs.map(x => x.data() as unknown as List)
+    }
+    return wishLists;
+  }
+
+  /**
+   * Adds a list to the current user's wish-lists.
+   * @param newList - A NewList object containing the data for the list being added.
+   */
+  async addWishList(newList: NewList) {
+    await runTransaction(this.db, async (transaction) => {
+      if (this.accountService.currentUserID) {
+        const newListRef = doc(collection(this.db, 'lists', this.accountService.currentUserID, 'wish-lists'));
+        transaction.set(newListRef, {
+          ...newList,
+          id: newListRef.id,
+        });
+      }
+    })
+  }
+
+  /**
+   * Updates a list in the database.
+   * @param oldList - A List object containing the data for the list to be updated.
+   * @param newList - A NewList object containing the updated data for the list.
+   */
+  async updateList(oldGift: List, newGift: NewList) {
+    await runTransaction(this.db, async (transaction) => {
+      const listRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGift.id);
+      transaction.update(listRef, {...oldGift, ...newGift});
+    });
+  }
+
+  /**
    * Fetches the wish-list of a given user.
    * @param userID - The user ID of the user whose wish-list is being fetched.
+   * @param listID - The list ID of the wish-list to fetch.
    * @returns A promise that resolves to a List object containing the data for the given user's wish-list.
    */
-  async getWishListInfo(userID: string): Promise<List | undefined> {
-    const wishQuerySnapshot = await getDocs(collection(this.db, 'lists', userID, 'wish-list'));
-    let user = await this.accountService.getUserInfo(userID);
-    if (user) {
+  async getWishListInfo(userID: string, listID: string): Promise<List | undefined> {
+    const wishQuerySnapshot = await getDoc(doc(this.db, 'lists', userID, 'wish-lists', listID));
+    const giftsQuerySnapshot = await getDocs(collection(this.db, 'lists', userID, 'wish-lists', listID, 'gifts'));
+    const data = wishQuerySnapshot.data();
+    const gifts = giftsQuerySnapshot.docs;
+    if (data) {
+      let user = data['owner'];
       // Create list
       let list: List = {
+        id: data['id'],
+        name: data['name'],
         type: 'wish',
         owner: user,
-        giftsByUser: wishQuerySnapshot.docs.length > 0 ?
+        giftsByUser: gifts.length > 0 ?
         {
           [user.id]: {
             gifts: new Map() as Gifts,
@@ -34,7 +83,7 @@ export class GiftListService {
         } : undefined
       }
       // Add all gifts to list
-      wishQuerySnapshot.forEach((doc) => {
+      giftsQuerySnapshot.forEach((doc) => {
         list.giftsByUser![userID].gifts.set(doc.data()['id'], doc.data() as Gift);
       });
       return list;
@@ -49,11 +98,13 @@ export class GiftListService {
   async getShoppingListInfo(): Promise<List | undefined> {
     if (this.accountService.currentUserID) {
       // Get all gifts from shopping-list
-      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', this.accountService.currentUserID, 'shopping-list'), orderBy('isWishedByUser')));
+      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'shopping-list', this.accountService.currentUserID, 'gifts'), orderBy('isWishedByUser')));
       // Convert DocumentData to List
       const owner = await this.accountService.getUserInfo(this.accountService.currentUserID)
       let list: List = {
         type: 'shopping',
+        name: 'shopping',
+        id: owner!.id,
         owner: owner!,
         giftsByUser: shoppingQuerySnapshot.docs.length > 0 ? {} : undefined,
       };
@@ -77,10 +128,11 @@ export class GiftListService {
   /**
    * Adds a gift to the current user's wish-list.
    * @param gift - A NewGift object containing the data for the gift being added.
+   * @param listID - The list ID of the wish-list to add the gift to.
    */
-  async addGiftToWishList(gift: NewGift) {
+  async addGiftToWishList(gift: NewGift, listID: string) {
     await runTransaction(this.db, async (transaction) => {
-      const giftRef = doc(collection(this.db, 'lists', this.accountService.currentUserID!, 'wish-list'))
+      const giftRef = doc(collection(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', listID, 'gifts'))
       transaction.set(giftRef, {
         ...gift,
         id: giftRef.id,
@@ -103,7 +155,7 @@ export class GiftListService {
       });
       
       // update isWishedBy user's wish-list
-      const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.id);
+      const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-lists', gift.isWishedOnListID, 'gifts', gift.id);
       transaction.update(wishRef, {
         isClaimedByID: this.accountService.currentUserID!,
       });
@@ -113,6 +165,7 @@ export class GiftListService {
   /**
    * Creates a new gift in the current user's shopping-list.
    * @param gift - A Gift object containing the data for the gift being claimed.
+   * @param friend - The friend the gift is for.
    */
   async createGiftInShoppingList(gift: NewGift, friend: Friend) {
     await runTransaction(this.db, async (transaction) => {
@@ -140,7 +193,7 @@ export class GiftListService {
         const shoppingRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'shopping-list', oldGift.id);
         refs.push(shoppingRef);
       } else {
-        const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-list', oldGift.id);
+        const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGift.isWishedOnListID, 'gifts', oldGift.id);
         refs.push(wishRef);
         if (oldGift.isClaimedByID) {
           const shoppingRef = doc(this.db, 'lists', oldGift.isClaimedByID, 'shopping-list', oldGift.id);
@@ -162,7 +215,7 @@ export class GiftListService {
   async deleteGiftFromWishList(gift: Gift) {
     await runTransaction(this.db, async (transaction) => {
       // update current user's wish-list
-      const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-list', gift.id);
+      const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', gift.isWishedOnListID, 'gifts', gift.id);
       transaction.delete(wishRef);
       
       // update isClaimedBy user's shopping-list
@@ -187,7 +240,7 @@ export class GiftListService {
 
       // update isWishedBy user's wish-list
       if (!gift.isCustom) {
-        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.id);
+        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.isWishedOnListID, 'gifts', gift.id);
         transaction.update(wishRef, {isClaimedByID: deleteField()})
       }
     });
