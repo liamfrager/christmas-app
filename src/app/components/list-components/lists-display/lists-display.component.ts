@@ -25,7 +25,6 @@ export class ListsDisplayComponent {
     'Could not load lists';;
 
   ngOnChanges() {
-    console.log('lists updated', this.lists);
     this.noListsMessage = 
     this.lists ?
     this.isOwnedByCurrentUser ?

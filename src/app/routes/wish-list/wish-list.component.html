@@ -1,20 +1,22 @@
-<ng-container *ngIf="IDParam && !isModalOpen; else noBackButton">
-    <app-page-heading
-        [headingText]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.displayName.split(' ')[0] + '\'s' + listInfo.name : listInfo.name"
-        [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
-        (onIconClick)="router.navigate(['wish-lists', listInfo.id, 'add-gift'])"
-        (onBackButton)="location.back()"
-        >
-    </app-page-heading>
+<ng-container *ngIf="listInfo">
+    <ng-container *ngIf="IDParam && !isModalOpen; else noBackButton">
+        <app-page-heading
+            [headingText]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.displayName.split(' ')[0] + '\'s' + listInfo.name : listInfo.name"
+            [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
+            (onIconClick)="router.navigate(['wish-lists', listInfo.id, 'add-gift'])"
+            (onBackButton)="location.back()"
+            >
+        </app-page-heading>
+    </ng-container>
+    <ng-template #noBackButton>
+        <app-page-heading
+            [headingText]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.displayName.split(' ')[0] + '\'s' + listInfo.name : listInfo.name"
+            [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
+            (onIconClick)="router.navigate(['wish-lists', listInfo.id, 'add-gift'])"
+            >
+        </app-page-heading>
+    </ng-template>
 </ng-container>
-<ng-template #noBackButton>
-    <app-page-heading
-        [headingText]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.displayName.split(' ')[0] + '\'s' + listInfo.name : listInfo.name"
-        [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
-        (onIconClick)="router.navigate(['wish-lists', listInfo.id, 'add-gift'])"
-        >
-    </app-page-heading>
-</ng-template>
 <div class="list">
     <app-list-display
     [list]="listInfo"
