@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ListDisplayComponent } from '../../components/list-components/list-display/list-display.component';
 import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
 import { GiftListService } from '../../services/gift-list.service';
@@ -27,29 +27,26 @@ export class WishListComponent implements OnInit {
   ) {};
   listInfo!: List;
   IDParam: string | undefined | null;
+  listID: string = this.route.snapshot.paramMap.get('list-id')!;
   user?: User | Friend;
   isModalOpen: boolean = false;
 
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
     this.IDParam = IDParam;
-    if (this.IDParam) {
-      if (this.IDParam !== this.accountService.currentUserID) {
-        this.user = await this.friendsService.getFriend(this.IDParam);
-        if (this.user!.status !== 'friends') {
-          this.listInfo = { type: 'not-friends', owner: this.user } as List;
-        }
-      } else {
-        this.user = this.accountService.currentUser;
+    if (this.IDParam && this.IDParam !== this.accountService.currentUserID) {
+      this.user = await this.friendsService.getFriend(this.IDParam);
+      if (this.user!.status !== 'friends') {
+        this.listInfo = { type: 'not-friends', owner: this.user } as List;
+        return
       }
-    } else {
-      this.user = this.accountService.currentUser;
     }
+    this.user = this.accountService.currentUser;
   }
 
   @RefreshService.onRefresh()
   async loadListInfo() {
-    const listInfo = await this.giftListService.getWishListInfo(this.user?.id!);
+    const listInfo = await this.giftListService.getWishListInfo(this.user!.id, this.listID!);
     if (listInfo)
       this.listInfo = listInfo;
   }
