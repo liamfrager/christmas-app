@@ -18,7 +18,7 @@ import { RefreshService } from '../../services/refresh.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, IconComponent, PopUpComponent, FriendsDisplayComponent, ProfileFormComponent, PickerComponent, EmojiComponent],
+  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, ProfileFormComponent, PickerComponent, EmojiComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -75,7 +75,7 @@ export class ProfileComponent {
   }
 
   viewFriends() {
-    this.router.navigate([`/profile/${this.user!.id}/friends`]);
+    this.router.navigate(['profile', this.user!.id, 'friends']);
   }
 
   hideFriends() {
@@ -85,7 +85,7 @@ export class ProfileComponent {
   }
 
   viewList() {
-    this.router.navigate([`/profile/${this.user!.id}/wish-list`]);
+    this.router.navigate(['profile', this.user!.id, 'wish-lists']);
   }
 
   onProfileEdited(form: NgForm) {

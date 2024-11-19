@@ -3,7 +3,6 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { GiftListService } from '../../../services/gift-list.service';
 import { FriendsService } from '../../../services/friends.service';
 import { Friend, Gift, NewGift } from '../../../types';
-import { PageHeadingComponent } from "../../page-heading/page-heading.component";
 import { PfpSelectComponent } from '../../pfp-select/pfp-select.component';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../../services/account.service';
@@ -11,7 +10,7 @@ import { AccountService } from '../../../services/account.service';
 @Component({
   selector: 'app-gift-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, PageHeadingComponent, PfpSelectComponent],
+  imports: [CommonModule, FormsModule, PfpSelectComponent],
   templateUrl: './gift-form.component.html',
   styleUrl: './gift-form.component.css'
 })

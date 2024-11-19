@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
 import { User } from '../../types';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-display',
   standalone: true,
-  imports: [CommonModule, IconComponent],
+  imports: [CommonModule],
   templateUrl: './user-display.component.html',
   styleUrl: './user-display.component.css'
 })
