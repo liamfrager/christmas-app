@@ -84,7 +84,7 @@ export class ProfileComponent {
     document.getElementsByTagName('body')[0].style.removeProperty('overflow');
   }
 
-  viewList() {
+  viewLists() {
     this.router.navigate(['profile', this.user!.id, 'wish-lists']);
   }
 
