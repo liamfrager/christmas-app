@@ -1,6 +1,6 @@
 <ng-container *ngIf="IDParam; else noBackButton">
     <app-page-heading
-        [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s List' : 'Wish List'"
+        [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s Lists' : 'Wish Lists'"
         [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
         (onIconClick)="router.navigate(['/wish-lists/add-list'])"
         (onBackButton)="location.back()"
@@ -9,7 +9,7 @@
 </ng-container>
 <ng-template #noBackButton>
     <app-page-heading
-        [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s List' : 'Wish List'"
+        [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s Lists' : 'Wish Lists'"
         [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
         (onIconClick)="router.navigate(['/wish-lists/add-list'])"
         >

@@ -22,7 +22,6 @@ export class AddWishListComponent {
   ) {}
 
   async onSubmit(newList: NewList) {
-    console.log(newList);
     await this.giftListService.addWishList(newList);
     this.router.navigate(['/wish-lists']);
   }
