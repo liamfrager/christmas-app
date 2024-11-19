@@ -38,7 +38,7 @@ export class ProfileComponent {
   userID: string | null = null;
 
   async ngOnInit() {
-    const userID = this.route.snapshot.paramMap.get('id');
+    const userID = this.route.snapshot.paramMap.get('user-id');
     this.userID = userID;
     if (userID && userID !== this.currentUserID) {
       const friend = await this.friendsService.getFriend(userID);

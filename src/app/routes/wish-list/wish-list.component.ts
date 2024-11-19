@@ -31,7 +31,7 @@ export class WishListComponent implements OnInit {
   isModalOpen: boolean = false;
 
   async ngOnInit() {
-    let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');
+    let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
     this.IDParam = IDParam;
     if (this.IDParam) {
       if (this.IDParam !== this.accountService.currentUserID) {
