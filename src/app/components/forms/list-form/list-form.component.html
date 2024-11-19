@@ -1,0 +1,16 @@
+<form (ngSubmit)="onSubmit(giftForm)" #giftForm="ngForm">
+  <input 
+    type="text"
+    name="list"
+    id="list"
+    placeholder="List Name *"
+    required [(ngModel)]="nameVal"
+  ><br>
+  <input
+    type="submit"
+    name="submit"
+    id="submit"
+    [value]="list ? 'Save' : 'Create List'"
+    [disabled]="giftForm.invalid"
+  >
+</form>
