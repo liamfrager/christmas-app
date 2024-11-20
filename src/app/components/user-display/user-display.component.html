@@ -3,4 +3,9 @@
         <img [src]="user.pfp" [alt]="user.displayName + ' profile picture'">
         <span>{{user.displayName}}</span>
     </div>
+    <app-icon *ngIf="icon"
+        [icon]="icon"
+        (iconClicked)="goToLists()"
+        >
+    </app-icon>
 </div>
