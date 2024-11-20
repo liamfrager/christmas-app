@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction, setDoc } from 'firebase/firestore';
+import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
 import { Gift, List, NewGift, Gifts, Friend, WishLists, User, NewList } from '../types';

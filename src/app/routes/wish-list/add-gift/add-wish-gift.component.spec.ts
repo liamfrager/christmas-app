@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddGiftComponent } from './add-wish-gift.component';
+import { AddWishGiftComponent } from './add-wish-gift.component';
 
 describe('AddGiftComponent', () => {
-  let component: AddGiftComponent;
-  let fixture: ComponentFixture<AddGiftComponent>;
+  let component: AddWishGiftComponent;
+  let fixture: ComponentFixture<AddWishGiftComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddGiftComponent]
+      imports: [AddWishGiftComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(AddGiftComponent);
+    fixture = TestBed.createComponent(AddWishGiftComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

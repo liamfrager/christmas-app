@@ -2,12 +2,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UserProfile } from '../../../types';
 import { AccountService } from '../../../services/account.service';
-import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 @Component({
   selector: 'app-profile-form',
   standalone: true,
-  imports: [FormsModule, PickerComponent],
+  imports: [FormsModule],
   templateUrl: './profile-form.component.html',
   styleUrl: './profile-form.component.css'
 })

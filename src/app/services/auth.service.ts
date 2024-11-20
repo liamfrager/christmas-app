@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { browserLocalPersistence, GoogleAuthProvider, setPersistence, signInWithPopup, signOut } from 'firebase/auth';
 import { User as FirebaseUser } from "firebase/auth";
 import { AccountService } from './account.service';
-import { User, UserProfile } from '../types';
+import { UserProfile } from '../types';
 import { SettingsService } from './settings.service';
 
 @Injectable({
