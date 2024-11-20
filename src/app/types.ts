@@ -7,13 +7,13 @@ export type NewGift = {
     url?: string,
     isClaimedByID?: string,
     isWishedByUser?: User,
+    isWishedOnListID: string,
 }
 export interface Gift extends NewGift {
     id: string,
     status: 'claimed' | 'purchased' | 'delivered' | 'wrapped' | 'under tree',
     isWishedByUser: User,
     isClaimedByUser?: User,
-    isWishedOnListID: string,
     isCustom?: boolean,
     isDeleted?: boolean,
 }

@@ -6,6 +6,7 @@ import { Friend, Gift, NewGift } from '../../../types';
 import { PfpSelectComponent } from '../../pfp-select/pfp-select.component';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../../services/account.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-gift-form',
@@ -19,6 +20,7 @@ export class GiftFormComponent {
     private giftListService: GiftListService, 
     private friendsService: FriendsService,
     private accountService: AccountService,
+    private route: ActivatedRoute,
   ) {}
   @Input({required: true}) type!: 'wish' | 'shopping';
   @Input() gift?: Gift;
@@ -49,6 +51,7 @@ export class GiftFormComponent {
       details: form.form.value.details,
       isWishedByID: isWishedByID,
       isWishedByUser: isWishedByUser,
+      isWishedOnListID: this.route.snapshot.paramMap.get('list-id')!,
     }
     if (this.gift) { // If editing gift.
       if (JSON.stringify(this.gift) == JSON.stringify({...this.gift, ...newGift})) { // If gift hasn't changed.
