@@ -53,8 +53,8 @@ export class WishListComponent implements OnInit {
     window.history.go(this.route.snapshot.queryParamMap.get('rerouted') === 'true' ? -2 : -1);
   }
 
-  deleteList() {
-    this.giftListService.deleteWishList(this.listInfo);
+  async deleteList() {
+    await this.giftListService.deleteWishList(this.listInfo);
     this.router.navigate(['/wish-lists'])
   }
 }
