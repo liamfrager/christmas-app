@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { UserDisplayComponent } from "../../user-display/user-display.component";
 import { List, WishLists } from '../../../types';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from "../../icon/icon.component";
@@ -9,7 +8,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-lists-display',
   standalone: true,
-  imports: [UserDisplayComponent, CommonModule, IconComponent],
+  imports: [CommonModule, IconComponent],
   templateUrl: './lists-display.component.html',
   styleUrl: './lists-display.component.css'
 })
@@ -34,6 +33,9 @@ export class ListsDisplayComponent {
   }
 
   goToList(list: List) {
-    this.router.navigate(["wish-lists", list.id]);
+    if (this.isOwnedByCurrentUser)
+      this.router.navigate(['wish-lists', list.id]);
+    else
+      this.router.navigate(['profile', list.owner.id, 'wish-lists', list.id])
   }
 }

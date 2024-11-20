@@ -7,18 +7,11 @@
   <ng-template #listsDisplay>
     <!-- Display lists -->
     <div *ngIf="lists.lists.length > 0; else noLists">
-      <!-- Display lists owner -->
-      <app-user-display *ngIf="!isOwnedByCurrentUser"
-        class="sticky"
-        [user]="lists.owner"
-        [onClick]="null"
-        >
-      </app-user-display>
       <ul>
         <li *ngFor="let list of lists.lists" (click)="goToList(list)">
           <div class="list-display">
             <app-icon
-            icon="radio_button_unchecked"
+            icon="contract"
             [hover]="null"
             >
             </app-icon>

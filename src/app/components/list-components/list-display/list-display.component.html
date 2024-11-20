@@ -13,13 +13,6 @@
   <ng-template #listDisplay>
     <!-- Display gifts -->
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
-      <!-- Display list owner -->
-      <app-user-display *ngIf="list.type !== 'shopping' && !isOwnedByCurrentUser"
-        class="sticky"
-        [user]="list.owner"
-        [onClick]="null"
-        >
-      </app-user-display>
       <ng-container *ngFor="let giftByUser of list.giftsByUser | keyvalue">
         <!-- If is shopping-list -->
         <ng-container *ngIf="list.type === 'shopping'">

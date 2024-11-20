@@ -3,6 +3,7 @@
         <app-page-heading
             [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s Lists' : 'Wish Lists'"
             [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
+            [imageURL]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.pfp : null"
             (onIconClick)="router.navigate(['/wish-lists/add-list'])"
             (onBackButton)="location.back()"
             >
@@ -12,6 +13,7 @@
         <app-page-heading
             [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s Lists' : 'Wish Lists'"
             [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
+            [imageURL]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.pfp : null"
             (onIconClick)="router.navigate(['/wish-lists/add-list'])"
             >
         </app-page-heading>
