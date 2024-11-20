@@ -97,7 +97,7 @@ export class ListDisplayComponent implements OnChanges {
    * Should only be called when gift is owned by the current user.
    */
   editGift(newGift: NewGift) {
-    if (this.giftInModal!.isWishedByID !== newGift.isWishedByID) {
+    if (this.giftInModal!.isWishedByID !== newGift.isWishedByID || this.giftInModal!.isWishedOnListID !== newGift.isWishedOnListID) {
       if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
         delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
       } else {
@@ -105,13 +105,15 @@ export class ListDisplayComponent implements OnChanges {
       }
     }
     this.giftInModal = {...this.giftInModal!, ...newGift};
-    if (!this.list!.giftsByUser![this.giftInModal!.isWishedByID]) {
-      this.list!.giftsByUser![this.giftInModal!.isWishedByID] = {
-        gifts: new Map<string, Gift>(),
-        user: this.giftInModal!.isWishedByUser,
-      };
+    if (this.giftInModal!.isWishedOnListID === this.list!.id) {
+      if (!this.list!.giftsByUser![this.giftInModal!.isWishedByID]) {
+        this.list!.giftsByUser![this.giftInModal!.isWishedByID] = {
+          gifts: new Map<string, Gift>(),
+          user: this.giftInModal!.isWishedByUser,
+        };
+      }
+      this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, this.giftInModal);
     }
-    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, this.giftInModal);
   }
 
   /**

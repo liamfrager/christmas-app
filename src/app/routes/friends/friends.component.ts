@@ -25,7 +25,7 @@ export class FriendsComponent implements OnInit {
   user?: User;
 
   async ngOnInit() {
-    let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('id');
+    let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
     this.IDParam = IDParam;
   }
 

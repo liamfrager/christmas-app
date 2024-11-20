@@ -7,6 +7,7 @@ export type NewGift = {
     url?: string,
     isClaimedByID?: string,
     isWishedByUser?: User,
+    isWishedOnListID: string,
 }
 export interface Gift extends NewGift {
     id: string,
@@ -36,15 +37,26 @@ export interface Friend extends User {
     status: 'incoming'| 'outgoing' | 'friends',
 }
 
-export type List = {
-    type: 'wish' | 'shopping' | 'error' | 'not-friends',
+export type NewList = {
+    name: string,
     owner: User,
+}
+
+export interface List extends NewList {
+    id: string,
+    type: 'wish' | 'shopping' | 'error' | 'not-friends',
     giftsByUser?: {
         [userID: string]: {
             gifts: Gifts,
             user: User,
         },
-    }
+    },
+}
+
+export type WishLists = {
+    type: 'valid' | 'error' | 'not-friends',
+    owner: User,
+    lists: List[],
 }
 
 export type Settings = {

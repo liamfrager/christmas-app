@@ -1,0 +1,29 @@
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  list-style-position: outside;
+}
+
+.list-display {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.list-name {
+  width: 100%;
+  border-bottom: .5px solid #26251d44;
+  padding: .8em 0 .8em 1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host-context(li:last-of-type) .list-name {
+  border-bottom: none;
+}
+
+.list-name:hover, .error {
+  color: #d64541;
+}

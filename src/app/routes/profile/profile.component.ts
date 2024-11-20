@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
 import { AccountService } from '../../services/account.service';
-import { UserDisplayComponent } from "../../components/user-display/user-display.component";
 import { IconComponent } from "../../components/icon/icon.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfile } from '../../types';
 import { CommonModule, Location } from '@angular/common';
 import { FriendsService } from '../../services/friends.service';
 import { PopUpComponent } from "../../components/pop-up/pop-up.component";
-import { FriendsDisplayComponent } from "../../components/friends-display/friends-display.component";
 import { ProfileFormComponent } from "../../components/forms/profile-form/profile-form.component";
 import { NgForm } from '@angular/forms';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
@@ -18,7 +16,7 @@ import { RefreshService } from '../../services/refresh.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, IconComponent, PopUpComponent, FriendsDisplayComponent, ProfileFormComponent, PickerComponent, EmojiComponent],
+  imports: [CommonModule, PageHeadingComponent, IconComponent, PopUpComponent, ProfileFormComponent, PickerComponent, EmojiComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -38,7 +36,7 @@ export class ProfileComponent {
   userID: string | null = null;
 
   async ngOnInit() {
-    const userID = this.route.snapshot.paramMap.get('id');
+    const userID = this.route.snapshot.paramMap.get('user-id');
     this.userID = userID;
     if (userID && userID !== this.currentUserID) {
       const friend = await this.friendsService.getFriend(userID);
@@ -75,7 +73,7 @@ export class ProfileComponent {
   }
 
   viewFriends() {
-    this.router.navigate([`/profile/${this.user!.id}/friends`]);
+    this.router.navigate(['profile', this.user!.id, 'friends']);
   }
 
   hideFriends() {
@@ -84,8 +82,8 @@ export class ProfileComponent {
     document.getElementsByTagName('body')[0].style.removeProperty('overflow');
   }
 
-  viewList() {
-    this.router.navigate([`/profile/${this.user!.id}/wish-list`]);
+  viewLists() {
+    this.router.navigate(['profile', this.user!.id, 'wish-lists']);
   }
 
   onProfileEdited(form: NgForm) {

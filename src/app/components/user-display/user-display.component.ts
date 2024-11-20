@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { IconComponent } from '../icon/icon.component';
 import { User } from '../../types';
 import { Router } from '@angular/router';
+import { IconComponent } from "../icon/icon.component";
 
 @Component({
   selector: 'app-user-display',
@@ -15,12 +15,20 @@ export class UserDisplayComponent {
   constructor(private router: Router) {};
   @Input({required: true}) user!: User;
   @Input() onClick: (() => void) | null = this.goToProfile;
+  @Input() icon: string | null = null;
 
   /**
    * Reroutes the webpage to the displayed user's profile.
    */
   goToProfile() {
-    this.router.navigate([`/profile/${this.user.id}`]);
+    this.router.navigate(['profile', this.user.id]);
+  }
+
+  /**
+   * Reroutes the webpage to the displayed user's wish-lists.
+   */
+  goToLists() {
+    this.router.navigate(['profile', this.user.id, 'wish-lists']);
   }
   
   /**

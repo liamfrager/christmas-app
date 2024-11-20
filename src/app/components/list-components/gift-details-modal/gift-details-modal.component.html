@@ -12,17 +12,17 @@
         (onBackButton)="onModalClose.emit(true);"
         >
       </app-page-heading>
-      <div class="content">
-        <p>{{gift.details}}</p>
+      <div class="content modal-container">
+        <p *ngIf="gift.details!.length > 0" class="spaced">{{gift.details}}</p>
         <ng-container *ngIf="gift.url">
-          <app-image-preview [url]="gift.url"></app-image-preview>
-          <a class="link-btn" [href]="gift.url" target="_blank">
+          <app-image-preview [url]="gift.url" class="spaced"></app-image-preview>
+          <a class="link-btn spaced" [href]="gift.url" target="_blank">
             <button class="link-btn">
               <app-icon icon="link" [hover]="null" size="20px"></app-icon>Link to gift
             </button>
           </a>
         </ng-container>
-        <hr *ngIf="gift.details || gift.url">
+        <hr *ngIf="gift.details || gift.url" class="spaced">
         <!-- Shopping list status bar -->
         <ng-container *ngIf="type === 'shopping'">
           <div class="status-display">

@@ -20,4 +20,9 @@ export class IconComponent {
   @Input() hover: boolean | null = true;
   @Input() size: string = '30px'; // Default size.
   @Output() iconClicked = new EventEmitter();
+
+  handleClick(event: MouseEvent) {
+    event.stopPropagation();
+    this.iconClicked.emit(true);
+  }
 }

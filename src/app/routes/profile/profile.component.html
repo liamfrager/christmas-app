@@ -34,7 +34,7 @@
       <p *ngIf="user.bio" class="bio">{{user.bio}}</p>
       <hr>
       <!-- Wish list -->
-      <button *ngIf="friendStatus === 'friends' || user.id === currentUserID" (click)="viewList()"><app-icon icon="featured_seasonal_and_gifts" [hover]="false" size="20px"></app-icon>View List</button>
+      <button *ngIf="friendStatus === 'friends' || user.id === currentUserID" (click)="viewLists()"><app-icon icon="featured_seasonal_and_gifts" [hover]="false" size="20px"></app-icon>View Lists</button>
       <!-- Friends list -->
       <button (click)="viewFriends()"><app-icon icon="group" [hover]="false" size="20px"></app-icon>View Friends</button>
       <!-- Friend requests -->

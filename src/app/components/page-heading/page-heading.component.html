@@ -4,6 +4,10 @@
     (iconClicked)="onBackButton.emit(true)"
     >
   </app-icon>
+  <img *ngIf="imageURL"
+    [src]="imageURL"
+    alt="heading image"
+  >
   <h2>{{headingText}}</h2>
 </div>
 <span *ngIf="buttons">
