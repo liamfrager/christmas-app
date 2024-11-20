@@ -26,7 +26,7 @@
     >
     </app-list-display>
 </div>
-<div *ngIf="!IDParam || IDParam === accountService.currentUserID" class="delete-button">
+<div *ngIf="!IDParam || IDParam === accountService.currentUserID" [ngClass]="{'delete-button': true, 'modal-open': isModalOpen }">
     <app-pop-up
         class="btn-red"
         buttonText="Delete List"

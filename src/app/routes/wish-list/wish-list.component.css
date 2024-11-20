@@ -19,4 +19,12 @@
 
 .delete-button {
   padding: 0 1em;
+  transition: all .3s ease-in-out;
+  max-height: fit-content;
+  height: 5em;
+}
+
+.modal-open {
+  transition: all .3s ease-in-out;
+  height: 0;
 }
