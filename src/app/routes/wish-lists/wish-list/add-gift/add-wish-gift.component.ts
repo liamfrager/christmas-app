@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { GiftFormComponent } from "../../../components/forms/gift-form/gift-form.component";
-import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
+import { GiftFormComponent } from "../../../../components/forms/gift-form/gift-form.component";
+import { PageHeadingComponent } from "../../../../components/page-heading/page-heading.component";
 import { ActivatedRoute } from '@angular/router';
-import { GiftListService } from '../../../services/gift-list.service';
-import { NewGift } from '../../../types';
+import { GiftListService } from '../../../../services/gift-list.service';
+import { NewGift } from '../../../../types';
 import { Location } from '@angular/common';
 
 
