@@ -25,7 +25,7 @@
         <hr *ngIf="gift.details || gift.url" class="spaced">
         <!-- Shopping list status bar -->
         <ng-container *ngIf="type === 'shopping'">
-          <div class="status-display">
+          <div class="status-display spaced">
             <h4 class="track-gift">Track your gift:</h4>
             <div class="line">
               <div *ngFor="let status of statuses" class="node" [style]="status.name === gift.status ? 'color: green' : ''">
@@ -39,7 +39,7 @@
               </div>
             </div>
           </div>
-          <hr>
+          <hr class="spaced">
         </ng-container>
         <!-- Bottom button (edit/claim/unclaim) -->
         <div class="bottom-button-wrap">
