@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { GiftListService } from '../../../services/gift-list.service';
 import { FriendsService } from '../../../services/friends.service';
-import { Friend, Gift, NewGift } from '../../../types';
+import { Friend, Gift, NewGift, WishLists } from '../../../types';
 import { PfpSelectComponent } from '../../pfp-select/pfp-select.component';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../../services/account.service';
@@ -27,19 +27,23 @@ export class GiftFormComponent {
   @Output() onFormSubmit = new EventEmitter();
   
   friends: Array<Friend> = [];
+  lists: WishLists | null = null;
   selectedFriend?: Friend;
   // Form values
   nameVal?: string;
   urlVal?: string;
   detailsVal?: string;
+  listVal?: string;
 
   async ngOnInit() {
     this.nameVal = this.gift ? this.gift.name : '';
     this.urlVal = this.gift ? this.gift.url : '';
     this.detailsVal = this.gift ? this.gift.details : '';
+    this.listVal = this.gift ? this.gift.isWishedOnListID : this.route.snapshot.paramMap.get('list-id')!;
     if (this.type === 'shopping') {
       this.friends = await this.friendsService.getFriends(this.accountService.currentUserID!)
     }
+    this.lists = await this.giftListService.getAllWishLists(this.accountService.currentUser);
   }
 
   async onSubmit(form: NgForm) {
@@ -51,7 +55,7 @@ export class GiftFormComponent {
       details: form.form.value.details,
       isWishedByID: isWishedByID,
       isWishedByUser: isWishedByUser,
-      isWishedOnListID: this.route.snapshot.paramMap.get('list-id')!,
+      isWishedOnListID: form.form.value.list ? form.form.value.list : this.listVal,
     }
     if (this.gift) { // If editing gift.
       if (JSON.stringify(this.gift) == JSON.stringify({...this.gift, ...newGift})) { // If gift hasn't changed.

@@ -207,6 +207,7 @@ export class GiftListService {
    * @param newGift - A NewGift object containing the updated data for the gift.
    */
   async updateGift(oldGift: Gift, newGift: NewGift) {
+    console.log('updating doc')
     await runTransaction(this.db, async (transaction) => {
       let refs = [];
       
@@ -214,8 +215,15 @@ export class GiftListService {
         const shoppingRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'shopping-list', oldGift.id);
         refs.push(shoppingRef);
       } else {
-        const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGift.isWishedOnListID, 'gifts', oldGift.id);
-        refs.push(wishRef);
+        if (oldGift.isWishedOnListID !== newGift.isWishedOnListID) {
+          const newWishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', newGift.isWishedOnListID, 'gifts', oldGift.id);
+          transaction.set(newWishRef, {...oldGift, ...newGift});
+          const oldWishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGift.isWishedOnListID, 'gifts', oldGift.id);
+          transaction.delete(oldWishRef);
+        } else {
+          const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGift.isWishedOnListID, 'gifts', oldGift.id);
+          refs.push(wishRef);
+        }
         if (oldGift.isClaimedByID) {
           const shoppingRef = doc(this.db, 'lists', oldGift.isClaimedByID, 'shopping-list', oldGift.id);
           refs.push(shoppingRef);
