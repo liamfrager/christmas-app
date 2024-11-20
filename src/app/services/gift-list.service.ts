@@ -44,6 +44,23 @@ export class GiftListService {
   }
 
   /**
+   * Deletes a list from the current user's wish-lists, updating shopping lists claiming that gifts from that list.
+   * @param list - A List object containing the data for the list being deleted.
+   */
+  async deleteWishList(list: List) {
+    await runTransaction(this.db, async (transaction) => {
+      // Delete all gifts from list
+      const giftsRef = await getDocs(collection(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', list.id, 'gifts'));
+      giftsRef.docs.forEach(gift => this.deleteGiftFromWishList(gift as unknown as Gift));
+      // Delete list
+      if (this.accountService.currentUserID) {
+        const listRef = doc(this.db, 'lists', this.accountService.currentUserID, 'wish-lists', list.id);
+        transaction.delete(listRef);
+      }
+    });
+  }
+
+  /**
    * Updates a list in the database.
    * @param oldList - A List object containing the data for the list to be updated.
    * @param newList - A NewList object containing the updated data for the list.
@@ -210,7 +227,7 @@ export class GiftListService {
 
   /**
    * Deletes a gift from the current user's wish-list, updating shopping lists claiming that gift.
-   * @param gift - A Gift object containing the data for the gift being claimed.
+   * @param gift - A Gift object containing the data for the gift being deleted.
    */
   async deleteGiftFromWishList(gift: Gift) {
     await runTransaction(this.db, async (transaction) => {
@@ -230,7 +247,7 @@ export class GiftListService {
 
   /**
    * Deletes a gift from the current user's shopping-list, marking it as unclaimed.
-   * @param gift - A Gift object containing the data for the gift being claimed.
+   * @param gift - A Gift object containing the data for the gift being deleted.
    */
   async deleteGiftFromShoppingList(gift: Gift) {
     await runTransaction(this.db, async (transaction) => {

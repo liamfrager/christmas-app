@@ -16,3 +16,7 @@
   flex-direction: column;
   position: relative;
 }
+
+.delete-button {
+  padding: 0 1em;
+}
