@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { User } from '../../types';
 
 @Component({
   selector: 'app-page-heading',
@@ -14,6 +15,7 @@ export class PageHeadingComponent {
   constructor(public router: Router) {};
   @Input({required: true}) headingText!: string;
   @Input() buttons!: string[];
+  @Input() imageURL: string | null = null;
   @Output() onBackButton =  new EventEmitter();
   @Output() onIconClick = new EventEmitter();
 }

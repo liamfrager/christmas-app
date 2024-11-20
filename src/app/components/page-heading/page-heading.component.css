@@ -19,6 +19,13 @@ app-icon {
   padding: 0 0 0 .5em;
 }
 
+img {
+  border-radius: 50%;
+  border: 1px solid #26251d;
+  width: 2.2em;
+  margin-right: .5em;
+}
+
 .heading-text {
   display: flex;
   flex-direction: row;
