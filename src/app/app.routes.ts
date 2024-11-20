@@ -16,7 +16,7 @@ export const routes: Routes = [
   },
   { path: 'wish-lists',
     canActivate: [authGuard],
-    loadChildren: () => import('./routes/wish-list/wish-list.module').then(m => m.WishListModule),
+    loadChildren: () => import('./routes/wish-lists/wish-list.module').then(m => m.WishListModule),
   },
   { path: 'friends',
     canActivate: [authGuard],

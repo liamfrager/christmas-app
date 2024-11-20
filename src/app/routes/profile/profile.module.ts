@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile.component';
-import { WishListComponent } from '../wish-list/wish-list.component';
+import { WishListComponent } from '../wish-lists/wish-list/wish-list.component';
 import { FriendsComponent } from '../friends/friends.component';
 import { SettingsComponent } from './settings/settings.component';
-import { WishListsComponent } from '../wish-list/wish-lists/wish-lists.component';
+import { WishListsComponent } from '../wish-lists/wish-lists/wish-lists.component';
 
 
 

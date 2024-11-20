@@ -1,14 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ListDisplayComponent } from '../../components/list-components/list-display/list-display.component';
-import { PageHeadingComponent } from '../../components/page-heading/page-heading.component';
-import { GiftListService } from '../../services/gift-list.service';
-import { AccountService } from '../../services/account.service';
+import { Component, OnInit } from '@angular/core';
+import { ListDisplayComponent } from '../../../components/list-components/list-display/list-display.component';
+import { PageHeadingComponent } from '../../../components/page-heading/page-heading.component';
+import { GiftListService } from '../../../services/gift-list.service';
+import { AccountService } from '../../../services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Friend, Gift, List, User } from '../../types';
-import { FriendsService } from '../../services/friends.service';
+import { Friend, List, User } from '../../../types';
+import { FriendsService } from '../../../services/friends.service';
 import { CommonModule, Location } from '@angular/common';
-import { RefreshService } from '../../services/refresh.service';
-import { PopUpComponent } from "../../components/pop-up/pop-up.component";
+import { RefreshService } from '../../../services/refresh.service';
+import { PopUpComponent } from "../../../components/pop-up/pop-up.component";
 
 @Component({
   selector: 'app-wish-list',
@@ -24,7 +24,6 @@ export class WishListComponent implements OnInit {
     private giftListService: GiftListService,
     private route: ActivatedRoute,
     public router: Router,
-    private location: Location,
   ) {};
   listInfo!: List;
   IDParam: string | undefined | null;

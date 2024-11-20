@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction, setDoc } from 'firebase/firestore';
+import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
 import { Gift, List, NewGift, Gifts, Friend, WishLists, User, NewList } from '../types';
@@ -119,7 +119,7 @@ export class GiftListService {
   async getShoppingListInfo(): Promise<List | undefined> {
     if (this.accountService.currentUserID) {
       // Get all gifts from shopping-list
-      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'shopping-list', this.accountService.currentUserID, 'gifts'), orderBy('isWishedByUser')));
+      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', this.accountService.currentUserID, 'shopping-list'), orderBy('isWishedByUser')));
       // Convert DocumentData to List
       const owner = await this.accountService.getUserInfo(this.accountService.currentUserID)
       let list: List = {

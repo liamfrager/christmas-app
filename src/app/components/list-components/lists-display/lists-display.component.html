@@ -6,7 +6,7 @@
   <!-- Lists display -->
   <ng-template #listsDisplay>
     <!-- Display lists -->
-    <div *ngIf="lists.lists.length > 0; else noLists">
+    <div *ngIf="lists.lists.length > 0; else noLists" class="gift-list">
       <ul>
         <li *ngFor="let list of lists.lists" (click)="goToList(list)">
           <div class="list-display">

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AccountService } from './account.service';
 import { Settings } from '../types';
 import { FirebaseService } from './firebase.service';
-import { doc, DocumentReference, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({

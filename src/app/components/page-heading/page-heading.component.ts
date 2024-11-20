@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { User } from '../../types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-page-heading',

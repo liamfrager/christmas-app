@@ -27,3 +27,11 @@ ul {
 .list-name:hover, .error {
   color: #d64541;
 }
+
+.gift-list {
+  overflow-y: auto; /* Allow vertical scrolling */
+  overflow-x: hidden;
+  flex: 1; /* Takes remaining space */
+  margin: 0;
+  padding: 0 1em 0 0;
+}
