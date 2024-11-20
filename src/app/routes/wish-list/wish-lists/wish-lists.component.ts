@@ -33,24 +33,20 @@ export class WishListsComponent {
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
     this.IDParam = IDParam;
-    if (this.IDParam) {
-      if (this.IDParam !== this.accountService.currentUserID) {
-        this.user = await this.friendsService.getFriend(this.IDParam);
-        if (this.user!.status !== 'friends') {
-          this.wishLists = { type: 'not-friends', owner: this.user } as WishLists;
-        }
-      } else {
-        this.user = this.accountService.currentUser;
-      }
-    } else {
-      this.user = this.accountService.currentUser;
-    }
+    this.user = this.IDParam && this.IDParam !== this.accountService.currentUserID
+      ? await this.friendsService.getFriend(this.IDParam)
+      : this.accountService.currentUser;
   }
 
   @RefreshService.onRefresh()
   async loadListInfo() {
-    const wishLists = await this.giftListService.getAllWishLists(this.user!);
+    const wishLists = this.user!.status === 'friends' || this.user!.id === this.accountService.currentUserID
+      ? await this.giftListService.getAllWishLists(this.user!)
+      : { type: 'not-friends', owner: this.user } as WishLists;
     if (wishLists)
+      if (this.IDParam && this.IDParam !== this.accountService.currentUserID && wishLists.lists.length == 1) {
+        this.router.navigate(['profile', this.IDParam, 'wish-lists', wishLists.lists[0].id], { queryParams: { rerouted: true } });
+      }
       this.wishLists = wishLists;
   }
 }

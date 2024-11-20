@@ -23,7 +23,8 @@ export class AddWishGiftComponent {
   ) {}
 
   async onSubmit(gift: NewGift) {
-    await this.giftListService.addGiftToWishList(gift, this.route.snapshot.paramMap.get('list-id')!);
-    this.router.navigate(['/wish-lists']);
+    const listID = this.route.snapshot.paramMap.get('list-id')!;
+    await this.giftListService.addGiftToWishList(gift, listID);
+    this.router.navigate(['wish-lists', listID]);
   }
 }
