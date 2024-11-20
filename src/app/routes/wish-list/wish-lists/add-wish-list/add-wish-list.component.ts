@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { GiftListService } from '../../../../services/gift-list.service';
 import { NewList } from '../../../../types';
 import { PageHeadingComponent } from "../../../../components/page-heading/page-heading.component";
@@ -18,11 +18,10 @@ export class AddWishListComponent {
     public router: Router,
     public location: Location,
     private giftListService: GiftListService,
-    private route: ActivatedRoute,
   ) {}
 
   async onSubmit(newList: NewList) {
-    await this.giftListService.addWishList(newList);
-    this.router.navigate(['/wish-lists']);
+    const listID = await this.giftListService.addWishList(newList);
+    this.router.navigate(['wish-lists', listID]);
   }
 }

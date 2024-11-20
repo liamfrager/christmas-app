@@ -30,16 +30,19 @@ export class GiftListService {
   /**
    * Adds a list to the current user's wish-lists.
    * @param newList - A NewList object containing the data for the list being added.
+   * @returns A promise that resolves to the ID of the newly created list, or null if the creation failed.
    */
-  async addWishList(newList: NewList) {
-    await runTransaction(this.db, async (transaction) => {
+  async addWishList(newList: NewList): Promise<string | undefined> {
+    return await runTransaction(this.db, async (transaction) => {
       if (this.accountService.currentUserID) {
         const newListRef = doc(collection(this.db, 'lists', this.accountService.currentUserID, 'wish-lists'));
         transaction.set(newListRef, {
           ...newList,
           id: newListRef.id,
         });
+        return newListRef.id;
       }
+      return undefined;
     })
   }
 
@@ -50,8 +53,9 @@ export class GiftListService {
   async deleteWishList(list: List) {
     await runTransaction(this.db, async (transaction) => {
       // Delete all gifts from list
-      const giftsRef = await getDocs(collection(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', list.id, 'gifts'));
-      giftsRef.docs.forEach(gift => this.deleteGiftFromWishList(gift as unknown as Gift));
+      const giftsRef = collection(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', list.id, 'gifts');
+      const giftsSnap = await getDocs(giftsRef);
+      giftsSnap.docs.forEach(gift => this.deleteGiftFromWishList(gift.data() as unknown as Gift));
       // Delete list
       if (this.accountService.currentUserID) {
         const listRef = doc(this.db, 'lists', this.accountService.currentUserID, 'wish-lists', list.id);
@@ -232,6 +236,7 @@ export class GiftListService {
   async deleteGiftFromWishList(gift: Gift) {
     await runTransaction(this.db, async (transaction) => {
       // update current user's wish-list
+      console.log(gift);
       const wishRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', gift.isWishedOnListID, 'gifts', gift.id);
       transaction.delete(wishRef);
       
