@@ -119,7 +119,7 @@ export class GiftListService {
   async getShoppingListInfo(): Promise<List | undefined> {
     if (this.accountService.currentUserID) {
       // Get all gifts from shopping-list
-      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'shopping-list', this.accountService.currentUserID, 'gifts'), orderBy('isWishedByUser')));
+      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', this.accountService.currentUserID, 'shopping-list'), orderBy('isWishedByUser')));
       // Convert DocumentData to List
       const owner = await this.accountService.getUserInfo(this.accountService.currentUserID)
       let list: List = {
