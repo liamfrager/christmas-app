@@ -5,6 +5,7 @@ import { WishListComponent } from './wish-list/wish-list.component';
 import { AddWishGiftComponent } from './wish-list/add-gift/add-wish-gift.component';
 import { WishListsComponent } from './wish-lists/wish-lists.component';
 import { AddWishListComponent } from './wish-lists/add-wish-list/add-wish-list.component';
+import { EditListComponent } from './wish-list/edit-list/edit-list.component';
 
 
 
@@ -18,6 +19,7 @@ import { AddWishListComponent } from './wish-lists/add-wish-list/add-wish-list.c
       { path: ':list-id', children: [
         { path: '', component: WishListComponent },
         { path: 'add-gift', component: AddWishGiftComponent },
+        { path: 'edit-list', component: EditListComponent },
       ]},
     ]),
   ]
