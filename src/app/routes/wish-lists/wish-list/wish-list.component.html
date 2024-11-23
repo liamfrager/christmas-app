@@ -2,9 +2,9 @@
     <ng-container *ngIf="!isModalOpen; else noBackButton">
         <app-page-heading
             [headingText]="listInfo.name"
-            [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
+            [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['edit', 'forms_add_on'] : []"
             [imageURL]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.pfp : null"
-            (onIconClick)="router.navigate(['wish-lists', listInfo.id, 'add-gift'])"
+            (onIconClick)="onIconClick($event)"
             (onBackButton)="goBack()"
             >
         </app-page-heading>
@@ -12,9 +12,9 @@
     <ng-template #noBackButton>
         <app-page-heading
             [headingText]="listInfo.name"
-            [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
+            [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['edit', 'forms_add_on'] : []"
             [imageURL]="IDParam && IDParam !== accountService.currentUserID ? listInfo.owner.pfp : null"
-            (onIconClick)="router.navigate(['wish-lists', listInfo.id, 'add-gift'])"
+            (onIconClick)="onIconClick($event)"
             >
         </app-page-heading>
     </ng-template>

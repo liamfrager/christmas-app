@@ -52,6 +52,13 @@ export class WishListComponent implements OnInit {
     window.history.go(this.route.snapshot.queryParamMap.get('rerouted') === 'true' ? -2 : -1);
   }
 
+  onIconClick(icon: string) {
+    if (icon === 'forms_add_on')
+      this.router.navigate(['wish-lists', this.listInfo.id, 'add-gift'])
+    else if (icon === 'edit')
+      this.router.navigate(['wish-lists', this.listInfo.id, 'edit-list'])
+  }
+
   async deleteList() {
     await this.giftListService.deleteWishList(this.listInfo);
     this.router.navigate(['/wish-lists'])
