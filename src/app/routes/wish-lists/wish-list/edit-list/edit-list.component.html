@@ -1,1 +1,8 @@
-<p>edit-list works!</p>
+<app-page-heading headingText="Edit List" (onBackButton)="location.back()"></app-page-heading>
+<div class="content">
+  <app-list-form *ngIf="editingList"
+    [list]="editingList"
+    (onFormSubmit)="location.back()"
+    >
+  </app-list-form>
+</div>

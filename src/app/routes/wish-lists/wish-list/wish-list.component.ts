@@ -6,7 +6,7 @@ import { AccountService } from '../../../services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Friend, List, User } from '../../../types';
 import { FriendsService } from '../../../services/friends.service';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RefreshService } from '../../../services/refresh.service';
 import { PopUpComponent } from "../../../components/pop-up/pop-up.component";
 
@@ -54,13 +54,13 @@ export class WishListComponent implements OnInit {
 
   onIconClick(icon: string) {
     if (icon === 'forms_add_on')
-      this.router.navigate(['wish-lists', this.listInfo.id, 'add-gift'])
+      this.router.navigate(['wish-lists', this.listInfo.id, 'add-gift']);
     else if (icon === 'edit')
-      this.router.navigate(['wish-lists', this.listInfo.id, 'edit-list'])
+      this.router.navigate(['wish-lists', this.listInfo.id, 'edit-list'], {state: {list: this.listInfo}});
   }
 
   async deleteList() {
     await this.giftListService.deleteWishList(this.listInfo);
-    this.router.navigate(['/wish-lists'])
+    this.router.navigate(['/wish-lists']);
   }
 }
