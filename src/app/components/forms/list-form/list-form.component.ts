@@ -31,8 +31,8 @@ export class ListFormComponent {
       name: form.form.value.list,
       owner: await this.accountService.getUserInfo(this.accountService.currentUserID!) as User,
     }
-    if (this.list) { // If editing gift.
-      if (JSON.stringify(this.list) == JSON.stringify({...this.list, ...newList})) { // If gift hasn't changed.
+    if (this.list) { // If editing list.
+      if (JSON.stringify(this.list) == JSON.stringify({...this.list, ...newList})) { // If list hasn't changed.
         this.onFormSubmit.emit(false);
       } else {
         this.giftListService.updateList(this.list, newList);
