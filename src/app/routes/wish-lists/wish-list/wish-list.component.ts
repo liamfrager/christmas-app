@@ -13,7 +13,7 @@ import { PopUpComponent } from "../../../components/pop-up/pop-up.component";
 @Component({
   selector: 'app-wish-list',
   standalone: true,
-  imports: [CommonModule, ListDisplayComponent, PageHeadingComponent, PopUpComponent],
+  imports: [CommonModule, ListDisplayComponent, PageHeadingComponent],
   templateUrl: './wish-list.component.html',
   styleUrl: './wish-list.component.css'
 })
@@ -57,10 +57,5 @@ export class WishListComponent implements OnInit {
       this.router.navigate(['wish-lists', this.listInfo.id, 'add-gift']);
     else if (icon === 'edit')
       this.router.navigate(['wish-lists', this.listInfo.id, 'edit-list'], {state: {list: this.listInfo}});
-  }
-
-  async deleteList() {
-    await this.giftListService.deleteWishList(this.listInfo);
-    this.router.navigate(['/wish-lists']);
   }
 }

@@ -1,8 +1,17 @@
 <app-page-heading headingText="Edit List" (onBackButton)="location.back()"></app-page-heading>
-<div class="content">
-  <app-list-form *ngIf="editingList"
+<div class="content" *ngIf="editingList">
+  <app-list-form
     [list]="editingList"
     (onFormSubmit)="location.back()"
     >
   </app-list-form>
+  <app-pop-up
+      class="btn-red"
+      buttonText="Delete List"
+      buttonIcon="delete_forever"
+      title="Are you sure you want to delete this list?"
+      body="This cannot be undone."
+      confirmText="Delete"
+      (onConfirm)="deleteList()"
+  ></app-pop-up>
 </div>
