@@ -270,7 +270,7 @@ export class GiftListService {
 
       // update isWishedBy user's wish-list
       if (!gift.isCustom) {
-        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.isWishedOnListID, 'gifts', gift.id);
+        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-lists', gift.isWishedOnListID, 'gifts', gift.id);
         transaction.update(wishRef, {isClaimedByID: deleteField()})
       }
     });
