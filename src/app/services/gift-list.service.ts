@@ -69,10 +69,10 @@ export class GiftListService {
    * @param oldList - A List object containing the data for the list to be updated.
    * @param newList - A NewList object containing the updated data for the list.
    */
-  async updateList(oldGift: List, newGift: NewList) {
-    await runTransaction(this.db, async (transaction) => {
-      const listRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGift.id);
-      transaction.update(listRef, {...oldGift, ...newGift});
+  async updateList(oldList: List, newList: NewList) {
+    await runTransaction(this.db, async (transaction) => { 
+      const listRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldList.id);
+      transaction.update(listRef, {...oldList, ...newList, giftsByUser: null}); // giftsByUser isn't saved in database, so must be null.
     });
   }
 
@@ -270,7 +270,7 @@ export class GiftListService {
 
       // update isWishedBy user's wish-list
       if (!gift.isCustom) {
-        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-list', gift.isWishedOnListID, 'gifts', gift.id);
+        const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-lists', gift.isWishedOnListID, 'gifts', gift.id);
         transaction.update(wishRef, {isClaimedByID: deleteField()})
       }
     });

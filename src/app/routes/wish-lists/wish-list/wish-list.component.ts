@@ -6,14 +6,14 @@ import { AccountService } from '../../../services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Friend, List, User } from '../../../types';
 import { FriendsService } from '../../../services/friends.service';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RefreshService } from '../../../services/refresh.service';
 import { PopUpComponent } from "../../../components/pop-up/pop-up.component";
 
 @Component({
   selector: 'app-wish-list',
   standalone: true,
-  imports: [CommonModule, ListDisplayComponent, PageHeadingComponent, PopUpComponent],
+  imports: [CommonModule, ListDisplayComponent, PageHeadingComponent],
   templateUrl: './wish-list.component.html',
   styleUrl: './wish-list.component.css'
 })
@@ -52,8 +52,10 @@ export class WishListComponent implements OnInit {
     window.history.go(this.route.snapshot.queryParamMap.get('rerouted') === 'true' ? -2 : -1);
   }
 
-  async deleteList() {
-    await this.giftListService.deleteWishList(this.listInfo);
-    this.router.navigate(['/wish-lists'])
+  onIconClick(icon: string) {
+    if (icon === 'forms_add_on')
+      this.router.navigate(['wish-lists', this.listInfo.id, 'add-gift']);
+    else if (icon === 'edit')
+      this.router.navigate(['wish-lists', this.listInfo.id, 'edit-list'], {state: {list: this.listInfo}});
   }
 }
