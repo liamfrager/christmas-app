@@ -53,7 +53,8 @@ export class GiftDetailsModalComponent implements OnInit {
   statuses = [
     { name: 'claimed', icon: 'check' },
     { name: 'purchased', icon: 'paid' },
-    { name: 'delivered', icon: 'local_shipping' },
+    { name: 'shipped', icon: 'local_shipping' },
+    { name: 'delivered', icon: 'package_2' },
     { name: 'wrapped', icon: 'featured_seasonal_and_gifts' },
     { name: 'under tree', icon: 'park'},
   ]

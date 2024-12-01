@@ -14,7 +14,7 @@ import { AccountService } from '../../../services/account.service';
 export class GiftDisplayComponent implements OnChanges {
   constructor(private accountService: AccountService) {};
   @Input({required: true}) gift!: Gift;
-  @Input({required: true}) checkType!: 'circle' | 'check_circle' | 'paid' | 'local_shipping' | 'featured_seasonal_and_gifts' | 'park' | 'error';
+  @Input({required: true}) checkType!: 'circle' | 'check_circle' | 'paid' | 'local_shipping' | 'package_2' | 'featured_seasonal_and_gifts' | 'park' | 'error';
   @Output() giftClicked = new EventEmitter();
 
   checkboxTitle?: string;
