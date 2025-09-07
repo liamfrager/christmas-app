@@ -40,6 +40,7 @@ export interface Friend extends User {
 export type NewList = {
     name: string,
     owner: User,
+    isArchived: boolean,
 }
 
 export interface List extends NewList {

@@ -77,6 +77,17 @@ export class GiftListService {
   }
 
   /**
+   * Sets the archive status of a list in the database.
+   * @param list - A List object containing the data for the list to be (un)archived.
+   */
+  async setWishListArchive(list: List, isArchived: boolean) {
+    await runTransaction(this.db, async (transaction) => { 
+      const listRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', list.id);
+      transaction.update(listRef, {...list, isArchived: isArchived, giftsByUser: null}); // giftsByUser isn't saved in database, so must be null.
+    });
+  }
+
+  /**
    * Fetches the wish-list of a given user.
    * @param userID - The user ID of the user whose wish-list is being fetched.
    * @param listID - The list ID of the wish-list to fetch.
@@ -101,7 +112,8 @@ export class GiftListService {
             gifts: new Map() as Gifts,
             user: user,
           }
-        } : undefined
+        } : undefined,
+        isArchived: data['isArchived'] ?? false
       }
       // Add all gifts to list
       giftsQuerySnapshot.forEach((doc) => {
@@ -128,6 +140,7 @@ export class GiftListService {
         id: owner!.id,
         owner: owner!,
         giftsByUser: shoppingQuerySnapshot.docs.length > 0 ? {} : undefined,
+        isArchived: false
       };
 
       for (let i = 0; i < shoppingQuerySnapshot.docs.length; i++) {

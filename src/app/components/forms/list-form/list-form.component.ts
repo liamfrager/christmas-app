@@ -30,6 +30,7 @@ export class ListFormComponent {
     const newList: NewList = {
       name: form.form.value.list,
       owner: await this.accountService.getUserInfo(this.accountService.currentUserID!) as User,
+      isArchived: false
     }
     if (this.list) { // If editing list.
       if (JSON.stringify(this.list) == JSON.stringify({...this.list, ...newList})) { // If list hasn't changed.
