@@ -40,8 +40,8 @@ export class FooterComponent implements OnInit {
       icon: 'shopping_cart',
     },
     {
-      route: '/secret-santa',
-      icon: 'crop_square',
+      route: '/groups',
+      icon: 'groups',
     },
     {
       route: '/profile',

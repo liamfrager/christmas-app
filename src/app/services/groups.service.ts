@@ -1,14 +1,26 @@
 import { Injectable } from '@angular/core';
 import { AccountService } from './account.service';
 import { FirebaseService } from './firebase.service';
-import { collection, doc, getDoc, runTransaction } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, runTransaction, where } from 'firebase/firestore';
+import { Group, User } from '../types';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SecretSantaServiceService {
+export class GroupsService {
   db = this.firebaseService.db;
   constructor(private accountService: AccountService, private firebaseService: FirebaseService) { }
+
+  async getAllGroups(user: User): Promise<Group[]> {
+    const q = query(
+      collection(this.db, 'groups'),
+      where('members', 'array-contains', user.id)
+    );
+
+    const snapshot = await getDocs(q);
+    const groups = snapshot.docs.map(doc => doc.data() as Group);
+    return groups;
+  }
 
   async getGroupInfo(groupID: string) {
     //const currentUserID = this.accountService.currentUser.id;

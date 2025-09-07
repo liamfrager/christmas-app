@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SecretSantaComponent } from './secret-santa.component';
+import { GroupsComponent } from './groups.component';
 
 describe('SecretSantaComponent', () => {
-  let component: SecretSantaComponent;
-  let fixture: ComponentFixture<SecretSantaComponent>;
+  let component: GroupsComponent;
+  let fixture: ComponentFixture<GroupsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SecretSantaComponent]
+      imports: [GroupsComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SecretSantaComponent);
+    fixture = TestBed.createComponent(GroupsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

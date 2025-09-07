@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SecretSantaServiceService } from '../../services/secret-santa-service.service';
+import { GroupsService } from '../../services/groups.service';
 import { AccountService } from '../../services/account.service';
 import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
 
@@ -19,15 +19,15 @@ function shuffle(array: any[]) {
 }
 
 @Component({
-  selector: 'app-secret-santa',
+  selector: 'app-groups',
   standalone: true,
   imports: [PageHeadingComponent],
-  templateUrl: './secret-santa.component.html',
-  styleUrl: './secret-santa.component.css'
+  templateUrl: './groups.component.html',
+  styleUrl: './groups.component.css'
 })
-export class SecretSantaComponent implements OnInit {
+export class GroupsComponent implements OnInit {
 
-  constructor(private secretSantaService: SecretSantaServiceService, private accountService: AccountService) {}
+  constructor(private secretSantaService: GroupsService, private accountService: AccountService) {}
 
   async ngOnInit() {
     const userProfile = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { SecretSantaComponent } from './secret-santa.component';
+import { GroupsComponent } from './groups.component';
 
 
 
@@ -10,7 +10,7 @@ import { SecretSantaComponent } from './secret-santa.component';
   imports: [
     CommonModule,
     RouterModule.forChild([
-      { path: '', component: SecretSantaComponent },
+      { path: '', component: GroupsComponent },
     ]),
   ]
 })
