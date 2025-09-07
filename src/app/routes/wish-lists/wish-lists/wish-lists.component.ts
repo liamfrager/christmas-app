@@ -29,6 +29,7 @@ export class WishListsComponent {
   IDParam: string | undefined | null;
   user?: User | Friend;
   wishLists!: WishLists;
+  isArchive: boolean = this.router.url === '/wish-lists/archive';
 
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
@@ -41,12 +42,21 @@ export class WishListsComponent {
   @RefreshService.onRefresh()
   async loadListInfo() {
     const wishLists = this.user!.status === 'friends' || this.user!.id === this.accountService.currentUserID
-      ? await this.giftListService.getAllWishLists(this.user!)
+      ? ( this.isArchive ? await this.giftListService.getAllArchivedWishLists(this.user!) : await this.giftListService.getAllWishLists(this.user!))
       : { type: 'not-friends', owner: this.user } as WishLists;
     if (wishLists)
       if (this.IDParam && this.IDParam !== this.accountService.currentUserID && wishLists.lists.length == 1) {
         this.router.navigate(['profile', this.IDParam, 'wish-lists', wishLists.lists[0].id], { queryParams: { rerouted: true } });
       }
       this.wishLists = wishLists;
+  }
+
+  onIconClick(icon: string) {
+    if (icon === 'inventory_2')
+      this.router.navigate(['wish-lists', 'archive']);
+    else if (icon === 'contract')
+      this.router.navigate(['wish-lists']);
+    else if (icon === 'forms_add_on')
+      this.router.navigate(['wish-lists', 'add-list']);
   }
 }

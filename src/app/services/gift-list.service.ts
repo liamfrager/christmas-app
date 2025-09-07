@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction } from 'firebase/firestore';
+import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction, where } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
 import { Gift, List, NewGift, Gifts, Friend, WishLists, User, NewList } from '../types';
@@ -13,18 +13,39 @@ export class GiftListService {
   db = this.firebaseService.db;
 
   /**
-   * Fetches all the wish-lists of a given user.
+   * Fetches all the unarchived wish-lists of a given user.
    * @param userID - The user ID of the user whose wish-lists are being fetched.
-   * @returns A promise that resolves to a WishLists object containing the data for the given user's wish-lists.
+   * @returns A promise that resolves to a WishLists object containing the data for the given user's unarchived wish-lists.
    */
   async getAllWishLists(user: User): Promise<WishLists> {
-    const wishListsQuerySnapshot = await getDocs(collection(this.db, 'lists', user.id, 'wish-lists'));
+    const wishListsQuerySnapshot = await getDocs(query(
+      collection(this.db, 'lists', user.id, 'wish-lists'),
+      where('isArchived', '==', false)
+    ));
     const wishLists: WishLists = {
       type: 'valid',
       owner: user,
       lists: wishListsQuerySnapshot.docs.map(x => x.data() as unknown as List)
     }
     return wishLists;
+  }
+
+  /**
+   * Fetches all the archived wish-lists of a given user.
+   * @param userID - The user ID of the user whose wish-lists are being fetched.
+   * @returns A promise that resolves to a WishLists object containing the data for the given user's archived wish-lists.
+   */
+  async getAllArchivedWishLists(user: User): Promise<WishLists> {
+    const archivedWishListsQuerySnapshot = await getDocs(query(
+      collection(this.db, 'lists', user.id, 'wish-lists'),
+      where('isArchived', '==', true)
+    ));
+    const archivedWishLists: WishLists = {
+      type: 'valid',
+      owner: user,
+      lists: archivedWishListsQuerySnapshot.docs.map(x => x.data() as unknown as List)
+    }
+    return archivedWishLists;
   }
 
   /**

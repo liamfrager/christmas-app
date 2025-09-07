@@ -4,7 +4,6 @@ import { HeaderComponent } from './components/ui/header/header.component';
 import { FooterComponent } from './components/ui/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from './services/firebase.service';
-import { FillerComponent } from "./components/ui/filler/filler.component";
 import { SettingsService } from './services/settings.service';
 import { Settings } from './types';
 import { RefreshService } from './services/refresh.service';
@@ -12,7 +11,7 @@ import { RefreshService } from './services/refresh.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, HeaderComponent, FooterComponent, FillerComponent],
+  imports: [RouterOutlet, CommonModule, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

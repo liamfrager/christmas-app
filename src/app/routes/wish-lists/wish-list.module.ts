@@ -15,6 +15,7 @@ import { EditListComponent } from './wish-list/edit-list/edit-list.component';
     CommonModule,
     RouterModule.forChild([
       { path: '', component: WishListsComponent },
+      { path: 'archive', component: WishListsComponent },
       { path: 'add-list', component: AddWishListComponent },
       { path: ':list-id', children: [
         { path: '', component: WishListComponent },
