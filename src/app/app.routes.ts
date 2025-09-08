@@ -28,7 +28,7 @@ export const routes: Routes = [
   },
   { path: 'groups',
     canActivate: [authGuard],
-    loadChildren: () => import('./routes/groups/groups.module').then(m => m.SecretSantaModule),
+    loadChildren: () => import('./routes/groups/groups.module').then(m => m.GroupsModule),
   },
   { path: 'profile',
     canActivate: [authGuard],

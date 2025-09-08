@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { GroupsComponent } from './groups.component';
+import { AddGroupComponent } from './add-group/add-group.component';
 
 
 
@@ -11,7 +12,8 @@ import { GroupsComponent } from './groups.component';
     CommonModule,
     RouterModule.forChild([
       { path: '', component: GroupsComponent },
+      { path: 'add-group', component: AddGroupComponent}
     ]),
   ]
 })
-export class SecretSantaModule { }
+export class GroupsModule { }

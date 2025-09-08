@@ -1,0 +1,14 @@
+<ng-container *ngIf="groups; else loadingFriends">
+  <ng-container *ngIf="groups.length > 0; else noFriends">
+    <ng-container *ngFor="let group of groups">
+      {{group.name}}
+      <hr>
+    </ng-container>
+  </ng-container>
+  <ng-template #noFriends>
+    <p>{{noGroupsMessage}}</p>
+  </ng-template>
+</ng-container>
+<ng-template #loadingFriends>
+  <p>Loading groups...</p>
+</ng-template>

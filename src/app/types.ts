@@ -37,6 +37,16 @@ export interface Friend extends User {
     status: 'incoming'| 'outgoing' | 'friends',
 }
 
+export type NewGroup = {
+    name: string;
+    description: string;
+}
+
+export interface Group extends NewGroup {
+    id: string;
+    members?: User[];
+}
+
 export type NewList = {
     name: string,
     owner: User,

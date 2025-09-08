@@ -1,4 +1,18 @@
-<app-page-heading headingText="Groups"></app-page-heading>
-<div class="content">
-  <p>This feature is coming soon...</p>
+<ng-container *ngIf="IDParam; else noBackButton">
+    <app-page-heading
+        [headingText]="user && user.id !== accountService.currentUserID ? user.displayName + '\'s Groups' : 'Groups'"
+        (onBackButton)="location.back()"
+        >
+    </app-page-heading>
+</ng-container>
+<ng-template #noBackButton>
+    <app-page-heading
+        headingText="Groups"
+        [buttons]="['add_circle']"
+        (onIconClick)="onIconClick($event)"
+        >
+    </app-page-heading>
+</ng-template>
+<div class="content" *ngIf="user">
+  <app-groups-display [userID]="user.id"></app-groups-display>
 </div>
