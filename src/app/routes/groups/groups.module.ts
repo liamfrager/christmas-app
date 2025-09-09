@@ -12,7 +12,11 @@ import { AddGroupComponent } from './add-group/add-group.component';
     CommonModule,
     RouterModule.forChild([
       { path: '', component: GroupsComponent },
-      { path: 'add-group', component: AddGroupComponent}
+      { path: 'add-group', component: AddGroupComponent},
+      { path: ':group-id', children: [
+        //{ path: '', component: GroupDisplayComponent },
+        //{ path: 'edit-group', component: EditGroupComponent },
+      ]},
     ]),
   ]
 })

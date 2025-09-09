@@ -1,7 +1,9 @@
 <ng-container *ngIf="groups; else loadingFriends">
   <ng-container *ngIf="groups.length > 0; else noFriends">
     <ng-container *ngFor="let group of groups">
-      {{group.name}}
+      <div class="group-wrap" (click)="goToGroup(group.id)">
+        <span class="group-name">{{group.name}}</span>
+      </div>
       <hr>
     </ng-container>
   </ng-container>

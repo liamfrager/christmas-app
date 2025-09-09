@@ -5,6 +5,7 @@ import { Group, User } from '../../types';
 import { AccountService } from '../../services/account.service';
 import { RefreshService } from '../../services/refresh.service';
 import { GroupsService } from '../../services/groups.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-groups-display',
@@ -17,6 +18,7 @@ export class GroupsDisplayComponent implements OnInit {
   constructor(
     private groupsService: GroupsService,
     private accountService: AccountService,
+    private router: Router,
   ) {}
   @Input({required: true}) userID?: string;
   user?: User;
@@ -34,5 +36,9 @@ export class GroupsDisplayComponent implements OnInit {
   async loadGroups() {
     if (this.userID)
       this.groups = await this.groupsService.getAllGroupsForUser(this.userID);
+  }
+
+  goToGroup(groupID: string) {
+    this.router.navigate(['groups', groupID]);
   }
 }
