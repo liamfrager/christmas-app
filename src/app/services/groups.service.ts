@@ -30,19 +30,19 @@ export class GroupsService {
     return groups;
   }
 
-  async getGroupInfo(groupID: string) {
-    const groupSnapshot = await getDoc(doc(this.db, 'groups', groupID));
-  }
-
   /**
-  * Gets the members of the group with the given groupID.
-  * @param groupID - The ID of the group whose members to return.
-  * @returns A promise that resolves to an array of User objects.
+  * Gets the group with the given groupID.
+  * @param groupID - The ID of the group to return.
+  * @returns A promise that resolves to a Group object.
   */
-  async getGroupMembers(groupID: string): Promise<User[]> {
-    const membersQ = query(collection(this.db, 'groups', groupID, 'members'), where('status', '==', 'accepted'), orderBy('displayName'));
-    const members =  await getDocs(membersQ)
-    return members.docs.map(doc => doc.data()) as User[];
+  async getGroup(groupID: string): Promise<Group> {
+    const groupSnap =  await getDoc(doc(this.db, 'groups', groupID));
+    let group = groupSnap.data() as Group;
+    const membersQ = query(collection(this.db, 'groups', groupID, 'members'), orderBy('displayName'));
+    const membersSnap =  await getDocs(membersQ);
+    const members = membersSnap.docs.map(doc => doc.data());
+    group.members = members as User[]
+    return group;
   }
 
   /**
