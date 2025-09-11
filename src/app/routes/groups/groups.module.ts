@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { GroupsComponent } from './groups.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { GroupComponent } from './group/group.component';
+import { AddMemberComponent } from './group/add-member/add-member.component';
 
 
 
@@ -16,6 +17,7 @@ import { GroupComponent } from './group/group.component';
       { path: 'add-group', component: AddGroupComponent},
       { path: ':group-id', children: [
         { path: '', component: GroupComponent },
+        { path: 'add-member', component: AddMemberComponent },
         //{ path: 'edit-group', component: EditGroupComponent },
       ]},
     ]),

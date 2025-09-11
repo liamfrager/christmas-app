@@ -29,7 +29,7 @@ export class GroupComponent {
   }
 
   onIconClick(icon: string) {
-    if (icon === 'person_add') return;
-      //this.router.navigate(['groups']);
+    if (icon === 'person_add')
+      this.router.navigate(['groups', this.groupID, 'add-member'], { state: { group: this.group } });
   }
 }

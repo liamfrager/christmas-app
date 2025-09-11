@@ -15,6 +15,11 @@
 }
 
 /* Forms */
+form {
+  padding-top: 1em;
+  min-height: 100%;
+}
+
 fieldset {
   border: none;
 }

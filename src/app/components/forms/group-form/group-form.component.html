@@ -1,24 +1,43 @@
 <form (ngSubmit)="onSubmit(groupForm)" #groupForm="ngForm">
-  <label for="group">Group</label>
-  <input 
-    type="text"
-    name="group"
-    id="group"
-    placeholder="Group *"
-    required [(ngModel)]="nameVal"
-  ><br>
-  <label for="description">Description</label>
-  <textarea
-    name="description"
-    id="description"
-    placeholder="Description"
-    [(ngModel)]="descriptionVal"
-  ></textarea>
+  <ng-container *ngIf="isEditing">
+    <label for="group">Group</label>
+    <input 
+      type="text"
+      name="group"
+      id="group"
+      placeholder="Group *"
+      required [(ngModel)]="nameVal"
+    ><br>
+    <label for="description">Description</label>
+    <textarea
+      name="description"
+      id="description"
+      placeholder="Description"
+      [(ngModel)]="descriptionVal"
+    ></textarea>
+    <ng-container *ngIf="group">
+      <label>Members</label>
+      <div *ngFor="let member of group.members">
+        <label [for]="member.id">{{member.displayName}}</label>
+        <input
+          type="checkbox"
+          [name]="member.id"
+          [id]="member.id"
+        />
+        <app-user-display [user]="member"></app-user-display>
+      </div>
+    </ng-container>
+  </ng-container>
+  <app-pfp-select *ngIf="group && nonMemberFriends && nonMemberFriends.length > 0"
+    [friends]="nonMemberFriends"
+    name="friend"
+    required [(ngModel)]="selectedFriend"
+  ></app-pfp-select>
   <input
     type="submit"
     name="submit"
     id="submit"
-    [value]="group ? 'Save' : 'Create Group'"
+    [value]="group ? isEditing ? 'Save' : 'Add Member' : 'Create Group'"
     [disabled]="groupForm.invalid"
   >
 </form>
