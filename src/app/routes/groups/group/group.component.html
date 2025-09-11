@@ -1,0 +1,26 @@
+<ng-container *ngIf="group; else loadingGroup" class="list">
+    <app-page-heading
+        [headingText]="group.name"
+        [buttons]="['person_add']"
+        (onIconClick)="onIconClick($event)"
+        (onBackButton)="location.back()"
+        >
+    </app-page-heading>
+    <div class="content">
+        <div class="two-col">
+            <div>
+                <p>{{group.description}}</p>
+            </div>
+            <div>
+                <h3>Members</h3>
+                <hr/>
+                <ng-container *ngFor="let member of group.members">
+                    <app-user-display [user]="member"></app-user-display>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-template #loadingGroup>
+  <p>Loading group...</p>
+</ng-template>

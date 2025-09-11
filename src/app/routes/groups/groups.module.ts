@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { GroupsComponent } from './groups.component';
 import { AddGroupComponent } from './add-group/add-group.component';
+import { GroupComponent } from './group/group.component';
 
 
 
@@ -14,7 +15,7 @@ import { AddGroupComponent } from './add-group/add-group.component';
       { path: '', component: GroupsComponent },
       { path: 'add-group', component: AddGroupComponent},
       { path: ':group-id', children: [
-        //{ path: '', component: GroupDisplayComponent },
+        { path: '', component: GroupComponent },
         //{ path: 'edit-group', component: EditGroupComponent },
       ]},
     ]),
