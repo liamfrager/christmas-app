@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FriendsComponent } from './friends.component';
-import { AddFriendComponent } from './add-friend/add-friend.component';
+import { UserSearchComponent } from './user-search/user-search.component';
 import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
 
 
@@ -14,7 +14,7 @@ import { FriendRequestsComponent } from './friend-requests/friend-requests.compo
     RouterModule.forChild([
       { path: '', component: FriendsComponent },
       { path: 'requests', component: FriendRequestsComponent },
-      { path: 'add-friend', component: AddFriendComponent },
+      { path: 'search', component: UserSearchComponent },
     ]),
   ]
 })

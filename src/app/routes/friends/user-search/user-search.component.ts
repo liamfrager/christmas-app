@@ -5,25 +5,22 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
 import { collection, query, where, getDocs } from 'firebase/firestore'; 
 import { CommonModule, Location } from '@angular/common';
-import { Friend, User } from '../../../types';
-import { FriendsService } from '../../../services/friends.service';
+import { User } from '../../../types';
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
 import { Router } from '@angular/router';
 import { CookieService } from '../../../services/cookie.service';
-import { RefreshService } from '../../../services/refresh.service';
 
 @Component({
-  selector: 'app-add-friend',
+  selector: 'app-user-search',
   standalone: true,
   imports: [FormsModule, UserDisplayComponent, CommonModule, PageHeadingComponent],
-  templateUrl: './add-friend.component.html',
-  styleUrl: './add-friend.component.css'
+  templateUrl: './user-search.component.html',
+  styleUrl: './user-search.component.css'
 })
-export class AddFriendComponent implements OnInit {
+export class UserSearchComponent implements OnInit {
   constructor(
     private firebaseService: FirebaseService,
     private accountService: AccountService,
-    private friendsService: FriendsService,
     private cookieService: CookieService,
     public router: Router,
     public location: Location,

@@ -39,8 +39,8 @@ export class FriendsComponent implements OnInit {
   }
 
   onIconClick(icon: string) {
-    if (icon === 'person_add')
-      this.router.navigate(['friends', 'add-friend'])
+    if (icon === 'person_search')
+      this.router.navigate(['friends', 'search'])
     else if (icon === 'inbox_text_person')
       this.router.navigate(['friends', 'requests'])
   }
