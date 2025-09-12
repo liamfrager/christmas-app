@@ -40,24 +40,10 @@ export class AddFriendComponent implements OnInit {
       this.cookieService.deleteCookie('searchQuery');
   }
   searchResults: Array<User> | null | undefined;
-  friendsStatuses: Record<string, string> = {};
-  incomingFriendRequests: Array<Friend> = [];
 
   async ngOnInit(): Promise<void> {
     if (this.searchQuery)
       this.searchResults = await this.searchUsers(this.searchQuery);
-  }
-
-  @RefreshService.onRefresh()
-  async loadFriendData() {
-    this.incomingFriendRequests = await this.friendsService.getFriendRequests();
-    const friends = await this.friendsService.getAllFriendsAndRequests()
-    if (friends.length > 0) {
-      this.friendsStatuses = friends.reduce( (obj: Record<string, string>, friend) => {
-        obj[friend.id] = friend.status;
-        return obj as Record<string, string> ;
-      }, {});
-    }
   }
   
   /**
@@ -90,38 +76,4 @@ export class AddFriendComponent implements OnInit {
       });
       return results;
   }
-
-  /**
-   * Handles when a friend request is sent.
-   * @param user - A User object representing the intended recipient of the friend request.
-   */
-  onSendFriendRequest(user: User) {
-    this.friendsStatuses = {
-      ...this.friendsStatuses,
-      [user.id]: 'outgoing'
-    };
-    this.friendsService.sendFriendRequest(user);
-  }
-
-  /**
-   * Handles when a friend request is accepted.
-   * @param user - A Friend object representing the sender of the incoming friend request.
-   */
-  onAcceptFriendRequest(user: Friend) {
-    this.friendsStatuses = {
-      [user.id]: 'friends'
-    };
-    this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
-    this.friendsService.acceptFriendRequest(user);
-  }
-
-  /**
-   * Handles when a friend request is rejected.
-   * @param user - A Friend object representing the sender of the incoming friend request.
-   */
-  onRejectFriendRequest(user: Friend) {
-    this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
-    this.friendsService.removeFriend(user)
-  }
-
 }

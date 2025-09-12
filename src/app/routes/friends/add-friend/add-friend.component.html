@@ -16,14 +16,4 @@
             <hr>
         </ng-container>
     </div>
-    <ng-container *ngIf="!searchResults">
-        <app-page-heading headingText="Friend Requests"></app-page-heading>
-        <div *ngFor="let friendRequest of incomingFriendRequests">
-            <app-user-display
-                [user]="friendRequest"
-            >
-            </app-user-display>
-            <hr>
-        </div>
-    </ng-container>
 </div>

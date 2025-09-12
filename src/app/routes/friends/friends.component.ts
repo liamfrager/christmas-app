@@ -37,4 +37,11 @@ export class FriendsComponent implements OnInit {
       this.user = this.accountService.currentUser;
     }
   }
+
+  onIconClick(icon: string) {
+    if (icon === 'person_add')
+      this.router.navigate(['friends', 'add-friend'])
+    else if (icon === 'inbox_text_person')
+      this.router.navigate(['friends', 'requests'])
+  }
 }

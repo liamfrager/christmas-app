@@ -8,8 +8,8 @@
 <ng-template #noBackButton>
     <app-page-heading
         headingText="Friends"
-        [buttons]="['person_add']"
-        (onIconClick)="router.navigate(['/friends/add-friend'])"
+        [buttons]="['inbox_text_person', 'person_add']"
+        (onIconClick)="onIconClick($event)"
         >
     </app-page-heading>
 </ng-template>
