@@ -8,13 +8,33 @@
     background-color: cornsilk;
 }
 
+.inline-user-display {
+    display: inline-flex;
+    vertical-align: text-bottom;
+    line-height: 1.2;
+    width: fit-content;
+    padding: 0;
+    img {
+        width: 1em;
+        margin-right: .3em;
+    }
+}
+
+.block-user-display {
+    display: flex;
+    flex-grow: 1;
+    padding-block: .5em;
+    font-size: 1.2em;
+    img {
+        width: 2.2em;
+        margin-right: .5em;
+    }
+}
+
 .user-display {
     justify-content: space-between;
     font-weight: bold;
-    font-size: 1.2em;
     border-radius: .5em;
-    width: 100%;
-    padding-block: .5em;
 }
 
 .user-info-hover {
@@ -31,8 +51,6 @@ p {
 img {
     border-radius: 50%;
     border: 1px solid #26251d;
-    width: 2.2em;
-    margin-right: .5em;
 }
 
 button {

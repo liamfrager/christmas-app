@@ -16,6 +16,7 @@ export class UserDisplayComponent {
   @Input({required: true}) user!: User;
   @Input() onClick: (() => void) | null = this.goToProfile;
   @Input() icon: string | null = null;
+  @Input() isInline?: boolean = false;
 
   /**
    * Reroutes the webpage to the displayed user's profile.

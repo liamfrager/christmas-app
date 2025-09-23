@@ -1,4 +1,4 @@
-<div *ngIf="user" [ngClass]="{'user-display': true, 'user-info-hover': onClick}" (click)="doOnClick()">
+<div *ngIf="user" [ngClass]="{'user-display': true, 'block-user-display': !isInline, 'inline-user-display': isInline, 'user-info-hover': onClick}" (click)="doOnClick()">
     <div [ngClass]="{'user-info': true}">
         <img [src]="user.pfp" [alt]="user.displayName + ' profile picture'">
         <span>{{user.displayName}}</span>
