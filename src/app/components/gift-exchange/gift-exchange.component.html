@@ -1,0 +1,13 @@
+<ng-container *ngIf="group.giftExchangeMap; else createGiftExchange">
+    <ng-container *ngIf="group.giftExchangeMap.get(currentUserID!) as user">
+        <span>You are assigned to </span>
+        <app-user-display
+            [user]="user"
+            [isInline]="true"
+        ></app-user-display>
+        <span>. Don't tell anyone! Shh... 🤫</span>
+    </ng-container>
+</ng-container>
+<ng-template #createGiftExchange>
+    <button (click)="handleCreateGiftExchange()">Create Gift Exchange</button>
+</ng-template>

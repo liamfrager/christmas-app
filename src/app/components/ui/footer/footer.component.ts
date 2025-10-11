@@ -41,7 +41,7 @@ export class FooterComponent implements OnInit {
     },
     {
       route: '/groups',
-      icon: 'hub',
+      icon: 'share',
     },
     {
       route: '/profile',

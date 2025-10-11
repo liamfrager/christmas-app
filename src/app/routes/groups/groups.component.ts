@@ -42,22 +42,6 @@ export class GroupsComponent implements OnInit {
   user?: User;
 
   async ngOnInit() {
-    // const userProfile = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);
-    // if (userProfile) {
-    //   const userGroups: string[] = userProfile.groups;
-    //   if (userGroups) {
-    //     userGroups.forEach(groupID => {
-    //       this.groupsService.getGroupInfo(groupID).then(data => {
-    //         console.log(data);
-    //       })
-    //     })
-    //   }
-    //   this.groupsService.getGroupInfo("rS2ooxxv4L4AuxbKje5V").then(data => {
-    //     console.log(data);
-    //   })
-    //   console.log(this.accountService.currentUser)
-    // }
-
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
     this.IDParam = IDParam;
   }

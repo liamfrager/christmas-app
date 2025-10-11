@@ -45,6 +45,8 @@ export type NewGroup = {
 export interface Group extends NewGroup {
     id: string;
     members?: User[];
+    giftExchangeMap?: Map<string, User>;
+    giftExchangeRestrictions?: Map<string, User[]>;
 }
 
 export type NewList = {
