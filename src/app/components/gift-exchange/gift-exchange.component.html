@@ -10,4 +10,29 @@
 </ng-container>
 <ng-template #createGiftExchange>
     <button (click)="handleCreateGiftExchange()">Create Gift Exchange</button>
+    <div [ngClass]="{'show': isShowModal, 'hide': !isShowModal}" class="backdrop">
+        <div class="modal">
+            <div class="content">
+                <span *ngIf="modalErrorMessage" class="error">
+                    <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
+                    <p>{{modalErrorMessage}}</p>
+                </span>
+            </div>
+            <app-page-heading
+                headingText="Gift exchange settings"
+                (onBackButton)="showModal(false);"
+                >
+            </app-page-heading>
+            <div class="content modal-container">
+                <ng-container *ngFor="let member of group.members">
+                    <app-user-display
+                        [user]="member"
+                        (onClick)="handleGiftExchangeUserSelect(member)"
+                    ></app-user-display>
+                </ng-container>
+                <div></div>
+            </div>
+        </div>
+        <!-- <app-filler size="footer"></app-filler> -->
+    </div>
 </ng-template>

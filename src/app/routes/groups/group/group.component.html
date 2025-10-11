@@ -1,4 +1,13 @@
 <ng-container *ngIf="group; else loadingGroup" class="list">
+    <ng-container *ngIf="!showBackButton; else noBackButton">
+    <app-page-heading
+        [headingText]="group.name"
+        [buttons]="['person_add']"
+        (onIconClick)="onIconClick($event)"
+        >
+    </app-page-heading>
+    </ng-container>
+    <ng-template #noBackButton>
     <app-page-heading
         [headingText]="group.name"
         [buttons]="['person_add']"
@@ -6,12 +15,14 @@
         (onBackButton)="location.back()"
         >
     </app-page-heading>
+    </ng-template>
     <div class="content">
         <div class="two-col">
             <div>
                 <p>{{group.description}}</p>
                 <app-gift-exchange *ngIf="group"
                     [group]="group"
+                    (onShowModal)="showBackButton = !$event"
                 ></app-gift-exchange>
             </div>
             <div>

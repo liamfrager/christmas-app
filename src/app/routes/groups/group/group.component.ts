@@ -24,6 +24,7 @@ export class GroupComponent {
   
   groupID: string = this.route.snapshot.paramMap.get('group-id')!;
   group?: Group;
+  showBackButton: boolean = true;
 
   async ngOnInit() {
     this.group = await this.groupsService.getGroup(this.groupID);
