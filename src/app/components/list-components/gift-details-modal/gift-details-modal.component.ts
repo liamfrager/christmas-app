@@ -21,6 +21,7 @@ export class GiftDetailsModalComponent implements OnInit {
   @Input() type?: string;
   @Input() buttonType!: 'claim' | 'unclaim' | 'claimed' | 'edit';
   @Input() isShown: boolean = false;
+  @Input() errors: string[] = [];
   @Output() onModalClose = new EventEmitter();
   @Output() onButtonClick = new EventEmitter();
   @Output() onStatusUpdated = new EventEmitter();
@@ -59,8 +60,9 @@ export class GiftDetailsModalComponent implements OnInit {
     { name: 'under tree', icon: 'park'},
   ]
 
-
   ngOnInit(): void {
+    if (this.gift?.isDeleted) this.errors.push(`This gift has been deleted by ${this.gift.isWishedByUser.displayName}. It is no longer on their wish list.`)
+
     const modal = this.el.nativeElement.querySelector('.backdrop');
     let initialTouchY = 0;
 

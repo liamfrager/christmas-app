@@ -201,18 +201,25 @@ export class GiftListService {
    */
   async addGiftToShoppingList(gift: Gift) {
     await runTransaction(this.db, async (transaction) => {
+
+      const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-lists', gift.isWishedOnListID, 'gifts', gift.id);
+      
+      // throw error if gift already claimed
+      const wishGiftSnap = await transaction.get(wishRef);
+      if (!wishGiftSnap.exists()) throw new Error('Gift does not exist.');
+      if (wishGiftSnap.data()?.['isClaimedByID']) throw new Error('Gift has already been claimed.');
+
+      // update isWishedBy user's wish-list
+      transaction.update(wishRef, {
+        isClaimedByID: this.accountService.currentUserID!,
+      });
+
       // update current user's shopping-list
       const shoppingRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'shopping-list', gift.id);
       transaction.set(shoppingRef, {
         ...gift,
         isWishedByUser: await this.accountService.getUserInfo(gift.isWishedByID),
         status: 'claimed',
-      });
-      
-      // update isWishedBy user's wish-list
-      const wishRef = doc(this.db, 'lists', gift.isWishedByID, 'wish-lists', gift.isWishedOnListID, 'gifts', gift.id);
-      transaction.update(wishRef, {
-        isClaimedByID: this.accountService.currentUserID!,
       });
     });
   }
