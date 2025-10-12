@@ -45,7 +45,7 @@ export class GiftExchangeFormComponent {
   }
 
   onSubmit() {
-    const errors = this.giftExchangeService.validateRestrictions(this.selection);
+    const errors = this.giftExchangeService.validateRestrictions(this.selection, this.members);
     if (errors.length > 0) {
       this.onMappingErrors.emit(errors);
     } else {

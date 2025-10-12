@@ -63,15 +63,12 @@ export class GiftExchangeService {
   }
 
   /**
-   * Replaced/expanded validation:
-   * - Checks for missing rule entries.
-   * - Flags givers with no valid recipients.
-   * - Flags recipients with no valid givers.
-   * - Runs a max bipartite-matching (Kuhn/DFS augmenting path) to determine
-   *   whether a perfect one-to-one assignment exists; if not, returns unmatched
-   *   givers/receivers so you know WHY a global assignment is impossible.
+   * Validates a set of gift exchange restrictions by checking the following:
+   * - Givers with no valid recipients.
+   * - Recipients with no valid givers.
+   * - Global restrictions that prevent forming a valid mapping.
    */
-  validateRestrictions(restrictions: GiftExchangeRestrictions): string[] {
+  validateRestrictions(restrictions: GiftExchangeRestrictions, members: Member[]): string[] {
     const errors: string[] = [];
 
     // Build the full set of userIds appearing either as a giver (top-level keys)
@@ -89,7 +86,7 @@ export class GiftExchangeService {
     for (const g of allUserIds) {
       const allowed = allUserIds.filter(r => r !== g && !!restrictions[g][r]);
       if (allowed.length === 0) {
-        errors.push(`Giver '${g}' has no valid recipients.`);
+        errors.push(`'${members.find(m => m.id === g)!.displayName}' cannot be assigned to anyone.`);
       }
     }
 
@@ -97,12 +94,13 @@ export class GiftExchangeService {
     for (const r of allUserIds) {
       const possibleGivers = allUserIds.filter(g => g !== r && !!restrictions[g][r]);
       if (possibleGivers.length === 0) {
-        errors.push(`Recipient '${r}' has no possible givers (nobody allowed to give to them).`);
+        errors.push(`Nobody can be assigned to '${members.find(m => m.id === r)!.displayName}'.`);
       }
     }
 
+    // Check globally to see if a valid mapping can be made.
     if (errors.length === 0 && this.generateGiftIDMap(restrictions) === null) {
-      errors.push("Uh oh! The given restrictions are invalid. It is impossible to create a valid mapping. Please update the restrictions and try again.");
+      errors.push("Uh oh! The given restrictions cannot form a valid assignment. Please update the restrictions and try again.");
     }
 
     return errors;
