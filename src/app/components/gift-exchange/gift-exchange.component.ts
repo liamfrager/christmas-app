@@ -1,16 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Group, User } from '../../types';
+import { Group, Member } from '../../types';
 import { CommonModule } from '@angular/common';
 import { GiftExchangeService } from '../../services/gift-exchange.service';
 import { UserDisplayComponent } from "../user-display/user-display.component";
 import { AccountService } from '../../services/account.service';
 import { PageHeadingComponent } from "../page-heading/page-heading.component";
 import { IconComponent } from "../icon/icon.component";
+import { GiftExchangeFormComponent } from "../forms/gift-exchange-form/gift-exchange-form.component";
+import { FillerComponent } from "../ui/filler/filler.component";
 
 @Component({
   selector: 'app-gift-exchange',
   standalone: true,
-  imports: [CommonModule, UserDisplayComponent, PageHeadingComponent, IconComponent],
+  imports: [CommonModule, UserDisplayComponent, PageHeadingComponent, IconComponent, GiftExchangeFormComponent, FillerComponent],
   templateUrl: './gift-exchange.component.html',
   styleUrl: './gift-exchange.component.css'
 })
@@ -24,25 +26,24 @@ export class GiftExchangeComponent {
   @Output() onShowModal = new EventEmitter();
   currentUserID?: string = this.accountService.currentUserID;
   isShowModal: boolean = false;
-  modalErrorMessage?: string;
-
+  modalErrorMessages: string[] = [];
+  currentSelectedMember?: Member;
 
   showModal(bool: boolean) {
     this.isShowModal = bool;
     this.onShowModal.emit(bool);
   }
 
-  handleCreateGiftExchange() {
-    if (this.group.members!.length < 2) this.modalErrorMessage = "This group does not have enough members to create a group!";
+  handleDefineGiftExchangeRestrictions() {
+    this.modalErrorMessages = [];
+    if (this.group.members!.filter(m => m.membershipStatus !== 'pending').length < 3) {
+      this.modalErrorMessages?.push("This group does not have enough members to create a gift exchange!");
+    }
     this.showModal(true);
   }
 
-  handle() {
-    if (this.group.giftExchangeMap) return;
-    this.group = this.giftExchangeService.createGiftExchange(this.group);
-  }
-
-  handleGiftExchangeUserSelect(member: User) {
-
+  async handleCreateGiftExchange(restrictionsMap: Record<string, Record<string, boolean>>) {
+    this.group.giftExchangeRestrictions = restrictionsMap;
+    this.group = await this.giftExchangeService.createGiftExchange(this.group);
   }
 }

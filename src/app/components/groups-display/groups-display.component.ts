@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserDisplayComponent } from '../user-display/user-display.component';
 import { CommonModule } from '@angular/common';
 import { Group, User } from '../../types';
 import { AccountService } from '../../services/account.service';

@@ -1,0 +1,21 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.small-member {
+    font-size: .7em;
+}
+
+.selected-member {
+    background-color: #0000000f;
+    padding-left: 1.5em;
+    margin-left: -1.5em;
+    border-bottom: .5px solid gray;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

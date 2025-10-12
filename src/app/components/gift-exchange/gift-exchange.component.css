@@ -38,71 +38,16 @@
   position: relative;
 }
 
-.status-display {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.small-member {
+  font-size: .7em;
 }
 
-.line {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: .5em;
-  height: .5em;
-  width: 100%;
-  background: white;
-  margin: 1em 0;
-}
-
-.node {
-  border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
-  background: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  align-content: center;
-  cursor: pointer;
-}
-
-.node:hover {
-  scale: 1.1;
-}
-.node app-icon {
-  height: 30px;
-}
-
-.status-fill {
-  color: green;
-}
-
-.bottom-button, .bottom-button-wrap {
-  width: 100%;
-}
-
-.spaced {
-  margin-block: 0 1em;
+.selected-member {
+  background-color: #0000000f;
 }
 
 .modal-container {
-  padding-top: 1em;
-}
-
-.link-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-}
-
-.track-gift {
-  align-self: flex-start;
-  margin: 0 0 1em 0;
+  align-content: start;
 }
 
 .error {

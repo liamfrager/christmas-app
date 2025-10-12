@@ -1,38 +1,36 @@
 <ng-container *ngIf="group.giftExchangeMap; else createGiftExchange">
-    <ng-container *ngIf="group.giftExchangeMap.get(currentUserID!) as user">
+    <ng-container *ngIf="group.giftExchangeMap[currentUserID!] as user">
         <span>You are assigned to </span>
         <app-user-display
             [user]="user"
             [isInline]="true"
-        ></app-user-display>
+        />
         <span>. Don't tell anyone! Shh... 🤫</span>
     </ng-container>
 </ng-container>
 <ng-template #createGiftExchange>
-    <button (click)="handleCreateGiftExchange()">Create Gift Exchange</button>
+    <button (click)="handleDefineGiftExchangeRestrictions()">Create Gift Exchange</button>
     <div [ngClass]="{'show': isShowModal, 'hide': !isShowModal}" class="backdrop">
         <div class="modal">
-            <div class="content">
-                <span *ngIf="modalErrorMessage" class="error">
-                    <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
-                    <p>{{modalErrorMessage}}</p>
-                </span>
-            </div>
             <app-page-heading
                 headingText="Gift exchange settings"
                 (onBackButton)="showModal(false);"
-                >
-            </app-page-heading>
+            />
             <div class="content modal-container">
-                <ng-container *ngFor="let member of group.members">
-                    <app-user-display
-                        [user]="member"
-                        (onClick)="handleGiftExchangeUserSelect(member)"
-                    ></app-user-display>
+                    <span *ngFor="let error of modalErrorMessages" class="error">
+                        <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
+                        <p>{{error}}</p>
+                    </span>
+                <ng-container>
+                    <app-gift-exchange-form
+                        [members]="group.members!"
+                        (onSetGiftExchangeRestrictions)="handleCreateGiftExchange($event)"
+                        (onMappingErrors)="modalErrorMessages = $event"
+                    />
                 </ng-container>
                 <div></div>
             </div>
         </div>
-        <!-- <app-filler size="footer"></app-filler> -->
+        <app-filler size="footer"></app-filler>
     </div>
 </ng-template>

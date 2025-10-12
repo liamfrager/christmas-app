@@ -45,15 +45,15 @@ export class GroupFormComponent {
       name: form.form.value.group,
       description: form.form.value.description,
     }
-    if (this.group) { // If editing gift.
-      if (JSON.stringify(this.group) == JSON.stringify({...this.group, ...newGroup})) { // If gift hasn't changed.
+    if (this.isEditing) { // If editing group.
+      if (JSON.stringify(this.group) == JSON.stringify({...this.group, ...newGroup})) { // If group hasn't changed.
         this.onFormSubmit.emit(false);
       } else {
-        this.groupsService.updateGroup(this.group, newGroup);
+        this.groupsService.updateGroup(this.group!, newGroup);
         this.onFormSubmit.emit(newGroup);
       }
     } else {
-      this.onFormSubmit.emit(newGroup);
+      this.onFormSubmit.emit(this.selectedFriend);
     }
   }
 }
