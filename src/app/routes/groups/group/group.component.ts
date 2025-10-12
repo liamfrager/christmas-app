@@ -31,7 +31,7 @@ export class GroupComponent {
   currentUserMembershipStatus?: 'member' | 'admin' | 'pending';
   membershipStatusIcons = {
     'member': 'person',
-    'admin': 'shield_person',
+    'admin': 'person_shield',
     'pending': 'schedule',
   }
 
@@ -42,8 +42,10 @@ export class GroupComponent {
   }
 
   onIconClick(icon: string) {
-    if (icon === 'person_add')
-      this.router.navigate(['groups', this.groupID, 'add-member'], { state: { group: this.group } });
+    if (icon === 'person_edit')
+      this.router.navigate(['groups', this.groupID, 'update-members'], { state: { group: this.group } });
+    if (icon === 'edit_note')
+      this.router.navigate(['groups', this.groupID, 'edit-group'], { state: { group: this.group } });
   }
 
   acceptGroupRequest() {

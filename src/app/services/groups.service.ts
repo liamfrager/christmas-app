@@ -75,8 +75,18 @@ export class GroupsService {
 
   async updateGroup(oldGroup: Group, newGroup: NewGroup) {
     await runTransaction(this.db, async (transaction) => { 
-      const listRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGroup.id);
-      transaction.update(listRef, {...oldGroup, ...newGroup});
+      const groupRef = doc(this.db, 'groups', oldGroup.id);
+      transaction.update(groupRef, {...oldGroup, ...newGroup});
+    });
+  }
+
+  async deleteGroup(group: Group) {
+    await runTransaction(this.db, async (transaction) => {
+      const currentUserGroupMember = group.members?.find(m => m.id === this.accountService.currentUserID);
+      if (currentUserGroupMember && currentUserGroupMember.membershipStatus === 'admin') {
+        const groupRef = doc(this.db, 'groups', group.id);
+        transaction.delete(groupRef);
+      }
     });
   }
 
@@ -84,6 +94,17 @@ export class GroupsService {
     await runTransaction(this.db, async (transaction) => { 
       const groupMembersRef = doc(this.db, 'groups', group.id, 'members', newMember.id);
       transaction.set(groupMembersRef, newMember);
+    });
+  }
+
+  async updateGroupMembers(oldGroup: Group, updatedMembers: Member[]) {
+    await runTransaction(this.db, async (transaction) => { 
+      for (const updatedMember of updatedMembers) {
+        const oldMember = oldGroup.members.find(m => m.id === updatedMember.id);
+        if (oldMember && JSON.stringify(oldMember) === JSON.stringify(updatedMember)) continue;
+        const memberRef = doc(this.db, 'groups', oldGroup.id, 'members', updatedMember.id);
+        transaction.update(memberRef, updatedMember);
+      }
     });
   }
 

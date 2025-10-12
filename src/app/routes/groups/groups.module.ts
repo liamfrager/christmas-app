@@ -4,8 +4,9 @@ import { RouterModule } from '@angular/router';
 import { GroupsComponent } from './groups.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { GroupComponent } from './group/group.component';
-import { AddMemberComponent } from './group/add-member/add-member.component';
+import { UpdateMembersComponent } from './group/update-members/update-members.component';
 import { GroupRequestsComponent } from './group-requests/group-requests.component';
+import { EditGroupComponent } from './edit-group/edit-group.component';
 
 
 
@@ -19,8 +20,8 @@ import { GroupRequestsComponent } from './group-requests/group-requests.componen
       { path: 'add-group', component: AddGroupComponent},
       { path: ':group-id', children: [
         { path: '', component: GroupComponent },
-        { path: 'add-member', component: AddMemberComponent },
-        //{ path: 'edit-group', component: EditGroupComponent },
+        { path: 'update-members', component: UpdateMembersComponent },
+        { path: 'edit-group', component: EditGroupComponent },
       ]},
     ]),
   ]

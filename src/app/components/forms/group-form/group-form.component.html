@@ -1,5 +1,5 @@
 <form (ngSubmit)="onSubmit(groupForm)" #groupForm="ngForm">
-  <ng-container *ngIf="isEditing">
+  <ng-container *ngIf="!isEditingMemberships">
     <label for="group">Group</label>
     <input 
       type="text"
@@ -15,29 +15,32 @@
       placeholder="Description"
       [(ngModel)]="descriptionVal"
     ></textarea>
-    <ng-container *ngIf="group">
-      <label>Members</label>
-      <div *ngFor="let member of group.members">
-        <label [for]="member.id">{{member.displayName}}</label>
-        <input
-          type="checkbox"
-          [name]="member.id"
-          [id]="member.id"
-        />
-        <app-user-display [user]="member"></app-user-display>
-      </div>
-    </ng-container>
   </ng-container>
-  <app-pfp-select *ngIf="group && nonMemberFriends && nonMemberFriends.length > 0"
-    [friends]="nonMemberFriends"
-    name="friend"
-    required [(ngModel)]="selectedFriend"
-  ></app-pfp-select>
+  <ng-container *ngIf="isEditingMemberships">
+    <ng-container *ngFor="let member of group!.members">
+      <app-user-display *ngIf="updatedMembershipStatuses[member.id] as updatedMembershipStatus"
+        [user]="member"
+        [icon]="membershipStatusIcons[updatedMembershipStatus ?? 'deleting']"
+        [onIconClick]="editMembershipStatus.bind(this, member)"
+        [onClick]="editMembershipStatus.bind(this, member)"
+      />
+    </ng-container>
+    <app-edit-group-membership-pop-up *ngIf="editingMembershipMember"
+      [member]="editingMembershipMember"
+      [updatedMembershipStatus]="updatedMembershipStatuses[editingMembershipMember.id] ?? 'deleting'" 
+      (onConfirm)="handlePopUpClose($event)"
+    />
+    <app-pfp-select *ngIf="group && nonMemberFriends && nonMemberFriends.length > 0"
+      [friends]="nonMemberFriends"
+      name="friend"
+      required [(ngModel)]="selectedFriend"
+    ></app-pfp-select>
+  </ng-container>
   <input
     type="submit"
     name="submit"
     id="submit"
-    [value]="group ? isEditing ? 'Save' : 'Add Member' : 'Create Group'"
+    [value]="group ? isEditingGroup ? 'Save' : 'Update Membership' : 'Create Group'"
     [disabled]="groupForm.invalid"
   >
 </form>
