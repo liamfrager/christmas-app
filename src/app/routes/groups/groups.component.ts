@@ -56,6 +56,8 @@ export class GroupsComponent implements OnInit {
   }
 
   onIconClick(icon: string) {
+    if (icon === 'inbox_text_share')
+      this.router.navigate(['/groups/requests']);
     if (icon === 'add_circle')
       this.router.navigate(['/groups/add-group']);
   }

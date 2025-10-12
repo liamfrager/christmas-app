@@ -5,6 +5,7 @@ import { GroupsComponent } from './groups.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { GroupComponent } from './group/group.component';
 import { AddMemberComponent } from './group/add-member/add-member.component';
+import { GroupRequestsComponent } from './group-requests/group-requests.component';
 
 
 
@@ -14,6 +15,7 @@ import { AddMemberComponent } from './group/add-member/add-member.component';
     CommonModule,
     RouterModule.forChild([
       { path: '', component: GroupsComponent },
+      { path: 'requests', component: GroupRequestsComponent },
       { path: 'add-group', component: AddGroupComponent},
       { path: ':group-id', children: [
         { path: '', component: GroupComponent },

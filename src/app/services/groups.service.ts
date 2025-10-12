@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AccountService } from './account.service';
 import { FirebaseService } from './firebase.service';
 import { collection, collectionGroup, doc, getDoc, getDocs, orderBy, query, runTransaction, where } from 'firebase/firestore';
-import { Group, NewGroup, User } from '../types';
+import { Group, Member, NewGroup, User } from '../types';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +14,9 @@ export class GroupsService {
   async getAllGroupsForUser(userID: string): Promise<Group[]> {
     const q = query(
       collectionGroup(this.db, 'members'),
-      where('id', '==', userID)
+      where('id', '==', userID),
+      where('membershipStatus', 'in', ['member', 'admin']),
     );
-
     const snapshot = await getDocs(q);
     let groups: Group[] = [];
     snapshot.docs.forEach(doc => {
@@ -41,7 +41,7 @@ export class GroupsService {
     const membersQ = query(collection(this.db, 'groups', groupID, 'members'), orderBy('displayName'));
     const membersSnap =  await getDocs(membersQ);
     const members = membersSnap.docs.map(doc => doc.data());
-    group.members = members as User[]
+    group.members = members as Member[];
     return group;
   }
 
@@ -59,11 +59,13 @@ export class GroupsService {
           id: newListRef.id,
         });
         const newListMembersRef = doc(this.db, 'groups', newListRef.id, 'members', this.accountService.currentUserID);
-        const currentUser = this.accountService.currentUser;
-        transaction.set(newListMembersRef, {
-          ...currentUser,
+        const currentUser = {
+          ...this.accountService.currentUser,
+          groupID: newListRef.id,
           groupName: newGroup.name,
-        });
+          membershipsStatus: 'admin',
+        }
+        transaction.set(newListMembersRef, currentUser);
         return newListRef.id;
       }
       return undefined;
@@ -71,36 +73,47 @@ export class GroupsService {
   }
 
   async updateGroup(oldGroup: Group, newGroup: NewGroup) {
-      await runTransaction(this.db, async (transaction) => { 
+    await runTransaction(this.db, async (transaction) => { 
       const listRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGroup.id);
       transaction.update(listRef, {...oldGroup, ...newGroup});
     });
   }
 
-  async createSecretSanta(giftingMap: Map<string, string>, year: number, name: string) {
-    const currentUserID = this.accountService.currentUserID;
-    if(currentUserID) {
-      await runTransaction(this.db, async (transaction) => {
-        const groupRef = doc(collection(this.db, "groups"));
-        transaction.set(groupRef, {
-          name,
-          members: Array.from(giftingMap.keys()),
-          giftingMap: Object.fromEntries(giftingMap.entries()),
-          year,
-        })
+  async addMemberToGroup(newMember: Member, group: Group) {
+    await runTransaction(this.db, async (transaction) => { 
+      const groupMembersRef = doc(this.db, 'groups', group.id, 'members', newMember.id);
+      transaction.set(groupMembersRef, newMember);
+    });
+  }
 
-        Array.from(giftingMap.keys()).forEach(async id => {
-          const userRef = doc(this.db, "users", id);
-          const userSnapshot = await transaction.get(userRef);
-          let groupArray = userSnapshot.get('groups');
-          if(groupArray === undefined) {
-            groupArray = [groupRef.id];
-          } else {
-            groupArray.push(groupRef.id);
-          }
-          transaction.update(userRef, 'groups', groupArray);
-        })
-      })
-    }
+  async acceptGroupRequest(member: Member, group: Group) {
+    await runTransaction(this.db, async (transaction) => { 
+      const groupMembersRef = doc(this.db, 'groups', group.id, 'members', member.id);
+      transaction.update(groupMembersRef, {
+        ...member,
+        membershipStatus: 'member',
+      });
+    });
+  }
+
+  async removeMemberFromGroup(member: Member, group: Group) {
+    await runTransaction(this.db, async (transaction) => { 
+      const groupMemberRef = doc(this.db, 'groups', group.id, 'members', member.id);
+      transaction.delete(groupMemberRef);
+    });
+  }
+
+  /**
+   * Fetches the incoming group requests of the current user.
+   * @returns A promise that resolves to an array of Group objects.
+   */
+  async getGroupRequests(): Promise<Member[]> {
+    const q = query(
+      collectionGroup(this.db, 'members'),
+      where('id', '==', this.accountService.currentUserID),
+      where('membershipStatus', '==', 'pending')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => doc.data()) as Array<Member>;
   }
 }

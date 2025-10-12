@@ -19,17 +19,26 @@
     <div class="content">
         <div class="two-col">
             <div>
+                <div *ngIf="currentUserMembershipStatus === 'pending'" class="group-request">
+                    <p>You've been invited to join this group! Would you like to join?</p>
+                    <div class="btn-wrap">
+                    <button (click)="acceptGroupRequest()"><app-icon icon="check" [hover]="false" size="20px"></app-icon>Accept</button>
+                    <button (click)="rejectGroupRequest()"><app-icon icon="close" [hover]="false" size="20px"></app-icon>Reject</button>
+                    </div>
+                </div>
                 <p>{{group.description}}</p>
-                <app-gift-exchange *ngIf="group"
+                <app-gift-exchange *ngIf="group && currentUserMembershipStatus === 'admin'"
                     [group]="group"
                     (onShowModal)="showBackButton = !$event"
-                ></app-gift-exchange>
+                />
             </div>
             <div>
                 <h3>Members</h3>
                 <hr/>
                 <ng-container *ngFor="let member of group.members">
-                    <app-user-display [user]="member"></app-user-display>
+                    <app-user-display *ngIf="member.membershipStatus !== 'pending'"
+                        [user]="member"
+                    />
                 </ng-container>
             </div>
         </div>

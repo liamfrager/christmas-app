@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { GroupsService } from '../../../../services/groups.service';
-import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { Group, User } from '../../../../types';
+import { Group, Member, User } from '../../../../types';
 import { PageHeadingComponent } from '../../../../components/page-heading/page-heading.component';
 import { GroupFormComponent } from '../../../../components/forms/group-form/group-form.component';
 
@@ -17,7 +16,6 @@ export class AddMemberComponent {
   constructor(
     public location: Location,
     private groupsService: GroupsService,
-    private route: ActivatedRoute,
   ) {}
 
   editingGroup?: Group;
@@ -26,9 +24,15 @@ export class AddMemberComponent {
     this.editingGroup = history.state.group;
   }
 
-  async onSubmit(member: User) {
-    const groupID = this.route.snapshot.paramMap.get('group-id')!;
-    //await this.groupsService.addMemberToGroup(member, groupID);
+  async onSubmit(user: User) {
+    const group = history.state.group;
+    const member: Member = {
+      ...user,
+      groupID: group.id,
+      groupName: group.name,
+      membershipStatus: 'pending',
+    }
+    await this.groupsService.addMemberToGroup(member, group);
     this.location.back()
   }
 }
