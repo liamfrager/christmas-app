@@ -9,6 +9,8 @@ import { IconComponent } from "../icon/icon.component";
 import { GiftExchangeFormComponent } from "../forms/gift-exchange-form/gift-exchange-form.component";
 import { FillerComponent } from "../ui/filler/filler.component";
 
+const MINIMUM_GIFT_EXCHANGE_MEMBERS: number = 4;
+
 @Component({
   selector: 'app-gift-exchange',
   standalone: true,
@@ -36,7 +38,7 @@ export class GiftExchangeComponent {
 
   handleDefineGiftExchangeRestrictions() {
     this.modalErrorMessages = [];
-    if (this.group.members!.filter(m => m.membershipStatus !== 'pending').length < 3) {
+    if (this.group.members!.filter(m => m.membershipStatus !== 'pending').length < MINIMUM_GIFT_EXCHANGE_MEMBERS) {
       this.modalErrorMessages?.push("This group does not have enough members to create a gift exchange!");
     }
     this.showModal(true);
