@@ -1,0 +1,16 @@
+<dialog #popUp>
+  <app-user-display
+    [user]="member"
+    [isInline]="true"
+    (onClick)="null"
+  />
+  <p>Edit the membership status below.</p>
+  <app-icon-select
+    [(selectedValue)]="newUpdatedMembershipStatus"
+    [options]="selectOptions"
+  />
+  <div class="btn-wrap">
+    <button (click)="this.onConfirm.emit('removed'); popUp.close()" class="btn-red">Remove Member</button>
+    <button (click)="this.onConfirm.emit(newUpdatedMembershipStatus); popUp.close()">Save</button>
+  </div>
+</dialog>
