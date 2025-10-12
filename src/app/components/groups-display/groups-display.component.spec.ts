@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SecretSantaComponent } from './secret-santa.component';
+import { GroupsDisplayComponent } from './groups-display.component';
 
-describe('SecretSantaComponent', () => {
-  let component: SecretSantaComponent;
-  let fixture: ComponentFixture<SecretSantaComponent>;
+describe('GroupsDisplayComponent', () => {
+  let component: GroupsDisplayComponent;
+  let fixture: ComponentFixture<GroupsDisplayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SecretSantaComponent]
+      imports: [GroupsDisplayComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SecretSantaComponent);
+    fixture = TestBed.createComponent(GroupsDisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

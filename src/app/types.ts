@@ -37,9 +37,31 @@ export interface Friend extends User {
     status: 'incoming'| 'outgoing' | 'friends',
 }
 
+export interface Member extends User {
+    groupID: string,
+    groupName: string,
+    membershipStatus: 'pending' | 'member' | 'admin',
+}
+
+export type NewGroup = {
+    name: string;
+    description: string;
+}
+
+export interface Group extends NewGroup {
+    id: string;
+    members?: Member[];
+    giftExchangeMap?: GiftExchangeMap;
+    giftExchangeRestrictions?: GiftExchangeRestrictions;
+}
+
+export type GiftExchangeMap = Record<string, Member> | null;
+export type GiftExchangeRestrictions = Record<string, Record<string, boolean>>;
+
 export type NewList = {
     name: string,
     owner: User,
+    isArchived: boolean,
 }
 
 export interface List extends NewList {

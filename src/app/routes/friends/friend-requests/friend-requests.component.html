@@ -1,0 +1,7 @@
+<app-page-heading headingText="Friend Requests" (onBackButton)="location.back()"></app-page-heading>
+<div class="content">
+    <ng-container *ngFor="let friendRequest of incomingFriendRequests">
+        <app-user-display [user]="friendRequest"></app-user-display>
+        <hr>
+    </ng-container>
+</div>

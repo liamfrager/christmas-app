@@ -1,0 +1,42 @@
+<ng-container *ngIf="group.giftExchangeMap; else createGiftExchange">
+    <ng-container *ngIf="group.giftExchangeMap[currentUserID!] as user">
+        <span>You are assigned to </span>
+        <span class="assignment">
+            <span
+                (click)="showAssignment()"
+                [ngClass]="{
+                    'assignment-cover': true,
+                    'uncovered': showGiftExchangeAssignment,
+                }"
+            ></span>
+            <app-user-display
+                [user]="user"
+                [isInline]="true"
+            />
+        </span>
+        <span>. Don't tell anyone! Shh... 🤫</span>
+    </ng-container>
+</ng-container>
+<ng-template #createGiftExchange>
+    <button (click)="handleDefineGiftExchangeRestrictions()">Create Gift Exchange</button>
+    <div [ngClass]="{'show': isShowModal, 'hide': !isShowModal}" class="backdrop">
+        <div class="modal">
+            <app-page-heading
+                headingText="Set Gift Exchange Restrictions"
+                (onBackButton)="showModal(false);"
+            />
+            <div class="content modal-container">
+                <span *ngFor="let error of modalErrorMessages" class="error">
+                    <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
+                    <p>{{error}}</p>
+                </span>
+                <app-gift-exchange-form
+                    [members]="group.members!"
+                    (onSetGiftExchangeRestrictions)="handleCreateGiftExchange($event)"
+                    (onMappingErrors)="modalErrorMessages = $event"
+                />
+            </div>
+        </div>
+        <app-filler size="footer"></app-filler>
+    </div>
+</ng-template>

@@ -28,6 +28,11 @@ export class EditListComponent implements OnInit {
     console.log(this.editingList);
   }
   
+  async setListArchive(isArchived: boolean) {
+    await this.giftListService.setWishListArchive(this.editingList!, isArchived);
+    this.router.navigate(['/wish-lists']);
+  }
+
   async deleteList() {
     await this.giftListService.deleteWishList(this.editingList!);
     this.router.navigate(['/wish-lists']);

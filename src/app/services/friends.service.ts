@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
-import { collection, doc, runTransaction, where, query, getDocs, deleteField, getDoc } from 'firebase/firestore';
+import { collection, doc, runTransaction, where, query, getDocs, deleteField, getDoc, orderBy } from 'firebase/firestore';
 import { Friend, User } from '../types';
 
 @Injectable({
@@ -49,7 +49,7 @@ export class FriendsService {
    * @returns A promise that resolves to an array of Friend objects.
    */
   async getFriends(id: string): Promise<Friend[]> {
-    const friendsQ = query(collection(this.db, "lists", id, "friends-list"), where('status', '==', 'friends'));
+    const friendsQ = query(collection(this.db, "lists", id, "friends-list"), where('status', '==', 'friends'), orderBy('displayName'));
     const friends = await getDocs(friendsQ);
     if (friends.docs.length == 0) {
       return [];

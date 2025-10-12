@@ -1,20 +1,20 @@
 <ng-container *ngIf="wishLists">
     <ng-container *ngIf="IDParam; else noBackButton">
         <app-page-heading
-            [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s Lists' : 'Wish Lists'"
-            [buttons]="IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
+            [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s Lists' : isArchive ? 'Archived Lists' : 'Wish Lists'"
+            [buttons]="IDParam === accountService.currentUserID ? [isArchive ? 'contract' : 'inventory_2', 'forms_add_on'] : []"
             [imageURL]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.pfp : null"
-            (onIconClick)="router.navigate(['/wish-lists/add-list'])"
+            (onIconClick)="onIconClick($event)"
             (onBackButton)="location.back()"
             >
         </app-page-heading>
     </ng-container>
     <ng-template #noBackButton>
         <app-page-heading
-            [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s Lists' : 'Wish Lists'"
-            [buttons]="!IDParam || IDParam === accountService.currentUserID ? ['forms_add_on'] : []"
+            [headingText]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.displayName.split(' ')[0] + '\'s Lists' : isArchive ? 'Archived Lists' : 'Wish Lists'"
+            [buttons]="!IDParam || IDParam === accountService.currentUserID ? [isArchive ? 'contract' : 'inventory_2', 'forms_add_on'] : []"
             [imageURL]="IDParam && IDParam !== accountService.currentUserID ? wishLists.owner.pfp : null"
-            (onIconClick)="router.navigate(['/wish-lists/add-list'])"
+            (onIconClick)="onIconClick($event)"
             >
         </app-page-heading>
     </ng-template>
@@ -22,6 +22,7 @@
 <div class="list">
     <app-lists-display
     [lists]="wishLists"
+    [isArchive]="isArchive"
     >
     </app-lists-display>
 </div>

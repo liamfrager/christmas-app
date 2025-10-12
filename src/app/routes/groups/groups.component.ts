@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { SecretSantaServiceService } from '../../services/secret-santa-service.service';
 import { AccountService } from '../../services/account.service';
 import { PageHeadingComponent } from "../../components/page-heading/page-heading.component";
+import { GroupsDisplayComponent } from '../../components/groups-display/groups-display.component';
+import { User } from '../../types';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RefreshService } from '../../services/refresh.service';
+import { CommonModule, Location } from '@angular/common';
+import { GroupsService } from '../../services/groups.service';
 
 // array shuffle function I found on stack overflow
 function shuffle(array: any[]) {
@@ -19,32 +24,42 @@ function shuffle(array: any[]) {
 }
 
 @Component({
-  selector: 'app-secret-santa',
+  selector: 'app-groups',
   standalone: true,
-  imports: [PageHeadingComponent],
-  templateUrl: './secret-santa.component.html',
-  styleUrl: './secret-santa.component.css'
+  imports: [CommonModule, PageHeadingComponent, GroupsDisplayComponent],
+  templateUrl: './groups.component.html',
+  styleUrl: './groups.component.css'
 })
-export class SecretSantaComponent implements OnInit {
-
-  constructor(private secretSantaService: SecretSantaServiceService, private accountService: AccountService) {}
+export class GroupsComponent implements OnInit {
+  constructor(
+    public router: Router,
+    private route: ActivatedRoute,
+    public accountService: AccountService,
+    public groupsService: GroupsService,
+    public location: Location,
+  ) {};
+  IDParam: string | undefined | null;
+  user?: User;
 
   async ngOnInit() {
-    const userProfile = await this.accountService.getUserInfo(this.accountService.currentUserID!, true);
-    if (userProfile) {
-      const userGroups: string[] = userProfile.groups;
-      if (userGroups) {
-        userGroups.forEach(groupID => {
-          this.secretSantaService.getGroupInfo(groupID).then(data => {
-            console.log(data);
-          })
-        })
-      }
-      this.secretSantaService.getGroupInfo("rS2ooxxv4L4AuxbKje5V").then(data => {
-        console.log(data);
-      })
-      console.log(this.accountService.currentUser)
+    let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
+    this.IDParam = IDParam;
+  }
+
+  @RefreshService.onRefresh()
+  async onRefresh() {
+    if (this.IDParam) {
+      this.user = await this.accountService.getUserInfo(this.IDParam);
+    } else {
+      this.user = this.accountService.currentUser;
     }
+  }
+
+  onIconClick(icon: string) {
+    if (icon === 'inbox_text_share')
+      this.router.navigate(['/groups/requests']);
+    if (icon === 'add_circle')
+      this.router.navigate(['/groups/add-group']);
   }
 
   /**

@@ -1,0 +1,7 @@
+<app-page-heading headingText="Add Members" (onBackButton)="location.back()"></app-page-heading>
+<div class="content">
+  <app-group-form
+    [group]="editingGroup"
+    (onFormSubmit)="onSubmit($event)"
+  ></app-group-form>
+</div>

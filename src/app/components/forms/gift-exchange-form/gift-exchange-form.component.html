@@ -1,0 +1,25 @@
+<div class="form">
+    <div class="selected-member">
+        <span>Select who </span>
+        <app-user-display
+            [user]="currentSelectedMember"
+            [onClick]="null"
+            [isInline]="true"
+            
+        />
+        <span> can be assigned to:</span>
+    </div>
+    <ng-container *ngFor="let member of members">
+        <ng-container *ngIf="member.membershipStatus !== 'pending' && member.id !== currentSelectedMember.id">
+            <app-user-display
+                [user]="member"
+                [onClick]="handleGiftExchangeUserSelect.bind(this, member)"
+                [onIconClick]="toggleSelection.bind(this, member.id)"
+                [icon]="selection[currentSelectedMember.id][member.id] ? 'check_box' : 'check_box_outline_blank'"
+                class="small-member"
+            />
+            <hr/>
+        </ng-container>
+    </ng-container>
+</div>
+<button (click)="onSubmit()">Save Settings</button>

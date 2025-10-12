@@ -6,7 +6,8 @@
 }
 
 form {
-  margin: .5em 0;
+  flex-grow: 0;
+  margin-bottom: 1em;
 }
 
 input {

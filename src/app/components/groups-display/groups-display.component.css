@@ -1,0 +1,22 @@
+.group-wrap {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.group-name {
+  width: 100%;
+  border-bottom: .5px solid #26251d44;
+  padding: .8em 0 .8em 1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host-context(li:last-of-type) .group-name {
+  border-bottom: none;
+}
+
+.group-name:hover, .error {
+  color: #d64541;
+}

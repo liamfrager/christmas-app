@@ -15,7 +15,9 @@ export class UserDisplayComponent {
   constructor(private router: Router) {};
   @Input({required: true}) user!: User;
   @Input() onClick: (() => void) | null = this.goToProfile;
+  @Input() onIconClick: (() => void) | null = this.goToLists;
   @Input() icon: string | null = null;
+  @Input() isInline?: boolean = false;
 
   /**
    * Reroutes the webpage to the displayed user's profile.
@@ -37,5 +39,10 @@ export class UserDisplayComponent {
   doOnClick() {
     if (this.onClick === null) return;
     this.onClick();
+  }
+
+  doOnIconClick() {
+    if (this.onIconClick === null) return;
+    this.onIconClick();
   }
 }

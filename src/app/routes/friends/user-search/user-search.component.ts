@@ -5,25 +5,22 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { AccountService } from '../../../services/account.service';
 import { collection, query, where, getDocs } from 'firebase/firestore'; 
 import { CommonModule, Location } from '@angular/common';
-import { Friend, User } from '../../../types';
-import { FriendsService } from '../../../services/friends.service';
+import { User } from '../../../types';
 import { PageHeadingComponent } from "../../../components/page-heading/page-heading.component";
 import { Router } from '@angular/router';
 import { CookieService } from '../../../services/cookie.service';
-import { RefreshService } from '../../../services/refresh.service';
 
 @Component({
-  selector: 'app-add-friend',
+  selector: 'app-user-search',
   standalone: true,
   imports: [FormsModule, UserDisplayComponent, CommonModule, PageHeadingComponent],
-  templateUrl: './add-friend.component.html',
-  styleUrl: './add-friend.component.css'
+  templateUrl: './user-search.component.html',
+  styleUrl: './user-search.component.css'
 })
-export class AddFriendComponent implements OnInit {
+export class UserSearchComponent implements OnInit {
   constructor(
     private firebaseService: FirebaseService,
     private accountService: AccountService,
-    private friendsService: FriendsService,
     private cookieService: CookieService,
     public router: Router,
     public location: Location,
@@ -40,24 +37,10 @@ export class AddFriendComponent implements OnInit {
       this.cookieService.deleteCookie('searchQuery');
   }
   searchResults: Array<User> | null | undefined;
-  friendsStatuses: Record<string, string> = {};
-  incomingFriendRequests: Array<Friend> = [];
 
   async ngOnInit(): Promise<void> {
     if (this.searchQuery)
       this.searchResults = await this.searchUsers(this.searchQuery);
-  }
-
-  @RefreshService.onRefresh()
-  async loadFriendData() {
-    this.incomingFriendRequests = await this.friendsService.getFriendRequests();
-    const friends = await this.friendsService.getAllFriendsAndRequests()
-    if (friends.length > 0) {
-      this.friendsStatuses = friends.reduce( (obj: Record<string, string>, friend) => {
-        obj[friend.id] = friend.status;
-        return obj as Record<string, string> ;
-      }, {});
-    }
   }
   
   /**
@@ -90,38 +73,4 @@ export class AddFriendComponent implements OnInit {
       });
       return results;
   }
-
-  /**
-   * Handles when a friend request is sent.
-   * @param user - A User object representing the intended recipient of the friend request.
-   */
-  onSendFriendRequest(user: User) {
-    this.friendsStatuses = {
-      ...this.friendsStatuses,
-      [user.id]: 'outgoing'
-    };
-    this.friendsService.sendFriendRequest(user);
-  }
-
-  /**
-   * Handles when a friend request is accepted.
-   * @param user - A Friend object representing the sender of the incoming friend request.
-   */
-  onAcceptFriendRequest(user: Friend) {
-    this.friendsStatuses = {
-      [user.id]: 'friends'
-    };
-    this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
-    this.friendsService.acceptFriendRequest(user);
-  }
-
-  /**
-   * Handles when a friend request is rejected.
-   * @param user - A Friend object representing the sender of the incoming friend request.
-   */
-  onRejectFriendRequest(user: Friend) {
-    this.incomingFriendRequests.splice(this.incomingFriendRequests.indexOf(user))
-    this.friendsService.removeFriend(user)
-  }
-
 }

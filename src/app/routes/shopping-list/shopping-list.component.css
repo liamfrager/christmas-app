@@ -5,3 +5,7 @@
   overflow: hidden;
   position: relative;
 }
+
+.content {
+  padding-right: 0;
+}

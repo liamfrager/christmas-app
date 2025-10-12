@@ -11,7 +11,7 @@
         <li *ngFor="let list of lists.lists" (click)="goToList(list)">
           <div class="list-display">
             <app-icon
-            icon="contract"
+            [icon]="isArchive ? 'inventory_2' : 'contract'"
             [hover]="null"
             >
             </app-icon>

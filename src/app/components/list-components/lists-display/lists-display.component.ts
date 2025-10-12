@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 export class ListsDisplayComponent {
   constructor(private router: Router, private accountService: AccountService) {};
   @Input({ required: true }) lists!: WishLists;
+  @Input() isArchive: boolean = false; 
   get isOwnedByCurrentUser(): boolean { return this.lists.owner.id === this.accountService.currentUserID }
   noListsMessage: string = 
     this.lists ?
