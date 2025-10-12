@@ -24,7 +24,7 @@ export class GroupsService {
       groups.push({
         id: doc.ref.parent.parent!.id,
         name: data['groupName'],
-        description: data['description'],
+        description: '',
         members: [],
       })
     });
@@ -64,7 +64,7 @@ export class GroupsService {
           ...this.accountService.currentUser,
           groupID: newListRef.id,
           groupName: newGroup.name,
-          membershipsStatus: 'admin',
+          membershipStatus: 'admin',
         }
         transaction.set(newListMembersRef, currentUser);
         return newListRef.id;

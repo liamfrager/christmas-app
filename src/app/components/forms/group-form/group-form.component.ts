@@ -65,7 +65,7 @@ export class GroupFormComponent {
   async onSubmit(form: NgForm) {
     const newGroup: NewGroup = {
       name: form.form.value.group,
-      description: form.form.value.description,
+      description: form.form.value.description ?? '',
     }
     if (this.group) {
       if (this.isEditingGroup) {
