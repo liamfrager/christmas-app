@@ -4,11 +4,8 @@
     align-items: center;
 }
 
-:host {
-    background-color: cornsilk;
-}
-
 .inline-user-display {
+    background-color: transparent;
     display: inline-flex;
     vertical-align: text-bottom;
     line-height: 1.2;
@@ -21,6 +18,7 @@
 }
 
 .block-user-display {
+    background-color: cornsilk;
     display: flex;
     flex-grow: 1;
     padding-block: .5em;
