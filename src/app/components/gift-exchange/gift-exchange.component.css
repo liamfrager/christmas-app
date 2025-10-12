@@ -38,12 +38,55 @@
   position: relative;
 }
 
-.small-member {
-  font-size: .7em;
+.assignment {
+  position: relative;
 }
 
-.selected-member {
-  background-color: #0000000f;
+.assignment-cover {
+position: absolute;
+  inset: 0 -.2em;
+  border-radius: 0.3em;
+  background-color: rgba(255, 248, 220, 0.3);
+  backdrop-filter: blur(8px);
+  mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: cover;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}
+
+.assignment-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(255,255,255,0) 60%),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.18), rgba(255,255,255,0) 50%),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12), rgba(255,255,255,0) 70%);
+  background-size: 200% 200%;
+  animation: amorphous-shimmer 2s infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes amorphous-shimmer {
+  0% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    background-position: 25% 20%, 75% 80%, 55% 45%;
+    transform: scale(1.05) rotate(1deg);
+  }
+  100% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.uncovered {
+  opacity: 0;
 }
 
 .modal-container {

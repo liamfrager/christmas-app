@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <p>{{group.description}}</p>
-                <app-gift-exchange *ngIf="group && currentUserMembershipStatus === 'admin'"
+                <app-gift-exchange
                     [group]="group"
                     (onShowModal)="showBackButton = !$event"
                 />

@@ -27,7 +27,7 @@ export class GiftExchangeComponent {
   currentUserID?: string = this.accountService.currentUserID;
   isShowModal: boolean = false;
   modalErrorMessages: string[] = [];
-  currentSelectedMember?: Member;
+  showGiftExchangeAssignment: boolean = false;
 
   showModal(bool: boolean) {
     this.isShowModal = bool;
@@ -45,5 +45,12 @@ export class GiftExchangeComponent {
   async handleCreateGiftExchange(restrictionsMap: Record<string, Record<string, boolean>>) {
     this.group.giftExchangeRestrictions = restrictionsMap;
     this.group = await this.giftExchangeService.createGiftExchange(this.group);
+  }
+
+  showAssignment() {
+    this.showGiftExchangeAssignment = true;
+    setTimeout(() => {
+      this.showGiftExchangeAssignment = false;
+    }, 4000);
   }
 }
