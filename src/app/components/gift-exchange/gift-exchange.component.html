@@ -30,14 +30,11 @@
                     <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
                     <p>{{error}}</p>
                 </span>
-                <ng-container>
-                    <app-gift-exchange-form
-                        [members]="group.members!"
-                        (onSetGiftExchangeRestrictions)="handleCreateGiftExchange($event)"
-                        (onMappingErrors)="modalErrorMessages = $event"
-                    />
-                </ng-container>
-                <div></div>
+                <app-gift-exchange-form
+                    [members]="group.members!"
+                    (onSetGiftExchangeRestrictions)="handleCreateGiftExchange($event)"
+                    (onMappingErrors)="modalErrorMessages = $event"
+                />
             </div>
         </div>
         <app-filler size="footer"></app-filler>

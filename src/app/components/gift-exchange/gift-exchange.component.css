@@ -11,18 +11,19 @@
 .backdrop {
   position: absolute;
   inset: 0;
-  align-items: center;
   background: cornsilk;
   border-left: 1px solid #26251d44;
   width: 100%;
   height: 100%;
   max-height: 100%;
   overflow-y: auto;
+  display: flex;
 }
 
 .modal {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 @media (min-width: 800px) {
