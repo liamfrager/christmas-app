@@ -29,6 +29,11 @@ export class GroupComponent {
   group?: Group;
   showBackButton: boolean = true;
   currentUserMembershipStatus?: 'member' | 'admin' | 'pending';
+  membershipStatusIcons = {
+    'member': 'person',
+    'admin': 'shield_person',
+    'pending': 'schedule',
+  }
 
   async ngOnInit() {
     this.group = await this.groupsService.getGroup(this.groupID);

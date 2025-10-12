@@ -36,8 +36,10 @@
                 <h3>Members</h3>
                 <hr/>
                 <ng-container *ngFor="let member of group.members">
-                    <app-user-display *ngIf="member.membershipStatus !== 'pending'"
+                    <app-user-display *ngIf="currentUserMembershipStatus === 'admin' || member.membershipStatus !== 'pending'"
                         [user]="member"
+                        [icon]="membershipStatusIcons[member.membershipStatus]"
+                        [onIconClick]="null"
                     />
                 </ng-container>
             </div>
