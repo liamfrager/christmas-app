@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { GroupsService } from '../../../../services/groups.service';
 import { Location } from '@angular/common';
-import { Group, Member, User } from '../../../../types';
+import { Group, Member } from '../../../../types';
 import { PageHeadingComponent } from '../../../../components/page-heading/page-heading.component';
 import { GroupFormComponent } from '../../../../components/forms/group-form/group-form.component';
 
 @Component({
-  selector: 'app-add-member',
+  selector: 'app-update-members',
   standalone: true,
   imports: [GroupFormComponent, PageHeadingComponent],
-  templateUrl: './add-member.component.html',
-  styleUrl: './add-member.component.css'
+  templateUrl: './update-members.component.html',
+  styleUrl: './update-members.component.css'
 })
-export class AddMemberComponent {
+export class UpdateMembersComponent {
   constructor(
     public location: Location,
     private groupsService: GroupsService,
@@ -24,15 +24,12 @@ export class AddMemberComponent {
     this.editingGroup = history.state.group;
   }
 
-  async onSubmit(user: User) {
-    const group = history.state.group;
-    const member: Member = {
-      ...user,
-      groupID: group.id,
-      groupName: group.name,
-      membershipStatus: 'pending',
-    }
-    await this.groupsService.addMemberToGroup(member, group);
-    this.location.back()
+  async onSubmit(updatedMemberships: Member[]) {
+    await this.groupsService.updateGroupMembers(this.editingGroup!, updatedMemberships);
+    this.location.back();
+  }
+
+  onCancel() {
+    this.location.back();
   }
 }
