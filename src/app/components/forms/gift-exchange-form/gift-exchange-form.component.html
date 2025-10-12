@@ -1,9 +1,14 @@
 <div class="form">
-    <app-user-display
-        [user]="currentSelectedMember"
-        [onClick]="null"
-        class="small-member selected-member"
-    />
+    <div class="selected-member">
+        <span>Select who </span>
+        <app-user-display
+            [user]="currentSelectedMember"
+            [onClick]="null"
+            [isInline]="true"
+            
+        />
+        <span> can be assigned to:</span>
+    </div>
     <ng-container *ngFor="let member of members">
         <ng-container *ngIf="member.membershipStatus !== 'pending' && member.id !== currentSelectedMember.id">
             <app-user-display

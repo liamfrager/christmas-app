@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  padding-bottom: 1em;
 }
 
 .small-member {
@@ -16,10 +17,11 @@
 }
 
 .selected-member {
-    background-color: #0000000f;
-    padding-left: 1.5em;
-    margin-left: -1.5em;
-    border-bottom: .5px solid gray;
+    background-color: #00000008;
+    padding-block: 1em;
+    padding-inline: 1.5em;
+    margin-inline: -1.5em;
+    border-block: .5px solid gray;
 }
 
 @media (max-width: 700px) {
