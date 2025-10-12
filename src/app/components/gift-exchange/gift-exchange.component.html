@@ -30,7 +30,7 @@
                     <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
                     <p>{{error}}</p>
                 </span>
-                <app-gift-exchange-form
+                <app-gift-exchange-form *ngIf="group.members!.length > 3"
                     [members]="group.members!"
                     (onSetGiftExchangeRestrictions)="handleCreateGiftExchange($event)"
                     (onMappingErrors)="modalErrorMessages = $event"
