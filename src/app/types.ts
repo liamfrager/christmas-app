@@ -50,7 +50,7 @@ export type NewGroup = {
 
 export interface Group extends NewGroup {
     id: string;
-    members?: Member[];
+    members: Member[];
     giftExchangeMap?: GiftExchangeMap;
     giftExchangeRestrictions?: GiftExchangeRestrictions;
 }

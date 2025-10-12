@@ -25,6 +25,7 @@ export class GroupsService {
         id: doc.ref.parent.parent!.id,
         name: data['groupName'],
         description: data['description'],
+        members: [],
       })
     });
     return groups;
