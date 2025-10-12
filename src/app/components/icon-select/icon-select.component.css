@@ -1,0 +1,59 @@
+.icon-select {
+  position: relative;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+.selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4em 0.6em;
+  border: 1px solid #ccc;
+  border-radius: 0.3em;
+  cursor: pointer;
+  background-color: white;
+}
+
+.selected .material-symbols-outlined {
+  margin-right: 0.5em;
+}
+
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0.2em 0;
+  list-style: none;
+  border: 1px solid #ccc;
+  border-radius: 0.3em;
+  background-color: white;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.options li {
+  padding: 0.4em 0.6em;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.options li:hover {
+  background-color: #f0f0f0;
+}
+
+.options li .material-symbols-outlined {
+  margin-right: 0.5em;
+}
+
+.arrow {
+  margin-left: auto;
+}
+
+.options span.label {
+  margin-left: 1em;
+}

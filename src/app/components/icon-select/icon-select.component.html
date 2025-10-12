@@ -1,0 +1,16 @@
+<div class="icon-select">
+  <div class="selected" (click)="toggleSelect()">
+    <ng-container *ngIf="selectedOption">
+      <span *ngIf="selectedOption.icon" class="material-symbols-outlined">{{selectedOption.icon}}</span>
+      {{selectedOption.label}}
+    </ng-container>
+    <span class="arrow">▾</span>
+  </div>
+
+  <ul class="options" *ngIf="isOpen">
+    <li *ngFor="let option of options" (click)="selectOption(option)">
+      <app-icon [icon]="option.icon!" [hover]="null"/>
+      <span class="label">{{option.label}}</span>
+    </li>
+  </ul>
+</div>
