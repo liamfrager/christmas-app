@@ -28,6 +28,7 @@ export class GroupComponent {
   groupID: string = this.route.snapshot.paramMap.get('group-id')!;
   group?: Group;
   showBackButton: boolean = true;
+  headerButtons: string[] = [];
   currentUserMembershipStatus?: 'member' | 'admin' | 'pending';
   membershipStatusIcons = {
     'member': 'person',
@@ -39,6 +40,7 @@ export class GroupComponent {
     this.group = await this.groupsService.getGroup(this.groupID);
     const isMember = this.group.members?.find(m => m.id === this.accountService.currentUserID);
     this.currentUserMembershipStatus = isMember ? isMember.membershipStatus : undefined;
+    this.headerButtons = this.currentUserMembershipStatus === 'admin' ? ['edit_note', 'person_edit'] : [];
   }
 
   onIconClick(icon: string) {

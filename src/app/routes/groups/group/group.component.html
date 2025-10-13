@@ -2,7 +2,7 @@
     <ng-container *ngIf="!showBackButton; else noBackButton">
     <app-page-heading
         [headingText]="group.name"
-        [buttons]="['edit_note', 'person_edit']"
+        [buttons]="headerButtons"
         (onIconClick)="onIconClick($event)"
         >
     </app-page-heading>
@@ -10,7 +10,7 @@
     <ng-template #noBackButton>
     <app-page-heading
         [headingText]="group.name"
-        [buttons]="['edit_note', 'person_edit']"
+        [buttons]="headerButtons"
         (onIconClick)="onIconClick($event)"
         (onBackButton)="location.back()"
         >

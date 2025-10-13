@@ -4,6 +4,8 @@ import { Location } from '@angular/common';
 import { Group, Member } from '../../../../types';
 import { PageHeadingComponent } from '../../../../components/page-heading/page-heading.component';
 import { GroupFormComponent } from '../../../../components/forms/group-form/group-form.component';
+import { AccountService } from '../../../../services/account.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-update-members',
@@ -15,14 +17,22 @@ import { GroupFormComponent } from '../../../../components/forms/group-form/grou
 export class UpdateMembersComponent {
   constructor(
     public location: Location,
+    private router: Router,
+    private route: ActivatedRoute,
     private groupsService: GroupsService,
+    private accountService: AccountService,
   ) {}
 
   editingGroup?: Group;
 
-  ngOnInit() {
-    this.editingGroup = history.state.group;
+ngOnInit() {
+  const userID = this.accountService.currentUserID;
+  const groupID = this.route.snapshot.paramMap.get('group-id');
+  this.editingGroup = history.state.group;
+  if (!this.editingGroup || !this.editingGroup.members.some((m: any) => m.id === userID && m.membershipStatus === 'admin')) {
+    this.router.navigate(['groups', groupID]);
   }
+}
 
   async onSubmit(updatedMemberships: Member[]) {
     await this.groupsService.updateGroupMembers(this.editingGroup!, updatedMemberships);
