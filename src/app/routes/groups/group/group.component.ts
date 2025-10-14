@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Group, Member } from '../../../types';
+import { Group, GroupMembershipStatus, Member } from '../../../types';
 import { GroupsService } from '../../../services/groups.service';
 import { PageHeadingComponent } from '../../../components/page-heading/page-heading.component';
 import { CommonModule, Location } from '@angular/common';
@@ -29,11 +29,13 @@ export class GroupComponent {
   group?: Group;
   showBackButton: boolean = true;
   headerButtons: string[] = [];
-  currentUserMembershipStatus?: 'member' | 'admin' | 'pending';
+  currentUserMembershipStatus?: GroupMembershipStatus;
   membershipStatusIcons = {
     'member': 'person',
     'admin': 'person_shield',
     'pending': 'schedule',
+    'removed': 'person_off',
+    'new': null,
   }
 
   async ngOnInit() {

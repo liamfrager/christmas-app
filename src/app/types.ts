@@ -40,8 +40,9 @@ export interface Friend extends User {
 export interface Member extends User {
     groupID: string,
     groupName: string,
-    membershipStatus: 'pending' | 'member' | 'admin',
+    membershipStatus: GroupMembershipStatus,
 }
+export type GroupMembershipStatus = 'pending' | 'member' | 'admin' | 'new' | 'removed';
 
 export type NewGroup = {
     name: string;

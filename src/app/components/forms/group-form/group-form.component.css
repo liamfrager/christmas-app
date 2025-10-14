@@ -1,0 +1,22 @@
+.add-member {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.new-member {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+
+    app-pfp-select {
+        flex: 1;
+        max-width: 100%;
+    }
+
+    app-icon {
+        flex-shrink: 0;
+        cursor: pointer;
+    }
+}

@@ -20,27 +20,48 @@
     <ng-container *ngFor="let member of group!.members">
       <app-user-display *ngIf="updatedMembershipStatuses[member.id] as updatedMembershipStatus"
         [user]="member"
-        [icon]="membershipStatusIcons[updatedMembershipStatus ?? 'deleting']"
+        [icon]="membershipStatusIcons[updatedMembershipStatus ?? 'removed']"
         [onIconClick]="editMembershipStatus.bind(this, member)"
         [onClick]="editMembershipStatus.bind(this, member)"
       />
     </ng-container>
     <app-edit-group-membership-pop-up *ngIf="editingMembershipMember"
       [member]="editingMembershipMember"
-      [updatedMembershipStatus]="updatedMembershipStatuses[editingMembershipMember.id] ?? 'deleting'" 
+      [updatedMembershipStatus]="updatedMembershipStatuses[editingMembershipMember.id] ?? 'removed'" 
       (onConfirm)="handlePopUpClose($event)"
     />
-    <app-pfp-select *ngIf="group && nonMemberFriends && nonMemberFriends.length > 0"
-      [friends]="nonMemberFriends"
-      name="friend"
-      required [(ngModel)]="selectedFriend"
-    ></app-pfp-select>
+    <!-- new members being added -->
+    <div *ngFor="let newMember of newMembers; let i = index; trackBy: trackByIndex" class="new-member">
+      <app-pfp-select
+        [friends]="getAvailableFriends(i)"
+        name="friend{{i}}"
+        required
+        [(ngModel)]="newMembers[i]"
+        (onSelectFriend)="onSelectFriend($event, i)"
+      ></app-pfp-select>
+      <app-icon
+        icon="remove"
+        (iconClicked)="removeNewMember(i)"
+        title="Remove member"
+      />
+    </div>
+
+    <!-- add new member button -->
+    <div class="add-member">
+      <span>Add Member</span>
+      <app-icon
+        icon="add"
+        (iconClicked)="addNewMember()"
+        title="Add member"
+      />
+    </div>
+
   </ng-container>
   <input
     type="submit"
     name="submit"
     id="submit"
-    [value]="group ? isEditingGroup ? 'Save' : 'Update Membership' : 'Create Group'"
+    [value]="group ? isEditingGroup ? 'Save' : 'Update Memberships' : 'Create Group'"
     [disabled]="groupForm.invalid"
   >
 </form>

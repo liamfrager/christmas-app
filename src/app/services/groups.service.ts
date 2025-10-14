@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AccountService } from './account.service';
 import { FirebaseService } from './firebase.service';
-import { collection, collectionGroup, doc, getDoc, getDocs, orderBy, query, runTransaction, where } from 'firebase/firestore';
+import { collection, collectionGroup, doc, getDoc, getDocs, orderBy, query, runTransaction, where, writeBatch } from 'firebase/firestore';
 import { Group, Member, NewGroup, User } from '../types';
 
 @Injectable({
@@ -90,22 +90,33 @@ export class GroupsService {
     });
   }
 
-  async addMemberToGroup(newMember: Member, group: Group) {
-    await runTransaction(this.db, async (transaction) => { 
-      const groupMembersRef = doc(this.db, 'groups', group.id, 'members', newMember.id);
-      transaction.set(groupMembersRef, newMember);
-    });
+  async addGroupMembers(members: Member[], group: Group) {
+    const batch = writeBatch(this.db);
+    for (const member of members) {
+      const groupMembersRef = doc(this.db, 'groups', group.id, 'members', member.id);
+      batch.set(groupMembersRef, member);
+    }
+    await batch.commit();
   }
 
-  async updateGroupMembers(oldGroup: Group, updatedMembers: Member[]) {
-    await runTransaction(this.db, async (transaction) => { 
-      for (const updatedMember of updatedMembers) {
-        const oldMember = oldGroup.members.find(m => m.id === updatedMember.id);
-        if (oldMember && JSON.stringify(oldMember) === JSON.stringify(updatedMember)) continue;
-        const memberRef = doc(this.db, 'groups', oldGroup.id, 'members', updatedMember.id);
-        transaction.update(memberRef, updatedMember);
-      }
-    });
+  async updateGroupMembers(members: Member[], group: Group) {
+    const batch = writeBatch(this.db);
+    for (const updatedMember of members) {
+      const oldMember = group.members.find(m => m.id === updatedMember.id);
+      if (oldMember && JSON.stringify(oldMember) === JSON.stringify(updatedMember)) continue;
+      const memberRef = doc(this.db, 'groups', group.id, 'members', updatedMember.id);
+      batch.update(memberRef, updatedMember);
+    }
+    await batch.commit();
+  }
+
+  async deleteGroupMembers(members: Member[], group: Group) {
+    const batch = writeBatch(this.db);
+    for (const member of members) {
+      const memberRef = doc(this.db, 'groups', group.id, 'members', member.id);
+      batch.delete(memberRef);
+    }
+    await batch.commit();
   }
 
   async acceptGroupRequest(member: Member, group: Group) {

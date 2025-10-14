@@ -25,17 +25,40 @@ export class UpdateMembersComponent {
 
   editingGroup?: Group;
 
-ngOnInit() {
-  const userID = this.accountService.currentUserID;
-  const groupID = this.route.snapshot.paramMap.get('group-id');
-  this.editingGroup = history.state.group;
-  if (!this.editingGroup || !this.editingGroup.members.some((m: any) => m.id === userID && m.membershipStatus === 'admin')) {
-    this.router.navigate(['groups', groupID]);
+  ngOnInit() {
+    const userID = this.accountService.currentUserID;
+    const groupID = this.route.snapshot.paramMap.get('group-id');
+    this.editingGroup = history.state.group;
+    if (!this.editingGroup || !this.editingGroup.members.some((m: any) => m.id === userID && m.membershipStatus === 'admin')) {
+      this.router.navigate(['groups', groupID]);
+    }
   }
-}
 
-  async onSubmit(updatedMemberships: Member[]) {
-    await this.groupsService.updateGroupMembers(this.editingGroup!, updatedMemberships);
+  async onSubmit(allMemberships: Member[]) {
+    let membersToAdd: Member[] = [];
+    let membersToUpdate: Member[] = [];
+    let membersToDelete: Member[] = [];
+    for (let member of allMemberships) {
+      switch (member.membershipStatus as string) {
+        case 'admin':
+        case 'member':
+        case 'pending':
+          membersToUpdate.push(member);
+          break;
+        case 'removed':
+          membersToDelete.push(member);
+          break;
+        case 'new':
+          membersToAdd.push({
+            ...member,
+            membershipStatus: 'pending',
+          });
+          break;
+      }
+    }
+    await this.groupsService.addGroupMembers(membersToAdd, this.editingGroup!);
+    await this.groupsService.updateGroupMembers(membersToUpdate, this.editingGroup!);
+    await this.groupsService.deleteGroupMembers(membersToDelete, this.editingGroup!);
     this.location.back();
   }
 
