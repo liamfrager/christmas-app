@@ -26,8 +26,11 @@
                     <button (click)="rejectGroupRequest()"><app-icon icon="close" [hover]="false" size="20px"></app-icon>Reject</button>
                     </div>
                 </div>
-                <p>{{group.description}}</p>
-                <app-gift-exchange
+                <p *ngIf="group.description">
+                    <strong>Description:</strong><br>
+                    <span>{{group.description}}</span>
+                </p>
+                <app-gift-exchange *ngIf="currentUserMembershipStatus === 'admin'"
                     [group]="group"
                     (onShowModal)="showBackButton = !$event"
                 />
