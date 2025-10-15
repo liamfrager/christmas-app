@@ -3,14 +3,14 @@
     <ng-container *ngIf="incomingGroupRequests; else loadingFriends">
         <ng-container *ngIf="incomingGroupRequests.length > 0; else noFriends">
             <ng-container *ngFor="let groupRequest of incomingGroupRequests">
-            <div class="group-wrap" (click)="goToGroup(groupRequest)">
-                <span class="group-name">{{groupRequest.groupName}}</span>
-            </div>
-            <hr>
+                <div class="group-wrap" (click)="goToGroup(groupRequest)">
+                    <span class="group-name">{{groupRequest.groupName}}</span>
+                </div>
+                <hr>
             </ng-container>
         </ng-container>
         <ng-template #noFriends>
-            <p>You have no group requests</p>
+            <p>You have no group requests.</p>
         </ng-template>
     </ng-container>
     <ng-template #loadingFriends>

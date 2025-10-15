@@ -52,6 +52,8 @@ export class UpdateMembersComponent {
           membersToAdd.push({
             ...member,
             membershipStatus: 'pending',
+            groupID: this.editingGroup!.id,
+            groupName: this.editingGroup!.name,
           });
           break;
       }

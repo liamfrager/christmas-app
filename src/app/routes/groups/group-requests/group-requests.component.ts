@@ -20,7 +20,7 @@ export class GroupRequestsComponent {
     public location: Location,
   ) {}
 
-  incomingGroupRequests: Array<Member> = [];
+  incomingGroupRequests?: Member[];
   friendsStatuses: Record<string, string> = {};
 
   @RefreshService.onRefresh()
