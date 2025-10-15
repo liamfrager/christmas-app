@@ -8,11 +8,12 @@ import { UserDisplayComponent } from '../../../components/user-display/user-disp
 import { GiftExchangeComponent } from '../../../components/gift-exchange/gift-exchange.component';
 import { AccountService } from '../../../services/account.service';
 import { IconComponent } from "../../../components/icon/icon.component";
+import { PopUpComponent } from "../../../components/pop-up/pop-up.component";
 
 @Component({
   selector: 'app-group',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, GiftExchangeComponent, IconComponent],
+  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, GiftExchangeComponent, IconComponent, PopUpComponent],
   templateUrl: './group.component.html',
   styleUrl: './group.component.css'
 })
@@ -54,19 +55,20 @@ export class GroupComponent {
 
   acceptGroupRequest() {
     if (this.group) {
-      this.groupsService.acceptGroupRequest(this.accountService.currentUser as Member, this.group);
-      this.currentUserMembershipStatus = 'member';
-      this.group.members!.push({
+      const acceptedMember = {
         ...this.accountService.currentUser,
         membershipStatus: 'member',
-      } as Member)
+      } as Member
+      this.groupsService.addGroupMembers([acceptedMember], this.group);
+      this.currentUserMembershipStatus = 'member';
+      this.group.members!.push(acceptedMember)
     }
   }
 
   rejectGroupRequest() {
     if (this.group) {
-    this.groupsService.removeMemberFromGroup(this.accountService.currentUser as Member, this.group);
-    this.currentUserMembershipStatus = undefined;
-    this.group.members!.filter(m => m.id !== this.accountService.currentUserID);}
-  }
+      this.groupsService.deleteGroupMembers([this.accountService.currentUser as Member], this.group);
+      this.currentUserMembershipStatus = undefined;
+      this.group.members!.filter(m => m.id !== this.accountService.currentUserID);}
+    }
 }

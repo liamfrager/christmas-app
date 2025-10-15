@@ -119,23 +119,6 @@ export class GroupsService {
     await batch.commit();
   }
 
-  async acceptGroupRequest(member: Member, group: Group) {
-    await runTransaction(this.db, async (transaction) => { 
-      const groupMembersRef = doc(this.db, 'groups', group.id, 'members', member.id);
-      transaction.update(groupMembersRef, {
-        ...member,
-        membershipStatus: 'member',
-      });
-    });
-  }
-
-  async removeMemberFromGroup(member: Member, group: Group) {
-    await runTransaction(this.db, async (transaction) => { 
-      const groupMemberRef = doc(this.db, 'groups', group.id, 'members', member.id);
-      transaction.delete(groupMemberRef);
-    });
-  }
-
   /**
    * Fetches the incoming group requests of the current user.
    * @returns A promise that resolves to an array of Group objects.
