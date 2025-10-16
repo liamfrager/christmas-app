@@ -9,8 +9,9 @@
     <app-page-heading
         headingText="Friends"
         [buttons]="['inbox_text_person', 'person_search']"
+        [buttonBadges]="[pendingFriendRequestCount!, false]"
         (onIconClick)="onIconClick($event)"
-        >
+    >
     </app-page-heading>
 </ng-template>
 <div class="content" *ngIf="user">
