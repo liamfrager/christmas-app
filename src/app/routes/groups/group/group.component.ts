@@ -48,7 +48,7 @@ export class GroupComponent {
 
   onIconClick(icon: string) {
     if (icon === 'person_edit')
-      this.router.navigate(['groups', this.groupID, 'memberhsip'], { state: { group: this.group } });
+      this.router.navigate(['groups', this.groupID, 'membership'], { state: { group: this.group } });
     if (icon === 'edit_note')
       this.router.navigate(['groups', this.groupID, 'edit-group'], { state: { group: this.group } });
   }
