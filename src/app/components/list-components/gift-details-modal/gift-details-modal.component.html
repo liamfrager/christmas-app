@@ -2,9 +2,9 @@
   <div *ngIf="gift" class="modal">
     <ng-container *ngIf="!editingGift; else editForm">
       <div class="content">
-        <span *ngIf="gift.isDeleted" class="error">
+        <span *ngFor="let error of errors" class="error">
           <div><app-icon icon="error" [hover]="null" size="1.5em"></app-icon></div>
-          <p>{{'This gift has been deleted by ' + this.gift.isWishedByUser.displayName + '. It is no longer on their wish list.'}}</p>
+          <p>{{error}}</p>
         </span>
       </div>
       <app-page-heading

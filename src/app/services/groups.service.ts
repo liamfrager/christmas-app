@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AccountService } from './account.service';
 import { FirebaseService } from './firebase.service';
-import { collection, collectionGroup, doc, getDoc, getDocs, orderBy, query, runTransaction, where } from 'firebase/firestore';
+import { collection, collectionGroup, doc, getDoc, getDocs, orderBy, query, runTransaction, where, writeBatch } from 'firebase/firestore';
 import { Group, Member, NewGroup, User } from '../types';
 
 @Injectable({
@@ -24,7 +24,8 @@ export class GroupsService {
       groups.push({
         id: doc.ref.parent.parent!.id,
         name: data['groupName'],
-        description: data['description'],
+        description: '',
+        members: [],
       })
     });
     return groups;
@@ -63,7 +64,7 @@ export class GroupsService {
           ...this.accountService.currentUser,
           groupID: newListRef.id,
           groupName: newGroup.name,
-          membershipsStatus: 'admin',
+          membershipStatus: 'admin',
         }
         transaction.set(newListMembersRef, currentUser);
         return newListRef.id;
@@ -74,33 +75,48 @@ export class GroupsService {
 
   async updateGroup(oldGroup: Group, newGroup: NewGroup) {
     await runTransaction(this.db, async (transaction) => { 
-      const listRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', oldGroup.id);
-      transaction.update(listRef, {...oldGroup, ...newGroup});
+      const groupRef = doc(this.db, 'groups', oldGroup.id);
+      transaction.update(groupRef, {...oldGroup, ...newGroup});
     });
   }
 
-  async addMemberToGroup(newMember: Member, group: Group) {
-    await runTransaction(this.db, async (transaction) => { 
-      const groupMembersRef = doc(this.db, 'groups', group.id, 'members', newMember.id);
-      transaction.set(groupMembersRef, newMember);
+  async deleteGroup(group: Group) {
+    await runTransaction(this.db, async (transaction) => {
+      const currentUserGroupMember = group.members?.find(m => m.id === this.accountService.currentUserID);
+      if (currentUserGroupMember && currentUserGroupMember.membershipStatus === 'admin') {
+        const groupRef = doc(this.db, 'groups', group.id);
+        transaction.delete(groupRef);
+      }
     });
   }
 
-  async acceptGroupRequest(member: Member, group: Group) {
-    await runTransaction(this.db, async (transaction) => { 
+  async addGroupMembers(members: Member[], group: Group) {
+    const batch = writeBatch(this.db);
+    for (const member of members) {
       const groupMembersRef = doc(this.db, 'groups', group.id, 'members', member.id);
-      transaction.update(groupMembersRef, {
-        ...member,
-        membershipStatus: 'member',
-      });
-    });
+      batch.set(groupMembersRef, member);
+    }
+    await batch.commit();
   }
 
-  async removeMemberFromGroup(member: Member, group: Group) {
-    await runTransaction(this.db, async (transaction) => { 
-      const groupMemberRef = doc(this.db, 'groups', group.id, 'members', member.id);
-      transaction.delete(groupMemberRef);
-    });
+  async updateGroupMembers(members: Member[], group: Group) {
+    const batch = writeBatch(this.db);
+    for (const updatedMember of members) {
+      const oldMember = group.members.find(m => m.id === updatedMember.id);
+      if (oldMember && JSON.stringify(oldMember) === JSON.stringify(updatedMember)) continue;
+      const memberRef = doc(this.db, 'groups', group.id, 'members', updatedMember.id);
+      batch.update(memberRef, updatedMember);
+    }
+    await batch.commit();
+  }
+
+  async deleteGroupMembers(members: Member[], group: Group) {
+    const batch = writeBatch(this.db);
+    for (const member of members) {
+      const memberRef = doc(this.db, 'groups', group.id, 'members', member.id);
+      batch.delete(memberRef);
+    }
+    await batch.commit();
   }
 
   /**

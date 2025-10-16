@@ -31,6 +31,7 @@ export class ListDisplayComponent implements OnChanges {
   giftInModal?: Gift;
   isModalOpen: boolean = false;
   modalButtonType: 'claim' | 'unclaim' | 'claimed' | 'edit' = 'claimed';
+  modalErrors: string[] = [];
   
   ngOnChanges() {
     this.noGiftsMessage = 
@@ -120,10 +121,14 @@ export class ListDisplayComponent implements OnChanges {
    * Claims the current gift displayed in `app-gift-details-modal`.
    * Should only be called when gift is unclaimed.
    */
-  claimGift() {
-    this.giftListService.addGiftToShoppingList(this.giftInModal!);
-    this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, {...this.giftInModal!, isClaimedByID: this.accountService.currentUserID});
-    this.hideModal();
+  async claimGift() {
+    try {
+      await this.giftListService.addGiftToShoppingList(this.giftInModal!);
+      this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.set(this.giftInModal!.id, {...this.giftInModal!, isClaimedByID: this.accountService.currentUserID});
+      this.hideModal();
+    } catch {
+      this.modalErrors = ['This gift has already been claimed by someone else! Please refresh the page to update.']
+    }
   }
 
   /**

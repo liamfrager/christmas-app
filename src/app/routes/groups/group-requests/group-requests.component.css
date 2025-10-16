@@ -1,0 +1,7 @@
+.group-wrap {
+    padding: 1em;
+    cursor: pointer;
+    &:hover {
+        color: #d64541;
+    }
+}

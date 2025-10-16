@@ -38,21 +38,17 @@ export class GroupsComponent implements OnInit {
     public groupsService: GroupsService,
     public location: Location,
   ) {};
-  IDParam: string | undefined | null;
   user?: User;
+  pendingGroupRequestCount?: number | boolean;
 
   async ngOnInit() {
-    let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
-    this.IDParam = IDParam;
+    this.user = this.accountService.currentUser;
   }
 
   @RefreshService.onRefresh()
   async onRefresh() {
-    if (this.IDParam) {
-      this.user = await this.accountService.getUserInfo(this.IDParam);
-    } else {
-      this.user = this.accountService.currentUser;
-    }
+      const pendingGroupRequests = await this.groupsService.getGroupRequests();
+      if (pendingGroupRequests.length > 0) this.pendingGroupRequestCount = pendingGroupRequests.length;
   }
 
   onIconClick(icon: string) {

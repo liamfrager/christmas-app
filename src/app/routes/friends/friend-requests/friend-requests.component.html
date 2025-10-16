@@ -1,7 +1,17 @@
 <app-page-heading headingText="Friend Requests" (onBackButton)="location.back()"></app-page-heading>
 <div class="content">
-    <ng-container *ngFor="let friendRequest of incomingFriendRequests">
-        <app-user-display [user]="friendRequest"></app-user-display>
-        <hr>
+    <ng-container *ngIf="incomingFriendRequests; else loadingFriends">
+        <ng-container *ngIf="incomingFriendRequests.length > 0; else noFriends">
+            <ng-container *ngFor="let friendRequest of incomingFriendRequests">
+                <app-user-display [user]="friendRequest"></app-user-display>
+                <hr>
+            </ng-container>
+        </ng-container>
+        <ng-template #noFriends>
+            <p>You have no friend requests.</p>
+        </ng-template>
     </ng-container>
+    <ng-template #loadingFriends>
+        <p>Loading friend requests...</p>
+    </ng-template>
 </div>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddMemberComponent } from './add-member.component';
+import { IconSelectComponent } from './icon-select.component';
 
-describe('AddMemberComponent', () => {
-  let component: AddMemberComponent;
-  let fixture: ComponentFixture<AddMemberComponent>;
+describe('IconSelectComponent', () => {
+  let component: IconSelectComponent;
+  let fixture: ComponentFixture<IconSelectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddMemberComponent]
+      imports: [IconSelectComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddMemberComponent);
+    fixture = TestBed.createComponent(IconSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

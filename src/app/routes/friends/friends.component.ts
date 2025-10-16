@@ -6,6 +6,7 @@ import { AccountService } from '../../services/account.service';
 import { CommonModule, Location } from '@angular/common';
 import { User } from '../../types';
 import { RefreshService } from '../../services/refresh.service';
+import { FriendsService } from '../../services/friends.service';
 
 @Component({
   selector: 'app-friends',
@@ -19,10 +20,12 @@ export class FriendsComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     public accountService: AccountService,
+    private friendsService: FriendsService,
     public location: Location,
   ) {};
   IDParam: string | undefined | null;
   user?: User;
+  pendingFriendRequestCount?: number | boolean;
 
   async ngOnInit() {
     let IDParam: string | undefined | null = this.route.snapshot.paramMap.get('user-id');
@@ -33,8 +36,11 @@ export class FriendsComponent implements OnInit {
   async onRefresh() {
     if (this.IDParam) {
       this.user = await this.accountService.getUserInfo(this.IDParam);
+      this.pendingFriendRequestCount = false;
     } else {
       this.user = this.accountService.currentUser;
+      const pendingFriendRequests = await this.friendsService.getFriendRequests();
+      if (pendingFriendRequests.length > 0) this.pendingFriendRequestCount = pendingFriendRequests.length;
     }
   }
 

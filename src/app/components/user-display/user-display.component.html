@@ -6,6 +6,7 @@
     <app-icon *ngIf="icon"
         [icon]="icon"
         (iconClicked)="doOnIconClick()"
+        [hover]="onIconClick !== null"
         >
     </app-icon>
 </div>

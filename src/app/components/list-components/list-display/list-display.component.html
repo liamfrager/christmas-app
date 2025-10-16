@@ -42,6 +42,7 @@
       [type]="list.type"
       [buttonType]="modalButtonType"
       [isShown]="isModalOpen"
+      [errors]="modalErrors"
       (onButtonClick)="onModalButtonClick($event)"
       (onStatusUpdated)="updateStatus($event)"
       (onModalClose)="hideModal()"

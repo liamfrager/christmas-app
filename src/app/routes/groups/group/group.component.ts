@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Group, Member } from '../../../types';
+import { Group, GroupMembershipStatus, Member } from '../../../types';
 import { GroupsService } from '../../../services/groups.service';
 import { PageHeadingComponent } from '../../../components/page-heading/page-heading.component';
 import { CommonModule, Location } from '@angular/common';
@@ -28,34 +28,51 @@ export class GroupComponent {
   groupID: string = this.route.snapshot.paramMap.get('group-id')!;
   group?: Group;
   showBackButton: boolean = true;
-  currentUserMembershipStatus?: 'member' | 'admin' | 'pending';
+  headerButtons: string[] = [];
+  currentUserMembershipStatus?: GroupMembershipStatus;
+  membershipStatusIcons = {
+    'member': 'person',
+    'admin': 'person_shield',
+    'pending': 'schedule',
+    'removed': 'person_off',
+    'new': null,
+  }
 
   async ngOnInit() {
     this.group = await this.groupsService.getGroup(this.groupID);
     const isMember = this.group.members?.find(m => m.id === this.accountService.currentUserID);
     this.currentUserMembershipStatus = isMember ? isMember.membershipStatus : undefined;
+    if (this.currentUserMembershipStatus === 'admin') this.headerButtons = ['edit_note', 'person_edit']
+    if (this.currentUserMembershipStatus === 'member') this.headerButtons = ['person_edit']
   }
 
   onIconClick(icon: string) {
-    if (icon === 'person_add')
-      this.router.navigate(['groups', this.groupID, 'add-member'], { state: { group: this.group } });
+    if (icon === 'person_edit')
+      this.router.navigate(['groups', this.groupID, 'membership'], { state: { group: this.group } });
+    if (icon === 'edit_note')
+      this.router.navigate(['groups', this.groupID, 'edit-group'], { state: { group: this.group } });
   }
 
   acceptGroupRequest() {
     if (this.group) {
-      this.groupsService.acceptGroupRequest(this.accountService.currentUser as Member, this.group);
-      this.currentUserMembershipStatus = 'member';
-      this.group.members!.push({
+      const acceptedMember = {
         ...this.accountService.currentUser,
         membershipStatus: 'member',
-      } as Member)
+        groupID: this.group.id,
+        groupName: this.group.name,
+      } as Member
+      this.groupsService.updateGroupMembers([acceptedMember], this.group);
+      this.currentUserMembershipStatus = 'member';
+      this.headerButtons = ['person_edit'];
+      this.group.members!.push(acceptedMember);
     }
   }
 
   rejectGroupRequest() {
     if (this.group) {
-    this.groupsService.removeMemberFromGroup(this.accountService.currentUser as Member, this.group);
-    this.currentUserMembershipStatus = undefined;
-    this.group.members!.filter(m => m.id !== this.accountService.currentUserID);}
+      this.groupsService.deleteGroupMembers([this.accountService.currentUser as Member], this.group);
+      this.currentUserMembershipStatus = undefined;
+      this.group.members = this.group.members.filter(m => m.id !== this.accountService.currentUserID);
+    }
   }
 }

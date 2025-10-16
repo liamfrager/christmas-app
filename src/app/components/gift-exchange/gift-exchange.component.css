@@ -43,6 +43,7 @@
 
 .assignment {
   position: relative;
+  display: inline-block;
 }
 
 .assignment-cover {

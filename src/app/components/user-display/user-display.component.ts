@@ -42,7 +42,10 @@ export class UserDisplayComponent {
   }
 
   doOnIconClick() {
-    if (this.onIconClick === null) return;
-    this.onIconClick();
+    if (this.onIconClick === null) {
+      this.doOnClick();
+    } else {
+      this.onIconClick();
+    }
   }
 }
