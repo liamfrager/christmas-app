@@ -9,13 +9,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PopUpComponent } from "../../../../components/pop-up/pop-up.component";
 
 @Component({
-  selector: 'app-update-members',
+  selector: 'app-membership',
   standalone: true,
   imports: [CommonModule, GroupFormComponent, PageHeadingComponent, PopUpComponent],
-  templateUrl: './update-members.component.html',
-  styleUrl: './update-members.component.css'
+  templateUrl: './membership.component.html',
+  styleUrl: './membership.component.css'
 })
-export class UpdateMembersComponent {
+export class MembershipComponent {
   constructor(
     public location: Location,
     private router: Router,
