@@ -19,7 +19,7 @@ export class FriendRequestsComponent {
     public location: Location,
   ) {}
 
-  incomingFriendRequests: Array<Friend> = [];
+  incomingFriendRequests?: Array<Friend>;
   friendsStatuses: Record<string, string> = {};
 
   @RefreshService.onRefresh()
