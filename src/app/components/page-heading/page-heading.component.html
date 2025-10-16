@@ -11,9 +11,15 @@
   <h2>{{headingText}}</h2>
 </div>
 <span *ngIf="buttons">
-  <app-icon *ngFor="let icon of buttons"
-    [icon]="icon"
-    (iconClicked)="onIconClick.emit(icon)"
+  <ng-container *ngFor="let icon of buttons; let i = index">
+    <app-badge
+      [badgeValue]="buttonBadges![i]"
     >
-  </app-icon>
+      <app-icon
+        [icon]="icon"
+        (iconClicked)="onIconClick.emit(icon)"
+        >
+      </app-icon>
+    </app-badge>
+  </ng-container>
 </span>
