@@ -84,6 +84,10 @@ export class GroupFormComponent {
     this.editingMembershipMember = undefined;
   }
 
+  get hasAdmin(): boolean {
+    return Object.values(this.updatedMembershipStatuses).some(status => status === 'admin');
+  }
+
   async onSubmit(form: NgForm) {
     const newGroup: NewGroup = {
       name: form.form.value.group,

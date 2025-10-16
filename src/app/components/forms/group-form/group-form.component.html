@@ -62,6 +62,7 @@
     name="submit"
     id="submit"
     [value]="group ? isEditingGroup ? 'Save' : 'Update Memberships' : 'Create Group'"
-    [disabled]="groupForm.invalid"
+    [disabled]="groupForm.invalid || !hasAdmin"
+    [title]="!hasAdmin ? 'Group must have an admin user' : 'Update Memberships'"
   >
 </form>
