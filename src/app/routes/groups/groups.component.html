@@ -1,18 +1,10 @@
-<ng-container *ngIf="IDParam; else noBackButton">
-    <app-page-heading
-        [headingText]="user && user.id !== accountService.currentUserID ? user.displayName + '\'s Groups' : 'Groups'"
-        (onBackButton)="location.back()"
-        >
-    </app-page-heading>
-</ng-container>
-<ng-template #noBackButton>
-    <app-page-heading
-        headingText="Groups"
-        [buttons]="['inbox_text_share', 'add_circle']"
-        (onIconClick)="onIconClick($event)"
-        >
-    </app-page-heading>
-</ng-template>
+<app-page-heading
+    headingText="Groups"
+    [buttons]="['inbox_text_share', 'add_circle']"
+    [buttonBadges]="[pendingGroupRequestCount!, false]"
+    (onIconClick)="onIconClick($event)"
+    >
+</app-page-heading>
 <div class="content" *ngIf="user">
   <app-groups-display [userID]="user.id"></app-groups-display>
 </div>
