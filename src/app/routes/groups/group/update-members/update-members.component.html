@@ -1,9 +1,17 @@
 <app-page-heading headingText="Update Memberships" (onBackButton)="location.back()"></app-page-heading>
 <div class="content">
-  <app-group-form
-    [group]="editingGroup"
-    [isEditingMemberships]="true"
-    (onFormSubmit)="onSubmit($event)"
-  ></app-group-form>
-  <button class="btn-red" (click)="onCancel()">Cancel</button>
+  <ng-container *ngIf="currentUserMembershipStatus === 'admin'">
+    <app-group-form
+      [group]="editingGroup"
+      [isEditingMemberships]="true"
+      (onFormSubmit)="onSubmit($event)"
+    ></app-group-form>
+    <button class="btn-red" (click)="onCancel()">Cancel</button>
+  </ng-container>
+  <app-pop-up *ngIf="currentUserMembershipStatus !== 'admin'"
+    buttonText="Leave Group"
+    title="Are you sure you want to leave this group?"
+    body="You will need to be invited again to join back."
+    (onConfirm)="handleLeaveGroup()"
+  />
 </div>

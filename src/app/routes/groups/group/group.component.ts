@@ -8,12 +8,11 @@ import { UserDisplayComponent } from '../../../components/user-display/user-disp
 import { GiftExchangeComponent } from '../../../components/gift-exchange/gift-exchange.component';
 import { AccountService } from '../../../services/account.service';
 import { IconComponent } from "../../../components/icon/icon.component";
-import { PopUpComponent } from "../../../components/pop-up/pop-up.component";
 
 @Component({
   selector: 'app-group',
   standalone: true,
-  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, GiftExchangeComponent, IconComponent, PopUpComponent],
+  imports: [CommonModule, PageHeadingComponent, UserDisplayComponent, GiftExchangeComponent, IconComponent],
   templateUrl: './group.component.html',
   styleUrl: './group.component.css'
 })
@@ -43,7 +42,8 @@ export class GroupComponent {
     this.group = await this.groupsService.getGroup(this.groupID);
     const isMember = this.group.members?.find(m => m.id === this.accountService.currentUserID);
     this.currentUserMembershipStatus = isMember ? isMember.membershipStatus : undefined;
-    this.headerButtons = this.currentUserMembershipStatus === 'admin' ? ['edit_note', 'person_edit'] : [];
+    if (this.currentUserMembershipStatus === 'admin') this.headerButtons = ['edit_note', 'person_edit']
+    if (this.currentUserMembershipStatus === 'member') this.headerButtons = ['person_edit']
   }
 
   onIconClick(icon: string) {
@@ -61,7 +61,8 @@ export class GroupComponent {
       } as Member
       this.groupsService.addGroupMembers([acceptedMember], this.group);
       this.currentUserMembershipStatus = 'member';
-      this.group.members!.push(acceptedMember)
+      this.headerButtons = ['person_edit'];
+      this.group.members!.push(acceptedMember);
     }
   }
 
@@ -69,6 +70,7 @@ export class GroupComponent {
     if (this.group) {
       this.groupsService.deleteGroupMembers([this.accountService.currentUser as Member], this.group);
       this.currentUserMembershipStatus = undefined;
-      this.group.members!.filter(m => m.id !== this.accountService.currentUserID);}
+      this.group.members = this.group.members.filter(m => m.id !== this.accountService.currentUserID);
     }
+  }
 }

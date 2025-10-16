@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
 import { GroupsService } from '../../../../services/groups.service';
-import { Location } from '@angular/common';
-import { Group, Member } from '../../../../types';
+import { CommonModule, Location } from '@angular/common';
+import { Group, GroupMembershipStatus, Member } from '../../../../types';
 import { PageHeadingComponent } from '../../../../components/page-heading/page-heading.component';
 import { GroupFormComponent } from '../../../../components/forms/group-form/group-form.component';
 import { AccountService } from '../../../../services/account.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PopUpComponent } from "../../../../components/pop-up/pop-up.component";
 
 @Component({
   selector: 'app-update-members',
   standalone: true,
-  imports: [GroupFormComponent, PageHeadingComponent],
+  imports: [CommonModule, GroupFormComponent, PageHeadingComponent, PopUpComponent],
   templateUrl: './update-members.component.html',
   styleUrl: './update-members.component.css'
 })
@@ -24,12 +25,14 @@ export class UpdateMembersComponent {
   ) {}
 
   editingGroup?: Group;
+  currentUserMembershipStatus?: GroupMembershipStatus;
 
   ngOnInit() {
     const userID = this.accountService.currentUserID;
     const groupID = this.route.snapshot.paramMap.get('group-id');
     this.editingGroup = history.state.group;
-    if (!this.editingGroup || !this.editingGroup.members.some((m: any) => m.id === userID && m.membershipStatus === 'admin')) {
+    this.currentUserMembershipStatus = this.editingGroup?.members.find((m: any) => m.id === userID)?.membershipStatus;
+    if (!this.currentUserMembershipStatus || this.currentUserMembershipStatus === 'pending') {
       this.router.navigate(['groups', groupID]);
     }
   }
@@ -66,5 +69,10 @@ export class UpdateMembersComponent {
 
   onCancel() {
     this.location.back();
+  }
+
+  handleLeaveGroup() {
+    this.groupsService.deleteGroupMembers([this.accountService.currentUser as Member], this.editingGroup!);
+    this.router.navigate(['groups']);
   }
 }
