@@ -58,8 +58,10 @@ export class GroupComponent {
       const acceptedMember = {
         ...this.accountService.currentUser,
         membershipStatus: 'member',
+        groupID: this.group.id,
+        groupName: this.group.name,
       } as Member
-      this.groupsService.addGroupMembers([acceptedMember], this.group);
+      this.groupsService.updateGroupMembers([acceptedMember], this.group);
       this.currentUserMembershipStatus = 'member';
       this.headerButtons = ['person_edit'];
       this.group.members!.push(acceptedMember);
