@@ -1,11 +1,11 @@
 <form (ngSubmit)="onSubmit(groupForm)" #groupForm="ngForm">
   <ng-container *ngIf="!isEditingMemberships">
-    <label for="group">Group</label>
+    <label for="group">Group Name</label>
     <input 
       type="text"
       name="group"
       id="group"
-      placeholder="Group *"
+      placeholder="My Group*"
       required [(ngModel)]="nameVal"
     ><br>
     <label for="description">Description</label>
@@ -62,7 +62,7 @@
     name="submit"
     id="submit"
     [value]="group ? isEditingGroup ? 'Save' : 'Update Memberships' : 'Create Group'"
-    [disabled]="groupForm.invalid || !hasAdmin"
+    [disabled]="groupForm.invalid || (isEditingMemberships && !hasAdmin)"
     [title]="!hasAdmin ? 'Group must have an admin user' : 'Update Memberships'"
   >
 </form>

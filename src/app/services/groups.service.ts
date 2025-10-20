@@ -74,20 +74,26 @@ export class GroupsService {
   }
 
   async updateGroup(oldGroup: Group, newGroup: NewGroup) {
-    await runTransaction(this.db, async (transaction) => { 
-      const groupRef = doc(this.db, 'groups', oldGroup.id);
-      transaction.update(groupRef, {...oldGroup, ...newGroup});
-    });
+    const batch = writeBatch(this.db);
+    const groupRef = doc(this.db, 'groups', oldGroup.id);
+    batch.update(groupRef, {...oldGroup, ...newGroup});
+    for (let member of oldGroup.members) {
+      const memberRef = doc(this.db, 'groups', oldGroup.id, 'members', member.id);
+      batch.update(memberRef, { groupName: newGroup.name });
+    }
+    batch.commit();
   }
 
   async deleteGroup(group: Group) {
-    await runTransaction(this.db, async (transaction) => {
-      const currentUserGroupMember = group.members?.find(m => m.id === this.accountService.currentUserID);
-      if (currentUserGroupMember && currentUserGroupMember.membershipStatus === 'admin') {
-        const groupRef = doc(this.db, 'groups', group.id);
-        transaction.delete(groupRef);
-      }
-    });
+    const currentUserGroupMember = group.members?.find(m => m.id === this.accountService.currentUserID);
+    if (currentUserGroupMember && currentUserGroupMember.membershipStatus === 'admin') {
+      const batch = writeBatch(this.db);
+      const groupRef = doc(this.db, 'groups', group.id);
+      batch.delete(groupRef);
+      const membersSnap = await getDocs(collection(this.db, 'groups', group.id, 'members'));
+      membersSnap.forEach(member => batch.delete(member.ref));
+      batch.commit();
+    }
   }
 
   async addGroupMembers(members: Member[], group: Group) {
