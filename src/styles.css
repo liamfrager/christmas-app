@@ -120,7 +120,7 @@ button.btn-red, app-pop-up.btn-red button:first-of-type {
   flex-direction: row;
   width: 100%;
   gap: 1em;
-  button {
+  button, div {
     flex-grow: 1;
   }
 }

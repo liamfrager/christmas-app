@@ -1,4 +1,4 @@
-<button (click)="popUp.showModal()">
+<!-- <button (click)="popUp.showModal()">
   <app-icon [icon]="buttonIcon" [hover]="false" size="20px"></app-icon>
   {{buttonText}}
 </button>
@@ -8,5 +8,38 @@
   <div class="btn-wrap">
     <button (click)="this.onConfirm.emit(true); popUp.close()" class="btn-red">{{confirmText}}</button>
     <button (click)="popUp.close()">Cancel</button>
+  </div>
+</dialog> -->
+<div (click)="showPopUp()">
+  <button *ngIf="triggerText; else trigger">
+    <app-icon *ngIf="triggerIcon" [icon]="triggerIcon" [hover]="false" size="20px"></app-icon>
+    {{triggerText}}
+  </button>
+  <ng-template #trigger>
+    <ng-content select="[popup-trigger]"/>
+  </ng-template>
+</div>
+
+<dialog #popUp>
+  <h3 *ngIf="title">{{title}}</h3>
+  <p *ngIf="title">{{body}}</p>
+  <ng-content select="[popup-body]"/>
+  <div class="btn-wrap">
+    <div (click)="onConfirm.emit(true); popUp.close()">
+      <ng-content select="[popup-confirm]">
+        <button>
+          <app-icon *ngIf="confirmIcon" [icon]="confirmIcon" [hover]="false" size="20px"></app-icon>
+          {{confirmText ?? triggerText ?? "Confirm"}}
+        </button>
+      </ng-content>
+    </div>
+    <div (click)="popUp.close()">
+      <ng-content select="[popup-cancel]">
+        <button>
+          <app-icon *ngIf="cancelIcon" [icon]="cancelIcon" [hover]="false" size="20px"></app-icon>
+          {{cancelText ?? "Cancel"}}
+        </button>
+      </ng-content>
+    </div>
   </div>
 </dialog>
