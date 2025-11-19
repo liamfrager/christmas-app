@@ -5,10 +5,23 @@
         (onFormSubmit)="location.back()"
         >
     </app-list-form>
+    <app-pop-up
+        (onConfirm)="cloneList(clonedListName.value)"
+        triggerText="Clone List"
+        triggerIcon="content_copy"
+        title="Are you sure you want to add a public copy of this list to your wish lists?"
+        body="All gifts will be unclaimed on the clone."
+        confirmText="Clone"
+    >
+        <ng-container popup-body>
+            <label>Cloned List Name</label>
+            <input #clonedListName type="text" [value]="editingList.name + ' Copy'"/>
+        </ng-container>
+    </app-pop-up>
     <ng-container *ngIf="editingList.isArchived; else notArchived">
         <app-pop-up
-            buttonText="Unarchive List"
-            buttonIcon="inventory_2"
+            triggerText="Unarchive List"
+            triggerIcon="inventory_2"
             title="Are you sure you want to unarchive this list?"
             body="Unarchived lists can be seen by your friends."
             confirmText="Unarchive"
@@ -17,8 +30,8 @@
     </ng-container>
     <ng-template #notArchived>
         <app-pop-up
-            buttonText="Archive List"
-            buttonIcon="inventory_2"
+            triggerText="Archive List"
+            triggerIcon="inventory_2"
             title="Are you sure you want to archive this list?"
             body="Archived lists can only be seen by you."
             confirmText="Archive"
@@ -27,8 +40,8 @@
     </ng-template>
     <app-pop-up
         class="btn-red"
-        buttonText="Delete List"
-        buttonIcon="delete_forever"
+        triggerText="Delete List"
+        triggerIcon="delete_forever"
         title="Are you sure you want to delete this list?"
         body="This cannot be undone."
         confirmText="Delete"

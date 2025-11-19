@@ -100,11 +100,56 @@ export class GiftListService {
   /**
    * Sets the archive status of a list in the database.
    * @param list - A List object containing the data for the list to be (un)archived.
+   * @param isArchived - A boolean indicating whether the list should be archived.
    */
   async setWishListArchive(list: List, isArchived: boolean) {
     await runTransaction(this.db, async (transaction) => { 
       const listRef = doc(this.db, 'lists', this.accountService.currentUserID!, 'wish-lists', list.id);
       transaction.update(listRef, {...list, isArchived: isArchived, giftsByUser: null}); // giftsByUser isn't saved in database, so must be null.
+    });
+  }
+
+  /**
+   * Sets the archive status of a list in the database.
+   * @param list - A List object containing the data for the list to be (un)archived.
+   * @param newListName - A string containing the name of the new cloned list.
+   * @returns A promise that resolves to the ID of the newly created list, or null if the creation failed.
+   */
+  async cloneWishList(list: List, newListName: string) {
+    return await runTransaction(this.db, async (transaction) => {
+      const userId = this.accountService.currentUserID;
+      if (userId) {
+        // Create new list doc
+        const newListRef = doc(collection(this.db, 'lists', userId, 'wish-lists'));
+        transaction.set(newListRef, {
+          id: newListRef.id,
+          owner: list.owner,
+          type: list.type,
+          name: newListName,
+          isArchived: false,
+        });
+
+        // Read gifts of original list
+        const giftsColRef = collection(this.db, 'lists', userId, 'wish-lists', list.id, 'gifts');
+        const giftsSnapshot = await getDocs(giftsColRef);
+
+        // Clone each gift to the new list
+        giftsSnapshot.forEach((giftDoc) => {
+          const newGiftRef = doc(collection(this.db, 'lists', userId, 'wish-lists', newListRef.id, 'gifts'));
+          const oldGift = giftDoc.data() as Gift;
+          transaction.set(newGiftRef, {
+            id: newGiftRef.id,
+            name: oldGift.name,
+            details: oldGift.details,
+            url: oldGift.url,
+            isWishedByID: oldGift.isWishedByID,
+            isWishedByUser: oldGift.isWishedByUser,
+            isWishedOnListID: newListRef.id,
+          });
+        },{merge: true});
+        return newListRef.id;
+      }
+      return undefined;
     });
   }
 

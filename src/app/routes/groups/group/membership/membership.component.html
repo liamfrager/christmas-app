@@ -9,7 +9,7 @@
     <button class="btn-red" (click)="onCancel()">Cancel</button>
   </ng-container>
   <app-pop-up *ngIf="currentUserMembershipStatus !== 'admin'"
-    buttonText="Leave Group"
+    triggerText="Leave Group"
     title="Are you sure you want to leave this group?"
     body="You will need to be invited again to join back."
     (onConfirm)="handleLeaveGroup()"
