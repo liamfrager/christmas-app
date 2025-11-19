@@ -33,6 +33,13 @@ export class EditListComponent implements OnInit {
     this.router.navigate(['/wish-lists']);
   }
 
+  async cloneList(cloneListName: string) {
+    const newListID = await this.giftListService.cloneWishList(this.editingList!, cloneListName);
+    this.router.navigate(['wish-lists']).then(() => {
+      this.router.navigate(['wish-lists', newListID]);
+    });
+  }
+
   async deleteList() {
     await this.giftListService.deleteWishList(this.editingList!);
     this.router.navigate(['/wish-lists']);

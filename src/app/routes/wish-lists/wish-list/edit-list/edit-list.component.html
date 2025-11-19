@@ -5,6 +5,19 @@
         (onFormSubmit)="location.back()"
         >
     </app-list-form>
+    <app-pop-up
+        (onConfirm)="cloneList(clonedListName.value)"
+        triggerText="Clone List"
+        triggerIcon="content_copy"
+        title="Are you sure you want to add a public copy of this list to your wish lists?"
+        body="All gifts will be unclaimed on the clone."
+        confirmText="Clone"
+    >
+        <ng-container popup-body>
+            <label>Cloned List Name</label>
+            <input #clonedListName type="text" [value]="editingList.name + ' Copy'"/>
+        </ng-container>
+    </app-pop-up>
     <ng-container *ngIf="editingList.isArchived; else notArchived">
         <app-pop-up
             triggerText="Unarchive List"
