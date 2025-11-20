@@ -6,7 +6,7 @@ import { AccountService } from '../../../services/account.service';
 import { doc, updateDoc } from 'firebase/firestore';
 import { GiftDetailsModalComponent } from '../gift-details-modal/gift-details-modal.component';
 import { FirebaseService } from '../../../services/firebase.service';
-import { Gift, List, NewGift } from '../../../types';
+import { Gift, List, NewGift, User } from '../../../types';
 import { UserDisplayComponent } from '../../user-display/user-display.component';
 
 @Component({
@@ -186,6 +186,17 @@ export class ListDisplayComponent implements OnChanges {
         throw Error('giftInModal does not exist.');
       }
     } catch(e) { console.error(e) }
+  }
+
+  /**
+   * Archives gifts on the user's shopping list by a particular user.
+   * @param user - User whose gifts to archive on your shopping list.
+   */
+  async archiveShoppingListGiftsByUser(user: User) {
+    if (this.list?.type === 'shopping') {
+      this.giftListService.archiveShoppingListGiftsByUser(user);
+      delete this.list!.giftsByUser![user.id];
+    }
   }
 
   /**

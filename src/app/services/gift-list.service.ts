@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction, where } from 'firebase/firestore';
+import { collection, deleteField, doc, getDoc, getDocs, orderBy, query, runTransaction, where, writeBatch } from 'firebase/firestore';
 import { FirebaseService } from './firebase.service';
 import { AccountService } from './account.service';
 import { Gift, List, NewGift, Gifts, Friend, WishLists, User, NewList } from '../types';
@@ -197,7 +197,11 @@ export class GiftListService {
   async getShoppingListInfo(): Promise<List | undefined> {
     if (this.accountService.currentUserID) {
       // Get all gifts from shopping-list
-      const shoppingQuerySnapshot = await getDocs(query(collection(this.db, 'lists', this.accountService.currentUserID, 'shopping-list'), orderBy('isWishedByUser')));
+      const shoppingQuerySnapshot = await getDocs(query(
+        collection(this.db, 'lists', this.accountService.currentUserID, 'shopping-list'),
+        where('isArchived', '==', false),
+        orderBy('isWishedByUser')
+      ));
       // Convert DocumentData to List
       const owner = await this.accountService.getUserInfo(this.accountService.currentUserID)
       let list: List = {
@@ -265,6 +269,7 @@ export class GiftListService {
         ...gift,
         isWishedByUser: await this.accountService.getUserInfo(gift.isWishedByID),
         status: 'claimed',
+        isArchived: false,
       });
     });
   }
@@ -282,6 +287,7 @@ export class GiftListService {
         id: giftRef.id,
         isWishedByUser: friend,
         status: 'claimed',
+        isArchived: false,
         isCustom: true,
       });
     });
@@ -360,5 +366,36 @@ export class GiftListService {
         transaction.update(wishRef, {isClaimedByID: deleteField()})
       }
     });
+  }
+
+  /**
+   * Archives gifts on the user's shopping list by a particular user.
+   * @param user - User whose gifts to archive on your shopping list.
+   */
+  async archiveShoppingListGiftsByUser(user: User) {
+    const shoppingListRef = collection(
+      this.firebaseService.db,
+      'lists',
+      this.accountService.currentUserID!,
+      'shopping-list'
+    );
+
+    // Get all items on the user's shopping list created by this specific user
+    const q = query(
+      shoppingListRef,
+      where('isWishedByID', '==', user.id),
+      where('isArchived', '==', false)
+    );
+
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return;
+
+    const batch = writeBatch(this.firebaseService.db);
+
+    snapshot.forEach((docSnap) => {
+      batch.update(docSnap.ref, { isArchived: true });
+    });
+
+    await batch.commit();
   }
 }

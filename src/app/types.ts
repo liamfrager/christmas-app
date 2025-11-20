@@ -15,6 +15,7 @@ export interface Gift extends NewGift {
     isWishedByUser: User,
     isClaimedByUser?: User,
     isCustom?: boolean,
+    isArchived?: boolean,
     isDeleted?: boolean,
 }
 
