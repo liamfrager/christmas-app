@@ -19,15 +19,29 @@
           <app-user-display
           [user]="giftByUser.value.user"
           icon="inventory_2"
-          [onIconClick]="archiveShoppingListGiftsByUser.bind(this, giftByUser.value.user)"
+          [onIconClick]="archiveGifts.showModal.bind(archiveGifts)"
           >
           </app-user-display>
-          <dialog #archiveGifts?>
-            <h3>Are you sure you want to archive all gifts for {{giftByUser.value.user.displayName}} on your shopping list?</h3>
+          <dialog #archiveGifts>
+            <p>
+              Are you sure you want to archive all gifts for
+              <app-user-display
+              [user]="giftByUser.value.user"
+              [isInline]="true"
+              [onClick]="null"
+              />
+              on your shopping list?
+            </p>
             <p>This cannot be undone.</p>
             <div class="btn-wrap">
-              <button>Archive</button>
-              <button>Cancel</button>
+              <button (click)="archiveShoppingListGiftsByUser(giftByUser.value.user)" class="btn-red">
+                <app-icon icon="inventory_2" [hover]="false" size="20px"/>
+                Archive
+              </button>
+              <button (click)="archiveGifts.close()">
+                <app-icon icon="close" [hover]="false" size="20px"/>
+                Cancel
+              </button>
             </div>
           </dialog>
           <hr>

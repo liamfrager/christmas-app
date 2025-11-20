@@ -8,13 +8,14 @@ import { GiftDetailsModalComponent } from '../gift-details-modal/gift-details-mo
 import { FirebaseService } from '../../../services/firebase.service';
 import { Gift, List, NewGift, User } from '../../../types';
 import { UserDisplayComponent } from '../../user-display/user-display.component';
+import { IconComponent } from "../../icon/icon.component";
 
 @Component({
     selector: 'app-list-display',
     standalone: true,
     templateUrl: './list-display.component.html',
     styleUrl: './list-display.component.css',
-    imports: [GiftDisplayComponent, GiftDetailsModalComponent, CommonModule, UserDisplayComponent]
+    imports: [GiftDisplayComponent, GiftDetailsModalComponent, CommonModule, UserDisplayComponent, IconComponent]
 })
 export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};
