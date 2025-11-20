@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FirebaseService } from './firebase.service';
-import { collection, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, collectionGroup, doc, getDocs, setDoc, updateDoc, writeBatch } from 'firebase/firestore';
 import { AccountService } from './account.service';
-import { User } from '../types';
+import { Gift, User } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -144,5 +144,32 @@ export class DatabaseMigrationService {
     } catch (error) {
       console.error('Error during migration:', error);
     }
+  }
+
+  async addIsArchivedToShoppingLists() {
+    const shoppingSnapshot = await getDocs(collectionGroup(this.db, 'shopping-list'));
+
+    const updates: { ref: any; data: any }[] = [];
+
+    shoppingSnapshot.forEach(giftDoc => {
+      const data = giftDoc.data() as Gift;
+
+      if (data.isArchived === undefined) {
+        updates.push({
+          ref: giftDoc.ref,
+          data: { isArchived: false }
+        });
+      }
+    });
+
+    const chunkSize = 400;
+    for (let i = 0; i < updates.length; i += chunkSize) {
+      const batch = writeBatch(this.db);
+      const chunk = updates.slice(i, i + chunkSize);
+      chunk.forEach(u => batch.update(u.ref, u.data));
+      await batch.commit();
+    }
+
+    console.log(`Updated ${updates.length} shopping-list gifts.`);
   }
 }

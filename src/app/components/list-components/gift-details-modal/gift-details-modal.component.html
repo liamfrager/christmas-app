@@ -59,6 +59,14 @@
           (onFormSubmit)="buttonClick($event)"
         ></app-gift-form>
         <app-pop-up
+          triggerText="Archive Gift"
+          triggerIcon="inventory_2"
+          title="Are you sure you want to archive this gift?"
+          body="This cannot be undone."
+          confirmText="Archive"
+          (onConfirm)="buttonClick('archive')"
+        />
+        <app-pop-up
           class="btn-red"
           triggerText="Delete Gift"
           triggerIcon="delete_forever"
@@ -66,7 +74,7 @@
           body="This cannot be undone."
           confirmText="Delete"
           (onConfirm)="buttonClick('delete')"
-        ></app-pop-up>
+        />
       </div>
     </ng-template>
   </div>

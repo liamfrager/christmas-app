@@ -6,15 +6,16 @@ import { AccountService } from '../../../services/account.service';
 import { doc, updateDoc } from 'firebase/firestore';
 import { GiftDetailsModalComponent } from '../gift-details-modal/gift-details-modal.component';
 import { FirebaseService } from '../../../services/firebase.service';
-import { Gift, List, NewGift } from '../../../types';
+import { Gift, List, NewGift, User } from '../../../types';
 import { UserDisplayComponent } from '../../user-display/user-display.component';
+import { IconComponent } from "../../icon/icon.component";
 
 @Component({
     selector: 'app-list-display',
     standalone: true,
     templateUrl: './list-display.component.html',
     styleUrl: './list-display.component.css',
-    imports: [GiftDisplayComponent, GiftDetailsModalComponent, CommonModule, UserDisplayComponent]
+    imports: [GiftDisplayComponent, GiftDetailsModalComponent, CommonModule, UserDisplayComponent, IconComponent]
 })
 export class ListDisplayComponent implements OnChanges {
   constructor(private giftListService: GiftListService, private accountService: AccountService, private firebaseService: FirebaseService) {};
@@ -86,6 +87,9 @@ export class ListDisplayComponent implements OnChanges {
         break;
       case 'unclaim':
         this.unclaimGift();
+        break;
+      case 'archive':
+        this.archiveGift();
         break;
       default:
         this.editGift(event);
@@ -186,6 +190,32 @@ export class ListDisplayComponent implements OnChanges {
         throw Error('giftInModal does not exist.');
       }
     } catch(e) { console.error(e) }
+  }
+
+  /**
+   * Archives the current gift displayed in `app-gift-details-modal`.
+   */
+  archiveGift() {
+    if (this.list?.type === 'shopping') {
+      this.giftListService.updateGift(this.giftInModal!, {...this.giftInModal!, isArchived: true});
+      if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
+        delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
+      } else {
+        this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id);
+      }
+    }
+    this.hideModal();
+  }
+
+  /**
+   * Archives gifts on the user's shopping list by a particular user.
+   * @param user - User whose gifts to archive on your shopping list.
+   */
+  async archiveShoppingListGiftsByUser(user: User) {
+    if (this.list?.type === 'shopping') {
+      this.giftListService.archiveShoppingListGiftsByUser(user);
+      delete this.list!.giftsByUser![user.id];
+    }
   }
 
   /**

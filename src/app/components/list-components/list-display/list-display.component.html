@@ -18,8 +18,32 @@
         <ng-container *ngIf="list.type === 'shopping'">
           <app-user-display
           [user]="giftByUser.value.user"
+          icon="inventory_2"
+          [onIconClick]="archiveGifts.showModal.bind(archiveGifts)"
           >
           </app-user-display>
+          <dialog #archiveGifts>
+            <p>
+              Are you sure you want to archive all gifts for
+              <app-user-display
+              [user]="giftByUser.value.user"
+              [isInline]="true"
+              [onClick]="null"
+              />
+              on your shopping list?
+            </p>
+            <p>This cannot be undone.</p>
+            <div class="btn-wrap">
+              <button (click)="archiveShoppingListGiftsByUser(giftByUser.value.user)" class="btn-red">
+                <app-icon icon="inventory_2" [hover]="false" size="20px"/>
+                Archive
+              </button>
+              <button (click)="archiveGifts.close()">
+                <app-icon icon="close" [hover]="false" size="20px"/>
+                Cancel
+              </button>
+            </div>
+          </dialog>
           <hr>
         </ng-container>
         <ul>
