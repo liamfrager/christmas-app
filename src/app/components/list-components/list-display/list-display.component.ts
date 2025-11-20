@@ -88,6 +88,9 @@ export class ListDisplayComponent implements OnChanges {
       case 'unclaim':
         this.unclaimGift();
         break;
+      case 'archive':
+        this.archiveGift();
+        break;
       default:
         this.editGift(event);
         break;
@@ -187,6 +190,21 @@ export class ListDisplayComponent implements OnChanges {
         throw Error('giftInModal does not exist.');
       }
     } catch(e) { console.error(e) }
+  }
+
+  /**
+   * Archives the current gift displayed in `app-gift-details-modal`.
+   */
+  archiveGift() {
+    if (this.list?.type === 'shopping') {
+      this.giftListService.updateGift(this.giftInModal!, {...this.giftInModal!, isArchived: true});
+      if (this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.size === 1) {
+        delete this.list!.giftsByUser![this.giftInModal!.isWishedByID];
+      } else {
+        this.list!.giftsByUser![this.giftInModal!.isWishedByID].gifts.delete(this.giftInModal!.id);
+      }
+    }
+    this.hideModal();
   }
 
   /**
