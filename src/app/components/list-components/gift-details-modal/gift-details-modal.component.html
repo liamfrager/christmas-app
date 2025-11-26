@@ -59,6 +59,7 @@
           (onFormSubmit)="buttonClick($event)"
         ></app-gift-form>
         <app-pop-up
+          *ngIf="type === 'shopping'"
           triggerText="Archive Gift"
           triggerIcon="inventory_2"
           title="Are you sure you want to archive this gift?"
