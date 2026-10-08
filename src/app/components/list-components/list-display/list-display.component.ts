@@ -244,7 +244,6 @@ export class ListDisplayComponent implements OnChanges {
   }
 
   sortListByUserAndMostWanted(list: List | undefined): List | undefined {
-    console.log("sortListByUserAndMostWanted()");
     if (!list) return list;
     if (!list.giftsByUser) {
       return list;

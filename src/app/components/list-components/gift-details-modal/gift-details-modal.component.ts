@@ -101,7 +101,7 @@ export class GiftDetailsModalComponent implements OnInit {
   }
 
   onIconClicked(icon: string) {
-    if (!this.gift) return;
+    if (!this.gift || this.buttonType !== 'edit') return;
 
     this.gift.isMostWanted = !this.gift.isMostWanted;
 

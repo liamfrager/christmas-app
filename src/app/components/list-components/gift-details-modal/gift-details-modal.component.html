@@ -12,6 +12,7 @@
         (onBackButton)="onModalClose.emit(true);"
         [buttons]="['star']"
         [buttonFills]="[gift.isMostWanted ? 1 : 0]"
+        [buttonHovers]="[buttonType === 'edit' ? true : null]"
         (onIconClick)="onIconClicked($event)"
         >
       </app-page-heading>
