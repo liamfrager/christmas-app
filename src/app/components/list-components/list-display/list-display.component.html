@@ -13,7 +13,7 @@
   <ng-template #listDisplay>
     <!-- Display gifts -->
     <div *ngIf="list.giftsByUser; else noGifts" [ngClass]="{'gift-list': true, 'modal-open': isModalOpen}">
-      <ng-container *ngFor="let giftByUser of list.giftsByUser | keyvalue">
+      <ng-container *ngFor="let giftByUser of list.giftsByUser | keyvalue: originalOrder">
         <!-- If is shopping-list -->
         <ng-container *ngIf="list.type === 'shopping'">
           <app-user-display
@@ -47,7 +47,7 @@
           <hr>
         </ng-container>
         <ul>
-          <li *ngFor="let gift of giftByUser.value.gifts | keyvalue">
+          <li *ngFor="let gift of giftByUser.value.gifts | keyvalue: originalOrder">
             <app-gift-display
               class="gift"
               [gift]="gift.value"

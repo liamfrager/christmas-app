@@ -17,6 +17,8 @@
     >
       <app-icon
         [icon]="icon"
+        [fill]="buttonFills[i]"
+        [hover]="buttonHovers[i]"
         (iconClicked)="onIconClick.emit(icon)"
         >
       </app-icon>

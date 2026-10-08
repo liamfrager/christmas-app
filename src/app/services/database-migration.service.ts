@@ -11,6 +11,10 @@ export class DatabaseMigrationService {
   constructor(private firebaseService: FirebaseService, private accountService: AccountService) {}
   db = this.firebaseService.db;
 
+  async update() {
+    // this.addIsMostWantedToGifts();
+  }
+
   async migrateWishLists() {
     try {
       // Loop through each user
@@ -171,5 +175,34 @@ export class DatabaseMigrationService {
     }
 
     console.log(`Updated ${updates.length} shopping-list gifts.`);
+  }
+
+  async addIsMostWantedToGifts() {
+    const giftsSnapshot = await getDocs(collectionGroup(this.db, 'gifts'));
+
+    const updates: { ref: any; data: any }[] = [];
+
+    giftsSnapshot.forEach(giftDoc => {
+      const data = giftDoc.data() as Gift;
+
+      if (data.isMostWanted === undefined) {
+        updates.push({
+          ref: giftDoc.ref,
+          data: { isMostWanted: false }
+        });
+      }
+    });
+
+    const chunkSize = 400;
+    for (let i = 0; i < updates.length; i += chunkSize) {
+      const batch = writeBatch(this.db);
+      const chunk = updates.slice(i, i + chunkSize);
+
+      chunk.forEach(u => batch.update(u.ref, u.data));
+
+      await batch.commit();
+    }
+
+    console.log(`Updated ${updates.length} gifts with isMostWanted.`);
   }
 }

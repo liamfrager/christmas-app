@@ -32,6 +32,7 @@ export class FriendsDisplayComponent implements OnInit {
 
   @RefreshService.onRefresh()
   async loadFriends() {
+    console.log('userID', this.userID);
     if (this.userID)
       this.friends = await this.friendsService.getFriends(this.userID);
   }

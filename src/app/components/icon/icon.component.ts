@@ -19,6 +19,7 @@ export class IconComponent {
   @Input({required: true}) icon!: string;
   @Input() hover: boolean | null = true;
   @Input() size: string = '30px'; // Default size.
+  @Input() fill: 0 | 1 = 0; // Default outline.
   @Output() iconClicked = new EventEmitter();
 
   handleClick(event: MouseEvent) {

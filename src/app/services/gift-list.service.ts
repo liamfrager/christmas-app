@@ -161,7 +161,12 @@ export class GiftListService {
    */
   async getWishListInfo(userID: string, listID: string): Promise<List | undefined> {
     const wishQuerySnapshot = await getDoc(doc(this.db, 'lists', userID, 'wish-lists', listID));
-    const giftsQuerySnapshot = await getDocs(collection(this.db, 'lists', userID, 'wish-lists', listID, 'gifts'));
+    const giftsQuery = query(
+      collection(this.db, 'lists', userID, 'wish-lists', listID, 'gifts'),
+      orderBy('isMostWanted', 'desc'),
+      orderBy('name', 'asc')
+    )
+    const giftsQuerySnapshot = await getDocs(giftsQuery);
     const data = wishQuerySnapshot.data();
     const gifts = giftsQuerySnapshot.docs;
     if (data) {

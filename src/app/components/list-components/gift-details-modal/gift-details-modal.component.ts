@@ -7,6 +7,7 @@ import { PopUpComponent } from '../../pop-up/pop-up.component';
 import { GiftFormComponent } from "../../forms/gift-form/gift-form.component";
 import { FillerComponent } from "../../ui/filler/filler.component";
 import { ImagePreviewComponent } from "../../image-preview/image-preview.component";
+import { GiftListService } from '../../../services/gift-list.service';
 
 @Component({
   selector: 'app-gift-details-modal',
@@ -16,7 +17,7 @@ import { ImagePreviewComponent } from "../../image-preview/image-preview.compone
   styleUrl: './gift-details-modal.component.css'
 })
 export class GiftDetailsModalComponent implements OnInit {
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  constructor(private el: ElementRef, private renderer: Renderer2, private giftListService: GiftListService) {}
   @Input() gift?: Gift;
   @Input() type?: string;
   @Input() buttonType!: 'claim' | 'unclaim' | 'claimed' | 'edit';
@@ -31,6 +32,7 @@ export class GiftDetailsModalComponent implements OnInit {
   public get buttonText() : string {
     return this.buttonType === 'claimed' ? 'This gift has already been claimed.' : this.buttonType.charAt(0).toUpperCase() + this.buttonType.slice(1) + ' gift';
   }
+  private mostWantedTimeout?: ReturnType<typeof setTimeout>;
   
   buttonClick(event: any) {
     if (event === 'edit') {
@@ -61,7 +63,9 @@ export class GiftDetailsModalComponent implements OnInit {
   ]
 
   ngOnInit(): void {
-    if (this.gift?.isDeleted) this.errors.push(`This gift has been deleted by ${this.gift.isWishedByUser.displayName}. It is no longer on their wish list.`)
+    if (this.gift?.isDeleted) {
+      this.errors.push(`This gift has been deleted by ${this.gift.isWishedByUser.displayName}. It is no longer on their wish list.`)
+    }
 
     const modal = this.el.nativeElement.querySelector('.backdrop');
     let initialTouchY = 0;
@@ -95,4 +99,19 @@ export class GiftDetailsModalComponent implements OnInit {
       }
     });
   }
+
+  onIconClicked(icon: string) {
+    if (!this.gift || this.buttonType !== 'edit') return;
+
+    this.gift.isMostWanted = !this.gift.isMostWanted;
+
+    clearTimeout(this.mostWantedTimeout);
+
+    this.mostWantedTimeout = setTimeout(() => {
+      if (this.gift) {
+        this.giftListService.updateGift(this.gift, this.gift);
+      }
+    }, 1000);
+  }
+
 }

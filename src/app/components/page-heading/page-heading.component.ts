@@ -15,6 +15,8 @@ export class PageHeadingComponent {
   constructor(public router: Router) {};
   @Input({required: true}) headingText!: string;
   @Input() buttons!: string[];
+  @Input() buttonFills: (0 | 1)[] = [];
+  @Input() buttonHovers: (boolean | null)[] = [];
   @Input() imageURL: string | null = null;
   @Input() buttonBadges?: (boolean | number | string)[] = [];
   @Output() onBackButton =  new EventEmitter();

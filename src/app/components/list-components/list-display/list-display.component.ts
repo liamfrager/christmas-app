@@ -33,6 +33,7 @@ export class ListDisplayComponent implements OnChanges {
   isModalOpen: boolean = false;
   modalButtonType: 'claim' | 'unclaim' | 'claimed' | 'edit' = 'claimed';
   modalErrors: string[] = [];
+  originalOrder = () => 0;
   
   ngOnChanges() {
     this.noGiftsMessage = 
@@ -72,6 +73,7 @@ export class ListDisplayComponent implements OnChanges {
   hideModal() {
     this.isModalOpen = false;
     this.onGiftInModal.emit(false);
+    this.list = this.sortListByUserAndMostWanted(this.list);
   }
 
   /**
@@ -239,5 +241,38 @@ export class ListDisplayComponent implements OnChanges {
       return statusIcons[gift.status];
     }
     return 'error';
+  }
+
+  sortListByUserAndMostWanted(list: List | undefined): List | undefined {
+    if (!list) return list;
+    if (!list.giftsByUser) {
+      return list;
+    }
+
+    const giftsByUser = list.giftsByUser;
+
+    const sortedGiftsByUser = Object.entries(giftsByUser)
+      .sort(([, a], [, b]) =>
+        a.user.displayName.localeCompare(b.user.displayName)
+      )
+      .reduce((result, [userID, userData]) => {
+        const sortedGifts = new Map(
+          [...userData.gifts.entries()].sort(([, a], [, b]) =>
+            Number(b.isMostWanted) - Number(a.isMostWanted)
+          )
+        );
+
+        result[userID] = {
+          ...userData,
+          gifts: sortedGifts,
+        };
+
+        return result;
+      }, {} as NonNullable<List['giftsByUser']>);
+
+    return {
+      ...list,
+      giftsByUser: sortedGiftsByUser,
+    };
   }
 }

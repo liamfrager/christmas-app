@@ -49,12 +49,20 @@ export class FriendsService {
    * @returns A promise that resolves to an array of Friend objects.
    */
   async getFriends(id: string): Promise<Friend[]> {
-    const friendsQ = query(collection(this.db, "lists", id, "friends-list"), where('status', '==', 'friends'), orderBy('displayName'));
-    const friends = await getDocs(friendsQ);
-    if (friends.docs.length == 0) {
-      return [];
+    const friendsQ = query(
+      collection(this.db, "lists", id, "friends-list"),
+      where('status', '==', 'friends'),
+      orderBy('displayName')
+    );
+
+    try {
+      const friends = await getDocs(friendsQ);
+
+      return friends.docs.map(doc => doc.data()) as Friend[];
+    } catch (error) {
+      console.error('getFriends FAILED:', error);
+      throw error;
     }
-    return friends.docs.map(doc => doc.data()) as Array<Friend>;
   }
 
   /**
@@ -72,6 +80,10 @@ export class FriendsService {
    * @returns A promise that resolves to an array of Friend objects.
    */
   async getAllFriendsAndRequests(): Promise<Friend[]> {
+    console.log('getAllFriendsAndRequests()');
+    console.log('requested user ID:', this.currentUserID);
+    console.log('authenticated UID:', this.accountService.currentUserID);
+    console.log('Firebase project:', this.db.app.options.projectId);
     const allFriendsQ = query(collection(this.db, "lists", this.currentUserID!, "friends-list"));
     const allFriends = await getDocs(allFriendsQ);
     return allFriends.docs.map(doc => doc.data()) as Array<Friend>;

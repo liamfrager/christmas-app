@@ -7,11 +7,12 @@ import { PfpSelectComponent } from '../../pfp-select/pfp-select.component';
 import { CommonModule } from '@angular/common';
 import { AccountService } from '../../../services/account.service';
 import { ActivatedRoute } from '@angular/router';
+import { IconComponent } from '../../icon/icon.component';
 
 @Component({
   selector: 'app-gift-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, PfpSelectComponent],
+  imports: [CommonModule, FormsModule, PfpSelectComponent, IconComponent],
   templateUrl: './gift-form.component.html',
   styleUrl: './gift-form.component.css'
 })
@@ -34,12 +35,14 @@ export class GiftFormComponent {
   urlVal?: string;
   detailsVal?: string;
   listVal?: string;
+  isMostWantedVal!: boolean;
 
   async ngOnInit() {
-    this.nameVal = this.gift ? this.gift.name : '';
-    this.urlVal = this.gift ? this.gift.url : '';
-    this.detailsVal = this.gift ? this.gift.details : '';
-    this.listVal = this.gift ? this.gift.isWishedOnListID : this.route.snapshot.paramMap.get('list-id')!;
+    this.nameVal = this.gift?.name ?? '';
+    this.urlVal = this.gift?.url ?? '';
+    this.detailsVal = this.gift?.details ?? '';
+    this.listVal = this.gift?.isWishedOnListID ?? this.route.snapshot.paramMap.get('list-id')!;
+    this.isMostWantedVal = this.gift?.isMostWanted ?? false;
     if (this.type === 'shopping') {
       this.friends = await this.friendsService.getFriends(this.accountService.currentUserID!)
     }
@@ -56,6 +59,7 @@ export class GiftFormComponent {
       isWishedByID: isWishedByID,
       isWishedByUser: isWishedByUser,
       isWishedOnListID: form.form.value.list ? form.form.value.list : this.listVal,
+      isMostWanted: this.isMostWantedVal
     }
     if (this.gift) { // If editing gift.
       if (JSON.stringify(this.gift) == JSON.stringify({...this.gift, ...newGift})) { // If gift hasn't changed.
