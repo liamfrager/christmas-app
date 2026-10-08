@@ -10,6 +10,9 @@
       <app-page-heading
         [headingText]="gift.name"
         (onBackButton)="onModalClose.emit(true);"
+        [buttons]="['star']"
+        [buttonFills]="[gift.isMostWanted ? 1 : 0]"
+        (onIconClick)="onIconClicked($event)"
         >
       </app-page-heading>
       <div class="content modal-container">

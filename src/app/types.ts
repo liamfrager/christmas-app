@@ -9,6 +9,7 @@ export type NewGift = {
     isWishedByUser?: User,
     isWishedOnListID: string,
     isArchived?: boolean,
+    isMostWanted: boolean
 }
 export interface Gift extends NewGift {
     id: string,

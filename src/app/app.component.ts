@@ -7,6 +7,7 @@ import { FirebaseService } from './services/firebase.service';
 import { SettingsService } from './services/settings.service';
 import { Settings } from './types';
 import { RefreshService } from './services/refresh.service';
+import { DatabaseMigrationService } from './services/database-migration.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,7 @@ import { RefreshService } from './services/refresh.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  constructor(public firebaseService: FirebaseService, public settingsService: SettingsService, private renderer: Renderer2) {}
+  constructor(public firebaseService: FirebaseService, public settingsService: SettingsService, private renderer: Renderer2, private dbms: DatabaseMigrationService) {}
   title = 'christmas-app';
   isLoggedIn = localStorage.getItem('isLoggedIn');
   isLoading: boolean = false;
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit {
   isPWA = window.matchMedia('(display-mode: standalone)').matches;
 
   ngOnInit() {
+    this.dbms.update();
     this.settingsService.settings$.subscribe(
       (settings) => {
         this.settings = settings;
