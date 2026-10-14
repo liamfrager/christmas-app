@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Group, Member } from '../../types';
+import { Group, GroupMembershipStatus, Member } from '../../types';
 import { CommonModule } from '@angular/common';
 import { GiftExchangeService } from '../../services/gift-exchange.service';
 import { UserDisplayComponent } from "../user-display/user-display.component";
@@ -24,7 +24,8 @@ export class GiftExchangeComponent {
     private giftExchangeService: GiftExchangeService,
   ) {};
 
-  @Input() group!: Group;
+  @Input({"required": true}) group!: Group;
+  @Input({"required": true}) currentUserMembershipStatus?: GroupMembershipStatus;
   @Output() onShowModal = new EventEmitter();
   currentUserID?: string = this.accountService.currentUserID;
   isShowModal: boolean = false;
